@@ -2,9 +2,9 @@ import Image from "next/image";
 import React from "react";
 
 const navigationLinks = [
-    { name: "Home", href: "#" },
-    { name: "About", href: "#" },
-    { name: "Contact", href: "#" },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
