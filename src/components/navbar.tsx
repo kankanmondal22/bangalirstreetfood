@@ -1,39 +1,43 @@
+import Image from "next/image";
 import React from "react";
+
+const navigationLinks = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" },
+];
 
 const Navbar = () => {
     return (
-        <header className="fixed top-4 right-0 left-0 z-50 px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-5xl bg-amber-200 p-4 rounded-lg flex items-center">
-                {/* Logo or Brand Name */}
-                <div className="bg-gray-500 h-10 w-10 rounded-3xl"></div>
+        <header className="">
+            <div className="flex max-w-5xl mx-auto items-center justify-center py-4 gap-10">
+                <Image
+                    src="/bangalir_street_food_logo1.jpg"
+                    alt="Logo"
+                    width={500}
+                    height={500}
+                    className="h-30 w-30 object-cover rounded-full"
+                />
+                <Image
+                    src="/khobarchoriadin.png"
+                    alt="Hero Image"
+                    width={800}
+                    height={500}
+                    className=" h-25 w-auto object-cover "
+                />
+            </div>
+            <div className="mx-auto max-w-5xl bg-amber-300 p-2 rounded-lg flex items-center justify-center">
                 {/* Navigation Links */}
-                <nav className="ml-4">
-                    <ul className="flex space-x-4">
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-700 hover:text-gray-900"
-                            >
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-700 hover:text-gray-900"
-                            >
-                                About
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-gray-700 hover:text-gray-900"
-                            >
-                                Contact
-                            </a>
-                        </li>
-                    </ul>
+                <nav className="flex gap-x-8">
+                    {navigationLinks.map((link) => (
+                        <a
+                            key={link.name}
+                            href={link.href}
+                            className="text-gray-700 border border-amber-300 hover:border-gray-600 px-2 py-1 rounded-2xl uppercase font-semibold "
+                        >
+                            {link.name}
+                        </a>
+                    ))}
                 </nav>
             </div>
         </header>
