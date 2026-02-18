@@ -1,8 +1,8 @@
 // app/api/og/route.tsx
 import { ImageResponse } from "next/og";
 
-// Optional: Set the runtime to edge for better performance on Vercel
-export const runtime = "edge";
+// Using Node.js runtime for database compatibility
+export const runtime = "nodejs";
 
 export async function GET() {
   return new ImageResponse(
