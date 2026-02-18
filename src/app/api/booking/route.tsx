@@ -2,7 +2,7 @@
 import { ImageResponse } from "next/og";
 
 // Using Node.js runtime for database compatibility
-export const runtime = "nodejs";
+// export csonst runtime = "nodejs";
 
 export async function GET() {
   return new ImageResponse(
