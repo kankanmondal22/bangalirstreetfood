@@ -1,4 +1,14 @@
-import { auth } from "@/utils/auth";
+import { NextRequest } from "next/server";
 import { toNextJsHandler } from "better-auth/next-js";
 
-export const { GET, POST } = toNextJsHandler(auth);
+export async function GET(req: NextRequest) {
+  const { auth } = await import("@/utils/auth");
+  const { GET } = toNextJsHandler(auth);
+  return GET(req);
+}
+
+export async function POST(req: NextRequest) {
+  const { auth } = await import("@/utils/auth");
+  const { POST } = toNextJsHandler(auth);
+  return POST(req);
+}

@@ -1,10 +1,59 @@
 @reference "tailwindcss";
 
 @layer base {
+  label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  input {
+    @apply w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-teal-600 focus:ring-4 focus:ring-teal-600/20 focus:ring-offset-0 transition-colors;
+  }
+
+  textarea {
+    @apply w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-teal-600 focus:ring-4 focus:ring-teal-600/20 focus:ring-offset-0 transition-colors;
+  }
+
+  /* remove the arrows from number inputs */
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
   button {
     @apply cursor-pointer;
   }
+
+  /* ── Reusable admin classes ── */
+
   .cute-button {
-    @apply w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full bg-teal-600 text-white py-2.5 font-medium tracking-wide hover:bg-teal-700 active:bg-teal-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .admin-card {
+    @apply bg-white border border-gray-200 p-8;
+  }
+
+  .admin-form-group {
+    @apply flex flex-col gap-1;
+  }
+
+  .admin-error-text {
+    @apply text-xs text-red-600 mt-0.5;
+  }
+
+  .admin-server-error {
+    @apply text-sm text-red-700 bg-red-50 border border-red-200 px-3 py-2;
+  }
+
+  .admin-page-title {
+    @apply text-xl font-semibold text-gray-900 tracking-tight;
+  }
+
+  .admin-divider {
+    @apply border-t border-gray-200 my-6;
   }
 }

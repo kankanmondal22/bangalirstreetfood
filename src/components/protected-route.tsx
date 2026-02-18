@@ -1,38 +1,29 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { getCurrentUser } from "@/app/admin/_actions/auth-actions";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   redirectTo?: string;
 }
 
-/**
- * Component to protect routes that require authentication
- *
- * @example
- * ```tsx
- * export default function AdminPage() {
- *   return (
- *     <ProtectedRoute>
- *       <div>Protected content</div>
- *     </ProtectedRoute>
- *   );
- * }
- * ```
- */
 export function ProtectedRoute({
   children,
   redirectTo = "/admin/login",
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, checkAuth } = useAuth();
+  const { isAuthenticated, setUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+    getCurrentUser().then((u) => {
+      if (u) setUser({ id: u.id, email: u.email, name: u.name ?? "" });
+      setIsLoading(false);
+    });
+  }, [setUser]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {

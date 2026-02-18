@@ -2,8 +2,9 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { getCurrentUser } from "@/app/admin/_actions/auth-actions";
 import { authClient } from "@/utils/auth-client";
 import "./admin.css";
 
@@ -14,19 +15,23 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isAuthenticated, isLoading, checkAuth, logout } = useAuth();
+  const { user, isAuthenticated, setUser, logout } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Skip auth check for login page
     if (pathname === "/admin/login") {
+      setIsLoading(false);
       return;
     }
 
-    // Check authentication
-    checkAuth();
-  }, [pathname, checkAuth]);
+    getCurrentUser().then((u) => {
+      if (u) {
+        setUser({ id: u.id, email: u.email, name: u.name ?? "" });
+      }
+      setIsLoading(false);
+    });
+  }, [pathname, setUser]);
 
-  // Redirect to login if not authenticated (after loading is complete)
   useEffect(() => {
     if (!isLoading && !isAuthenticated && pathname !== "/admin/login") {
       router.push("/admin/login");
@@ -34,17 +39,9 @@ export default function AdminLayout({
   }, [isLoading, isAuthenticated, pathname, router]);
 
   const handleLogout = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          logout();
-          router.push("/admin/login");
-        },
-        onError: (ctx) => {
-          console.error("Logout failed:", ctx.error.message);
-        },
-      },
-    });
+    await authClient.signOut();
+    logout();
+    router.push("/admin/login");
   };
 
   // Don't show layout for login page
