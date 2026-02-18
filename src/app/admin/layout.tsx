@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { authClient } from "@/utils/auth-client";
 import "./admin.css";
 
 export default function AdminLayout({
@@ -33,13 +34,17 @@ export default function AdminLayout({
   }, [isLoading, isAuthenticated, pathname, router]);
 
   const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/sign-out", { method: "POST" });
-      logout();
-      router.push("/admin/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          logout();
+          router.push("/admin/login");
+        },
+        onError: (ctx) => {
+          console.error("Logout failed:", ctx.error.message);
+        },
+      },
+    });
   };
 
   // Don't show layout for login page

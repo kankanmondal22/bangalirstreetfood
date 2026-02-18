@@ -1,11 +1,15 @@
 "use client";
 
+import axios from "axios";
+
 export default function TestPage() {
   const handleDownload = async () => {
     try {
       // Fetch the image from the API route
-      const response = await fetch("/api/booking");
-      const blob = await response.blob();
+      const response = await axios.get("/api/booking", {
+        responseType: "blob",
+      });
+      const blob = response.data;
 
       // Create a download link
       const url = window.URL.createObjectURL(blob);

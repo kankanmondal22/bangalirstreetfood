@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getUsers, createUser } from "@/app/admin/_actions/user-actions";
 
 interface User {
   id: string;
@@ -27,10 +28,11 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("/api/admin/users");
-      if (response.ok) {
-        const data = await response.json();
-        setUsers(data.users || []);
+      const result = await getUsers();
+      if (result.success && result.data) {
+        setUsers(result.data);
+      } else {
+        console.error("Failed to fetch users:", result.message);
       }
     } catch (error) {
       console.error("Failed to fetch users:", error);
@@ -39,25 +41,18 @@ export default function AdminUsersPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
     try {
-      const response = await fetch("/api/admin/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to create user");
+      const result = await createUser(formData);
+      if (!result.success) {
+        setError(result.message || "Failed to create user");
+        return;
       }
-
-      setSuccess("Admin user created successfully");
+      setSuccess(result.message || "Admin user created successfully");
       setFormData({ email: "", password: "", name: "" });
       setShowForm(false);
       fetchUsers();

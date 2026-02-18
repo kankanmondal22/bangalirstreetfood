@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { authClient } from "@/utils/auth-client";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -18,25 +19,25 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/sign-in", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const { data, error: signInError } = await authClient.signIn.email({
+        email,
+        password,
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Login failed");
+      if (signInError) {
+        console.log(signInError);
+
+        throw new Error(signInError.message || "Login failed");
       }
 
-      const data = await response.json();
-
-      // Update Zustand store with user data
-      login({
-        id: data.user.id,
-        email: data.user.email,
-        name: data.user.name,
-      });
+      if (data?.user) {
+        // Update Zustand store with user data
+        login({
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.name,
+        });
+      }
 
       router.push("/admin/users");
     } catch (err) {

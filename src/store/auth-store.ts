@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { authClient } from "@/utils/auth-client";
 
 interface User {
   id: string;
@@ -47,23 +48,19 @@ export const useAuthStore = create<AuthState>()(
 
       checkAuth: async () => {
         set({ isLoading: true });
-        try {
-          const response = await fetch('/api/auth/session');
-          if (response.ok) {
-            const data = await response.json();
-            set({
-              user: data.user,
-              isAuthenticated: true,
-              isLoading: false,
-            });
-          } else {
-            set({
-              user: null,
-              isAuthenticated: false,
-              isLoading: false,
-            });
-          }
-        } catch {
+        const { data: session, error } = await authClient.getSession();
+        if (session?.user) {
+          set({
+            user: {
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.name,
+            },
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        } else {
+          if (error) console.error("Session check failed:", error.message);
           set({
             user: null,
             isAuthenticated: false,
@@ -73,11 +70,11 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'auth-storage',
+      name: "auth-storage",
       partialize: (state) => ({
         user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
+    },
+  ),
 );

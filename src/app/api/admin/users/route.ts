@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/utils/auth";
+import { db } from "@/utils/auth";
 import { headers } from "next/headers";
+import dbConnect from "@/utils/db";
 
 // GET - List all users (admins only)
 export async function GET() {
   try {
+    await dbConnect(); // Ensure DB connection is established
     // Check authentication
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -15,9 +18,7 @@ export async function GET() {
     }
 
     // Get all users from the database
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const db = (auth as any).options.database;
-    const usersCollection = db.db.collection("user");
+    const usersCollection = db.collection("user");
 
     const users = await usersCollection
       .find({})
@@ -25,14 +26,16 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .toArray();
 
+    const result = users.map((user) => ({
+      id: (user._id as { toString: () => string }).toString(),
+      email: user.email as string,
+      name: user.name as string | undefined,
+      createdAt: user.createdAt as string,
+    }));
+
     return NextResponse.json({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      users: users.map((user: any) => ({
-        id: user._id.toString(),
-        email: user.email,
-        name: user.name,
-        createdAt: user.createdAt,
-      })),
+      success: true,
+      data: result,
     });
   } catch (error) {
     console.error("Error fetching users:", error);
