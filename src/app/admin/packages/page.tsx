@@ -9,6 +9,8 @@ const TourPackagePage = async () => {
       return [];
     });
 
+  console.log(tours[0].journeyDates);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -23,6 +25,7 @@ const TourPackagePage = async () => {
             <th>Name</th>
             <th>Duration</th>
             <th>Price</th>
+            <th>Dates</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -35,6 +38,14 @@ const TourPackagePage = async () => {
                 Adult: Rs. {tour.adultPrice}
                 <br />
                 Child: Rs. {tour.childPrice}
+              </td>
+              <td>
+                {tour.journeyDates?.map((date, i) => (
+                  <div key={i}>
+                    {date.startDate.toISOString()} to{" "}
+                    {date.endDate.toISOString()}
+                  </div>
+                ))}
               </td>
               <td>
                 <button className="btn btn-sm btn-primary mr-2">Edit</button>

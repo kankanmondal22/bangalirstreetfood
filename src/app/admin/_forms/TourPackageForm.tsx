@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
+import { createTourPackage } from "../_actions/tours";
 
 export const itinerarySchema = z.object({
   day: z.coerce.number().min(1, "Day must be at least 1"),
@@ -13,10 +14,10 @@ export const itinerarySchema = z.object({
 
 export const journeyDateSchema = z
   .object({
-    startDate: z.string().min(1, "Start date is required"),
-    endDate: z.string().min(1, "End date is required"),
+    startDate: z.coerce.date({ message: "Start date is required" }),
+    endDate: z.coerce.date({ message: "End date is required" }),
   })
-  .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
+  .refine((data) => data.endDate > data.startDate, {
     message: "End date must be after start date",
     path: ["endDate"],
   });
@@ -37,21 +38,25 @@ export const tourPackageSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
+export const editTourPackageSchema = tourPackageSchema.extend({
+  id: z.string(),
+});
+
 export type TourPackageData = z.infer<typeof tourPackageSchema>;
-export type CreateTourPackageData = Omit<TourPackageData, "id">;
+export type CreateTourPackageData = z.infer<typeof tourPackageSchema>;
+export type EditTourPackageData = z.infer<typeof editTourPackageSchema>;
 
 export default function TourPackageForm({
   tourPackageData,
 }: {
-  tourPackageData?: CreateTourPackageData;
+  tourPackageData?: EditTourPackageData;
 }) {
   const {
     register,
     handleSubmit,
     control,
     watch,
-    setValue,
-    formState: { errors, isSubmitting, isDirty },
+    formState: { errors, isSubmitting, isDirty, isSubmitSuccessful },
   } = useForm({
     resolver: zodResolver(tourPackageSchema),
     defaultValues: {
@@ -106,7 +111,21 @@ export default function TourPackageForm({
   }, [daysValue]);
 
   const onSubmit = async (formData: any) => {
-    console.log(formData);
+    const parsed = tourPackageSchema.safeParse(formData);
+    if (!parsed.success) {
+      console.error("Form data validation errors:", parsed.error.issues);
+      return;
+    }
+    // Strip FileList — file upload handled separately
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { images, ...payload } = parsed.data;
+    await createTourPackage(payload as CreateTourPackageData)
+      .then(() => {
+        alert("Tour package created successfully!");
+      })
+      .catch((error) => {
+        alert("Failed to create tour package: " + error.message);
+      });
   };
 
   return (

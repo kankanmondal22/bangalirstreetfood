@@ -13,7 +13,7 @@ interface ActionResult<T = undefined> {
   data?: T;
 }
 
-async function requireSession() {
+export async function requireSession() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
