@@ -1,9 +1,17 @@
-import mongoose from "mongoose";
+import { model, models, Schema, Types } from "mongoose";
 
-const PaymentSchema = new mongoose.Schema(
+interface IPayment {
+  bookingId: Types.ObjectId;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+  status: "PENDING" | "SUCCESS" | "FAILED";
+}
+
+const PaymentSchema = new Schema<IPayment>(
   {
     bookingId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Booking",
       required: true,
     },
@@ -21,5 +29,4 @@ const PaymentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.models.Payment ||
-  mongoose.model("Payment", PaymentSchema);
+export default models.Payment || model<IPayment>("Payment", PaymentSchema);

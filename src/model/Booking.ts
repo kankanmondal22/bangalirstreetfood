@@ -1,18 +1,17 @@
-import mongoose from "mongoose";
+import { Schema, model, models } from "mongoose";
 
-const MemberSchema = new mongoose.Schema({
+const MemberSchema = new Schema({
   name: String,
   type: { type: String, enum: ["ADULT", "CHILD"] },
 });
 
-const BookingSchema = new mongoose.Schema(
+const BookingSchema = new Schema(
   {
     packageId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "TourPackage",
       required: true,
     },
-
     customerName: String,
     phone: String,
     email: String,
@@ -32,12 +31,11 @@ const BookingSchema = new mongoose.Schema(
     },
 
     payment: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Payment",
     },
   },
   { timestamps: true },
 );
 
-export default mongoose.models.Booking ||
-  mongoose.model("Booking", BookingSchema);
+export default models.Booking || model("Booking", BookingSchema);
