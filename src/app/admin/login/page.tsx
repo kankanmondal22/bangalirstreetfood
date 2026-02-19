@@ -1,6 +1,15 @@
 import AuthForm from "@/app/admin/_forms/AuthForm";
+import { isAuthenticated } from "../_actions/auth-actions";
+import { redirect, RedirectType } from "next/navigation";
 
-export default function AdminLogin() {
+export default async function AdminLogin() {
+  const isUserAuthenticated = await isAuthenticated();
+  if (isUserAuthenticated) {
+    // redirect to /admin/`dashboard`
+
+    redirect("/admin/users", RedirectType.replace);
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="w-full max-w-sm">

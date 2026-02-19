@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/utils/auth";
+import { authClient } from "@/utils/auth-client";
 
 const emailSchema = z.string().email();
 const passwordSchema = z.string().min(8).max(128);
@@ -21,17 +22,18 @@ export async function signUp(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  const data = signUpSchema.parse(rawData);
+  const parsedData = signUpSchema.parse(rawData);
 
-  const res = await auth.api.signUpEmail({
+  const { user } = await auth.api.signUpEmail({
     body: {
-      email: data.email,
-      password: data.password,
-      name: data.name,
+      email: parsedData.email,
+      password: parsedData.password,
+      name: parsedData.name,
     },
   });
 
-  return { ok: true, userId: res.user?.id };
+  if (!user) return { ok: false, error: "Failed to create user" };
+  return { ok: true };
 }
 
 const signInSchema = z.object({
@@ -73,4 +75,20 @@ export async function getCurrentUser() {
 export async function signOut() {
   await auth.api.signOut({ headers: await headers() });
   return { ok: true };
+}
+
+// check if user is authenticated in every request
+export async function isAuthenticated(): Promise<boolean> {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) return false;
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 }

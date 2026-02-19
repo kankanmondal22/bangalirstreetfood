@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -5,9 +6,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useRouter } from "next/navigation";
-import { authClient } from "@/utils/auth-client";
+import { signIn, signUp } from "@/utils/auth-client";
 import { createUser } from "@/app/admin/_actions/user-actions";
-import { useAuthStore } from "@/store/auth";
 
 const loginSchema = z.object({
   email: z.email("Invalid email address"),
@@ -27,36 +27,36 @@ function LoginForm() {
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const setUser = useAuthStore((state) => state.setUser);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<LoginFormData>({ resolver: zodResolver(loginSchema) });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (fomrdata: LoginFormData) => {
     setServerError("");
     setLoading(true);
-    try {
-      const { data: result, error } = await authClient.signIn.email({
-        email: data.email,
-        password: data.password,
-      });
-      if (error) throw new Error(error.message || "Login failed");
-      if (result?.user) {
-        setUser({
-          id: result.user.id,
-          email: result.user.email,
-          name: result.user.name ?? "",
-        });
-      }
-      router.push("/admin/users");
-    } catch (e) {
-      setServerError(e instanceof Error ? e.message : "Login failed");
-    } finally {
-      setLoading(false);
-    }
+    await signIn.email(
+      {
+        email: fomrdata.email,
+        password: fomrdata.password,
+      },
+      {
+        onError: (err) => {
+          // toast error
+          console.log(err.error.cause);
+        },
+        onSuccess: (res) => {
+          // toast success
+          // clear form
+          reset();
+          // redirect to /admin/users
+          router.push("/admin/users");
+        },
+      },
+    );
   };
 
   return (
@@ -107,15 +107,11 @@ function CreateUserForm({ onSuccess }: { onSuccess?: () => void }) {
   const onSubmit = async (data: CreateUserFormData) => {
     setServerError("");
     setLoading(true);
-    const result = await createUser(data);
-    if (!result.success) {
-      setServerError(result.message || "Failed to create user");
-      setLoading(false);
-      return;
-    }
-    reset();
-    onSuccess?.();
-    setLoading(false);
+
+    await signUp.email(data, {
+      onError: (err) => {},
+      onSuccess: (res) => {},
+    });
   };
 
   return (
