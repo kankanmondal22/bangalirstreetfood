@@ -44,7 +44,7 @@ const menuItems = [
     label: "Users",
     icon: <BiUser size={20} />,
   },
-  { href: "/admin/tours", label: "Tours", icon: <BiMapPin size={20} /> },
+  { href: "/admin/packages", label: "Tours", icon: <BiMapPin size={20} /> },
   {
     href: "/admin/bookings",
     label: "Bookings",

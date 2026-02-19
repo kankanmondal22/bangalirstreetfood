@@ -1,7 +1,7 @@
 "use server";
 
 import dbConnect from "@/utils/db";
-import TourPackage from "@/model/TourPackage";
+import TourPackage, { ITourPackage } from "@/model/TourPackage";
 import {
   CreateTourPackageData,
   TourPackageData,
@@ -50,8 +50,10 @@ export async function fetchTourPackage(id: string) {
 export async function fetchAllTourPackages() {
   try {
     await dbConnect();
-    const packages = await TourPackage.find({}).sort({ createdAt: -1 }).lean();
-    return JSON.parse(JSON.stringify(packages));
+    const packages = await TourPackage.find()
+      .sort({ createdAt: -1 })
+      .lean<ITourPackage[]>();
+    return packages;
   } catch (error) {
     console.error("Fetch all tour packages error:", error);
     throw error;

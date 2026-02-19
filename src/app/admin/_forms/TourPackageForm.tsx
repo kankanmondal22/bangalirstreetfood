@@ -1,14 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createTourPackage,
-  fetchTourPackage,
-  updateTourPackage,
-} from "../_actions/package";
-
 import z from "zod";
 
 export const itinerarySchema = z.object({
@@ -16,6 +10,16 @@ export const itinerarySchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
 });
+
+export const journeyDateSchema = z
+  .object({
+    startDate: z.string().min(1, "Start date is required"),
+    endDate: z.string().min(1, "End date is required"),
+  })
+  .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  });
 
 export const tourPackageSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -26,414 +30,308 @@ export const tourPackageSchema = z.object({
   childPrice: z.coerce.number().min(0, "Price must be non-negative").optional(),
   itinerary: z.array(itinerarySchema).optional(),
   foodingAndLodging: z.string().optional(),
-  images: z.array(z.string().url("Must be a valid URL")).optional(),
+  journeyDates: z.array(journeyDateSchema).optional(),
+  images: z.custom<FileList>().optional(),
+  pickupAt: z.string().optional(),
+  dropAt: z.string().optional(),
   isActive: z.boolean().optional(),
 });
 
 export type TourPackageData = z.infer<typeof tourPackageSchema>;
-export type CreateTourPackageData = Omit<TourPackageData, "slug">;
-// ─── Main Component ───────────────────────────────────────────────────────────
+export type CreateTourPackageData = Omit<TourPackageData, "id">;
 
 export default function TourPackageForm({
-  tourPackageId,
-  onSuccess,
+  tourPackageData,
 }: {
-  tourPackageId?: string;
-  onSuccess?: (data: unknown) => void;
+  tourPackageData?: CreateTourPackageData;
 }) {
-  const isEditMode = Boolean(tourPackageId);
-  const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
-    null,
-  ); // 'success' | 'error' | null
-  const [submitMessage, setSubmitMessage] = useState("");
-  const [imageinput, setImageinput] = useState("");
-
   const {
     register,
     handleSubmit,
     control,
-    reset,
     watch,
     setValue,
     formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(tourPackageSchema),
     defaultValues: {
-      title: "",
-      slug: "",
-      description: "",
-      days: "",
-      adultPrice: "",
-      childPrice: "",
-      itinerary: [],
-      foodingAndLodging: "",
-      images: [],
-      isActive: true,
+      title: tourPackageData?.title || "",
+      slug: tourPackageData?.slug || "",
+      description: tourPackageData?.description || "",
+      days: tourPackageData?.days || 1,
+      adultPrice: tourPackageData?.adultPrice || 0,
+      childPrice: tourPackageData?.childPrice || 0,
+      itinerary: tourPackageData?.itinerary || [],
+      foodingAndLodging: tourPackageData?.foodingAndLodging || "",
+      journeyDates: tourPackageData?.journeyDates || [],
+      pickupAt: tourPackageData?.pickupAt || "",
+      dropAt: tourPackageData?.dropAt || "",
+      isActive: tourPackageData?.isActive ?? true,
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "itinerary",
-  });
+  const {
+    fields: itineraryFields,
+    append: appendItinerary,
+    remove: removeItinerary,
+  } = useFieldArray({ control, name: "itinerary" });
 
-  const images = watch("images") || [];
+  const {
+    fields: journeyFields,
+    append: appendJourney,
+    remove: removeJourney,
+  } = useFieldArray({ control, name: "journeyDates" });
 
-  // Load existing data in edit mode
+  const titleValue = watch("title");
+  const daysValue = watch("days");
+
   useEffect(() => {
-    if (!isEditMode) return;
+    const count = Number(daysValue);
+    if (!count || count < 1) return;
 
-    async function loadData() {
-      try {
-        if (!tourPackageId)
-          throw new Error("Tour package ID is required for editing.");
-        const data = await fetchTourPackage(tourPackageId);
-        reset(data);
-      } catch (err: any) {
-        setSubmitStatus("error");
-        setSubmitMessage(err.message || "Failed to load tour package data.");
+    const current = itineraryFields.length;
+
+    if (count > current) {
+      for (let i = current + 1; i <= count; i++) {
+        appendItinerary(
+          { day: i, title: "", description: "" },
+          { shouldFocus: false },
+        );
+      }
+    } else if (count < current) {
+      for (let i = current - 1; i >= count; i--) {
+        removeItinerary(i);
       }
     }
-    loadData();
-  }, [tourPackageId, isEditMode, reset]);
+  }, [daysValue]);
 
   const onSubmit = async (formData: any) => {
-    setSubmitStatus(null);
-    try {
-      let result;
-
-      if (isEditMode) {
-        if (!tourPackageId)
-          throw new Error("Tour package ID is required for editing.");
-
-        result = await updateTourPackage(tourPackageId, formData);
-      } else {
-        result = await createTourPackage(formData);
-      }
-      setSubmitStatus("success");
-      setSubmitMessage(
-        isEditMode
-          ? "Tour package updated successfully!"
-          : "Tour package created successfully!",
-      );
-      if (!isEditMode) reset();
-      if (onSuccess) onSuccess(result);
-    } catch (err: any) {
-      setSubmitStatus("error");
-      setSubmitMessage(
-        err.message || "Something went wrong. Please try again.",
-      );
-    }
-  };
-
-  const addImage = () => {
-    const trimmed = imageinput.trim();
-    if (!trimmed) return;
-    setValue("images", [...images, trimmed], { shouldDirty: true });
-    setImageinput("");
-  };
-
-  const removeImage = (idx: number) => {
-    setValue(
-      "images",
-      images.filter((_, i) => i !== idx),
-      { shouldDirty: true },
-    );
+    console.log(formData);
   };
 
   return (
-    <div className="min-h-screen  p-4 md:p-8 font-sans">
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-1 h-8 bg-linear-to-b from-teal-400 to-teal-600 rounded-full" />
-            <h1 className="text-2xl font-bold text-teal-700 tracking-tight">
-              {isEditMode ? "Edit Tour Package" : "New Tour Package"}
-            </h1>
+    <div className="max-w-4xl">
+      <h2 className="page-heading">
+        {tourPackageData ? "Edit Tour Package" : "New Tour Package"}
+      </h2>
+
+      <div className="admin-card">
+        <form onSubmit={handleSubmit(onSubmit)} className="gap-1">
+          {/* BASIC INFO */}
+          <div>
+            <h3 className="admin-page-title mb-4">Basic Information</h3>
+
+            <div className="admin-form-group">
+              <label>Title</label>
+              <input
+                {...register("title")}
+                placeholder="Golden Triangle Explorer"
+              />
+              <p className="admin-error-text">{errors.title?.message}</p>
+            </div>
+
+            <div className="admin-form-group">
+              <label>Description</label>
+              <textarea
+                {...register("description")}
+                rows={4}
+                placeholder="Describe the tour package..."
+              />
+              <p className="admin-error-text">{errors.description?.message}</p>
+            </div>
+
+            <div className="sr-only">
+              <input {...register("slug")} readOnly />
+            </div>
           </div>
-          <p className="text-teal-800/70 text-sm ml-4">
-            {isEditMode
-              ? "Update the details of your tour package"
-              : "Fill in the details to create a new tour package"}
-          </p>
-        </div>
 
-        {/* Status Banner */}
-        {submitStatus && (
-          <div
-            className={`mb-6 px-4 py-3  text-sm font-medium border-2 ${
-              submitStatus === "success"
-                ? "bg-teal-500/10 border-teal-500/30 text-teal-300"
-                : "bg-red-500/10 border-red-500/30 text-red-300"
-            }`}
-          >
-            {submitStatus === "success" ? "✓ " : "✕ "}
-            {submitMessage}
-          </div>
-        )}
+          <div className="admin-divider" />
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Card: Basic Info */}
-          <section className="border-2 border-teal-800/40  p-6 backdrop-blur-sm">
-            <h2 className="text-sm font-bold text-teal-800 uppercase tracking-widest mb-5">
-              Basic Information
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="md:col-span-2">
-                <label>Title</label>
-                <input
-                  required
-                  {...register("title")}
-                  placeholder="e.g. Golden Triangle Explorer"
-                />
-                <p>{errors.title?.message} </p>
-              </div>
+          {/* PRICING & DURATION */}
+          <div>
+            <h3 className="admin-page-title mb-4">Pricing & Duration</h3>
 
-              <div>
-                <label>Slug</label>
-                <input
-                  {...register("slug")}
-                  placeholder="golden-triangle-explorer"
-                />
-                <p>{errors.slug?.message} </p>
-              </div>
-
-              <div>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="admin-form-group">
                 <label>Duration (Days)</label>
-                <input
-                  {...register("days")}
-                  type="number"
-                  min="1"
-                  placeholder="7"
-                />
-                <p>{errors.days?.message} </p>
+                <input {...register("days")} type="number" min="1" />
+                <p className="admin-error-text">{errors.days?.message}</p>
               </div>
 
-              <div className="md:col-span-2">
-                <label>Description</label>
-                <textarea
-                  {...register("description")}
-                  placeholder="Describe the tour package..."
-                  rows={4}
-                />
-                <p>{errors.description?.message}</p>
-              </div>
-            </div>
-          </section>
-
-          {/* Card: Pricing */}
-          <section className="order border-teal-800/40  p-6 backdrop-blur-sm">
-            <h2 className="text-sm font-bold text-teal-800 uppercase tracking-widest mb-5">
-              Pricing
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
+              <div className="admin-form-group">
                 <label>Adult Price (₹)</label>
-                <input
-                  {...register("adultPrice")}
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  placeholder="12999"
-                />
-                <p>{errors.adultPrice?.message} </p>
+                <input {...register("adultPrice")} type="number" />
+                <p className="admin-error-text">{errors.adultPrice?.message}</p>
               </div>
-              <div>
+
+              <div className="admin-form-group">
                 <label>Child Price (₹)</label>
-                <input
-                  {...register("childPrice")}
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  placeholder="7999"
-                />
-                <p>{errors.childPrice?.message} </p>
+                <input {...register("childPrice")} type="number" />
+                <p className="admin-error-text">{errors.childPrice?.message}</p>
               </div>
             </div>
-          </section>
+          </div>
 
-          {/* Card: Itinerary */}
-          <section className=" border-2 border-teal-800/40  p-6 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-bold text-teal-800 uppercase tracking-widest">
-                Itinerary
-              </h2>
-              <button
-                type="button"
-                onClick={() =>
-                  append({ day: fields.length + 1, title: "", description: "" })
-                }
-                className="flex items-center gap-1.5 bg-teal-500/15 hover:bg-teal-500/25 border-2 border-teal-500/30
-                  text-teal-600 text-xs font-semibold px-3 py-1.5  transition-all duration-200"
-              >
-                <span className="text-base leading-none">+</span> Add Day
-              </button>
+          <div className="admin-divider" />
+
+          {/* LOCATIONS */}
+          <div>
+            <h3 className="admin-page-title mb-4">Locations</h3>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="admin-form-group">
+                <label>Pickup Location</label>
+                <input {...register("pickupAt")} />
+                <p className="admin-error-text">{errors.pickupAt?.message}</p>
+              </div>
+
+              <div className="admin-form-group">
+                <label>Drop Location</label>
+                <input {...register("dropAt")} />
+                <p className="admin-error-text">{errors.dropAt?.message}</p>
+              </div>
             </div>
+          </div>
 
-            {fields.length === 0 && (
-              <p className="text-teal-600 text-sm text-center py-6 border-2 border-dashed border-teal-800/50 ">
-                No itinerary added yet. Click "Add Day" to get started.
-              </p>
-            )}
+          <div className="admin-divider" />
+
+          {/* JOURNEY DATES */}
+          <div>
+            <h3 className="admin-page-title mb-4">Journey Dates</h3>
 
             <div className="space-y-4">
-              {fields.map((field, index) => (
+              {journeyFields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="bg-teal-50/50 border-2 border-teal-800/30  p-4"
+                  className="border border-gray-200 p-4 rounded-lg"
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold text-teal-500 uppercase tracking-widest">
-                      Day {index + 1}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => remove(index)}
-                      className="text-red-400/60 hover:text-red-400 text-xs transition-colors"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label>Day #</label>
+                      <label>Start Date</label>
                       <input
-                        {...register(`itinerary.${index}.day`)}
-                        type="number"
-                        min="1"
-                        placeholder="1"
+                        {...register(`journeyDates.${index}.startDate`)}
+                        type="date"
                       />
-                      <p>{errors.itinerary?.[index]?.day?.message}</p>
+                      <p className="admin-error-text">
+                        {errors.journeyDates?.[index]?.startDate?.message}
+                      </p>
                     </div>
-                    <div className="md:col-span-2">
-                      <label>Title</label>
+
+                    <div>
+                      <label>End Date</label>
                       <input
-                        {...register(`itinerary.${index}.title`)}
-                        placeholder="Arrival & City Tour"
+                        {...register(`journeyDates.${index}.endDate`)}
+                        type="date"
                       />
-                      <p>{errors.itinerary?.[index]?.title?.message}</p>
+                      <p className="admin-error-text">
+                        {errors.journeyDates?.[index]?.endDate?.message}
+                      </p>
                     </div>
-                    <div className="md:col-span-3">
-                      <label>Description</label>
-                      <textarea
-                        {...register(`itinerary.${index}.description`)}
-                        placeholder="What happens on this day..."
-                      />
-                      <p>{errors.itinerary?.[index]?.description?.message}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="mt-3 text-sm text-red-600 hover:underline"
+                    onClick={() => removeJourney(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+
+              <button
+                type="button"
+                className="add-button"
+                onClick={() => appendJourney({ startDate: "", endDate: "" })}
+              >
+                Add Journey Date
+              </button>
+            </div>
+          </div>
+
+          <div className="admin-divider" />
+
+          {/* ITINERARY */}
+          <div>
+            <h3 className="admin-page-title mb-4">Itinerary</h3>
+
+            <div className="space-y-4">
+              {itineraryFields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="border border-gray-200 p-4 rounded-lg "
+                >
+                  <div className="flex gap-4 items-start">
+                    <strong className="block mb-2">Day {index + 1} :</strong>
+                    <input
+                      type="hidden"
+                      {...register(`itinerary.${index}.day`)}
+                      value={index + 1}
+                    />
+
+                    <div className="admin-form-group grow">
+                      <label className="sr-only">Title</label>
+                      <input {...register(`itinerary.${index}.title`)} />
+                      <p className="admin-error-text">
+                        {errors.itinerary?.[index]?.title?.message}
+                      </p>
                     </div>
+                  </div>
+                  <div className="admin-form-group  md:col-span-2">
+                    <label>Description</label>
+                    <textarea
+                      className="max-w-md"
+                      {...register(`itinerary.${index}.description`)}
+                    />
+                    <p className="admin-error-text">
+                      {errors.itinerary?.[index]?.description?.message}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
-          </section>
+          </div>
 
-          {/* Card: Accommodation & Images */}
-          <section className=" border-2 border-teal-800/40  p-6 backdrop-blur-sm">
-            <h2 className="text-sm font-bold text-teal-800 uppercase tracking-widest mb-5">
-              Accommodation & Media
-            </h2>
-            <div className="space-y-5">
-              <div>
-                <label>Fooding & Lodging</label>
-                <textarea
-                  {...register("foodingAndLodging")}
-                  placeholder="e.g. Breakfast included, 3-star hotels..."
-                />
-                <p>{errors.foodingAndLodging?.message} </p>
-              </div>
+          <div className="admin-divider" />
 
-              {/* Image URLs */}
-              <div>
-                <label>Image URLs</label>
-                <div className="flex gap-2">
-                  <input
-                    value={imageinput}
-                    onChange={(e) => setImageinput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        addImage();
-                      }
-                    }}
-                    placeholder="https://example.com/image.jpg"
-                  />
-                  <button
-                    type="button"
-                    onClick={addImage}
-                    className="shrink-0 bg-teal-600 hover:bg-teal-500 text-white text-sm font-semibold
-                      px-4 py-2.5  transition-colors duration-200"
-                  >
-                    Add
-                  </button>
-                </div>
-                {errors.images && (
-                  <p className="text-red-400 text-xs mt-1">
-                    One or more URLs are invalid
-                  </p>
-                )}
-                {images.length > 0 && (
-                  <ul className="mt-3 space-y-2">
-                    {images.map((url, i) => (
-                      <li
-                        key={i}
-                        className="flex items-center justify-between gap-2 bg-teal-950/60
-                          border-2 border-teal-800/30  px-3 py-2"
-                      >
-                        <span className="text-xs text-teal-300 truncate">
-                          {url}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => removeImage(i)}
-                          className="shrink-0 text-red-400/60 hover:text-red-400 text-xs transition-colors"
-                        >
-                          ✕
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+          {/* OTHER */}
+          <div>
+            <h3 className="admin-page-title mb-4">Other Details</h3>
+
+            <div className="admin-form-group">
+              <label>Fooding & Lodging</label>
+              <textarea {...register("foodingAndLodging")} />
             </div>
-          </section>
 
-          {/* Card: Settings */}
-          <section className=" border-2 border-teal-800/40  p-6 backdrop-blur-sm">
-            <h2 className="text-sm font-bold text-teal-800 uppercase tracking-widest mb-4">
-              Settings
-            </h2>
-            <label className="flex items-center gap-3 cursor-pointer w-fit">
-              <input
-                type="checkbox"
-                {...register("isActive")}
-                className="w-4 h-4 rounded border-teal-600 bg-teal-950 text-teal-500
-                  focus:ring-teal-400 focus:ring-offset-0 cursor-pointer"
-              />
-              <span className="text-sm text-teal-800">
-                Active (visible to customers)
-              </span>
+            <div className="admin-form-group">
+              <label>Images</label>
+              <input {...register("images")} type="file" multiple />
+            </div>
+
+            <label className="flex items-center gap-2">
+              <input type="checkbox" {...register("isActive")} />
+              Active package
             </label>
-          </section>
+          </div>
 
-          {/* Submit */}
-          <div className="flex items-center gap-4 pb-4">
+          <div className="admin-divider" />
+
+          {/* SUBMIT */}
+          <div className="flex items-center gap-4">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 md:flex-none md:min-w-[180px] bg-teal-500 hover:bg-teal-400
-                disabled:bg-teal-800 disabled:text-teal-600 disabled:cursor-not-allowed
-                text-white font-bold py-3 px-8  transition-all duration-200
-                focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-teal-950"
+              className="add-button"
             >
               {isSubmitting
                 ? "Saving..."
-                : isEditMode
+                : tourPackageData
                   ? "Update Package"
                   : "Create Package"}
             </button>
+
             {isDirty && !isSubmitting && (
-              <span className="text-xs text-teal-500">Unsaved changes</span>
+              <span className="text-sm text-gray-500">Unsaved changes</span>
             )}
           </div>
         </form>
