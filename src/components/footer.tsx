@@ -9,7 +9,7 @@ const quickLinks = [
 
 const Footer = () => {
     return (
-        <footer className="mt-auto rounded-t-3xl bg-amber-300 text-gray-800">
+        <footer className="mt-auto rounded-t-3xl bg-teal-900 text-gray-100">
             <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
                 <div className="grid gap-8 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3">
                     <div className="sm:col-span-2 lg:col-span-1">
@@ -60,7 +60,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="mt-8 border-t border-amber-400 pt-4 text-center text-xs sm:text-sm">
+                <div className="mt-8 border-t border-teal-500 pt-4 text-center text-xs sm:text-sm">
                     © {new Date().getFullYear()} Bangalir Street Food. All
                     rights reserved.
                 </div>

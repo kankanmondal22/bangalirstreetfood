@@ -25,14 +25,14 @@ const Navbar = () => {
                     className=" h-25 w-auto object-cover "
                 />
             </div>
-            <div className="mx-auto max-w-5xl bg-amber-300 p-2 rounded-lg flex items-center justify-center">
+            <div className="mx-auto max-w-5xl bg-teal-400 p-2 rounded-lg flex items-center justify-center">
                 {/* Navigation Links */}
                 <nav className="flex gap-x-8">
                     {navigationLinks.map((link) => (
                         <a
                             key={link.name}
                             href={link.href}
-                            className="text-gray-700 border border-amber-300 hover:border-gray-600 px-2 py-1 rounded-2xl uppercase font-bold  "
+                            className="text-gray-900 border border-teal-400 hover:border-gray-600 px-2 py-1 rounded-2xl uppercase font-semibold  "
                         >
                             {link.name}
                         </a>
