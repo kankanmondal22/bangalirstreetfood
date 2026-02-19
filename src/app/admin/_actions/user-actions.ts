@@ -1,15 +1,12 @@
 "use server";
 
 import { auth, db } from "@/utils/auth";
+import dbConnect from "@/utils/db";
+import { User } from "better-auth";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-
-interface User {
-  id: string;
-  email: string;
-  name?: string;
-  createdAt: string;
-}
-
+import { redirect, RedirectType } from "next/navigation";
+// import { redirect } from "next/";
 interface ActionResult<T = undefined> {
   success: boolean;
   message?: string;
@@ -24,9 +21,10 @@ async function requireSession() {
   return session;
 }
 
-export async function getUsers(): Promise<ActionResult<User[]>> {
+export async function getUsers() {
   try {
     await requireSession();
+    await dbConnect();
 
     const usersCollection = db.collection("user");
     const users = await usersCollection
@@ -40,8 +38,8 @@ export async function getUsers(): Promise<ActionResult<User[]>> {
       data: users.map((user) => ({
         id: (user._id as { toString: () => string }).toString(),
         email: user.email as string,
-        name: user.name as string | undefined,
-        createdAt: user.createdAt as string,
+        name: user.name as string | "Unknown User",
+        createdAt: user.createdAt as Date,
       })),
     };
   } catch (error) {
@@ -59,8 +57,6 @@ export async function createUser(formData: {
   name: string;
 }): Promise<ActionResult<User>> {
   try {
-    await requireSession();
-
     const { email, password, name } = formData;
 
     if (!email || !password) {
@@ -86,16 +82,15 @@ export async function createUser(formData: {
       return { success: false, message: "Failed to create user" };
     }
 
+    revalidatePath("/admin/users");
+    // push to /admin/users
     return {
       success: true,
       message: "Admin user created successfully",
-      data: {
-        id: result.user.id,
-        email: result.user.email,
-        name: result.user.name,
-        createdAt: new Date().toISOString(),
-      },
+      data: result.user,
     };
+
+    // redirect("/admin/users", RedirectType.replace);
   } catch (error) {
     console.error("Error creating user:", error);
     return {
