@@ -9,7 +9,7 @@ const quickLinks = [
 
 const Footer = () => {
     return (
-        <footer className="mt-auto rounded-t-3xl bg-teal-900 text-gray-100">
+        <footer className="mt-auto bg-teal-900 text-gray-100 m-2">
             <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
                 <div className="grid gap-8 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3">
                     <div className="sm:col-span-2 lg:col-span-1">

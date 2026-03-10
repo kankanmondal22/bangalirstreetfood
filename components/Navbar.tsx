@@ -18,7 +18,7 @@ const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
-        <header className="print:static print:shadow-none">
+        <header className="print:static print:shadow-none mx-2">
             {/* Top Banner – Logo & Brand */}
             <div className="bg-white border-b">
                 <div className="max-w-5xl mx-auto flex items-center justify-center gap-6 py-4 px-4">
@@ -45,11 +45,11 @@ const Navbar = () => {
                     {/* Small logo in navbar */}
                     <Link href="/" className="shrink-0">
                         <Image
-                            src="/kalokodhai.png"
+                            src="/sadakodhai.png"
                             alt="Logo"
-                            width={200}
-                            height={200}
-                            className="h-16 my-1 object-contain "
+                            width={100}
+                            height={100}
+                            className="h-16 object-contain w-full my-1 "
                         />
                     </Link>
 
@@ -62,20 +62,27 @@ const Navbar = () => {
                                     : pathname.startsWith(link.href);
 
                             return (
-                                <Link
+                                <Button
+                                    asChild
                                     key={link.name}
-                                    href={link.href}
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                    variant={isActive ? "secondary" : "ghost"}
+                                    size="sm"
+                                    className={
                                         isActive
-                                            ? "bg-teal-50 text-teal-700"
-                                            : "text-white hover:bg-gray-100/90 hover:text-teal-700"
-                                    }`}
+                                            ? "text-teal-700"
+                                            : "text-white hover:text-teal-700"
+                                    }
                                 >
-                                    {link.name}
-                                </Link>
+                                    <Link href={link.href}>{link.name}</Link>
+                                </Button>
                             );
                         })}
-                        <Button asChild size="sm" className="ml-3">
+                        <Button
+                            asChild
+                            size="sm"
+                            className="ml-3"
+                            variant={"accent"}
+                        >
                             <Link href="/package">Book a Trip</Link>
                         </Button>
                     </nav>
@@ -145,12 +152,14 @@ const Navbar = () => {
                         })}
                         <Button
                             asChild
-                            className=" w-full mt-2  "
+                            className="w-full mt-2"
                             size="sm"
+                            variant={"accent"}
                         >
                             <Link
                                 href="/package"
                                 onClick={() => setMobileOpen(false)}
+                                className="bg-transparent"
                             >
                                 Book a Trip
                             </Link>
