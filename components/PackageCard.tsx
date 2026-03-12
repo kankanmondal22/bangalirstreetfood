@@ -15,26 +15,17 @@ export interface PackageCardProps {
   id: string;
   title: string;
   duration: string;
-  pricePerAdult: number;
-  pricePerChild: number;
-  maxParticipants: number;
-  images: string[];
   highlights: string[];
-  availableDates: string[];
-  minBookingAmount: number;
+  amountPerAdult: number;
+  amountPerChild: number;
+  thumbnail: string | null;
+  nextDate: string | null;
+  noOfUpcomingDates: number;
 }
 
 export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
-  const upcomingDates = pkg.availableDates
-    .map((d) => new Date(d))
-    .filter((d) => d >= new Date())
-    .sort((a, b) => a.getTime() - b.getTime());
-
-  const upcomingDatesCount = upcomingDates.length;
-  const nextDate = upcomingDates[0];
-
-  const formattedNextDate = nextDate
-    ? nextDate.toLocaleDateString("en-IN", {
+  const formattedNextDate = pkg.nextDate
+    ? new Date(pkg.nextDate).toLocaleDateString("en-IN", {
         day: "numeric",
         month: "short",
         year: "numeric",
@@ -46,7 +37,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
       {/* Image */}
       <div className="relative overflow-hidden">
         <Image
-          src={pkg.images[0]}
+          src={pkg.thumbnail || "/placeholder.jpg"}
           alt={pkg.title}
           width={600}
           height={400}
@@ -89,13 +80,13 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
           <div>
             <p className="text-gray-500 text-xs">Per Adult</p>
             <p className="font-semibold text-gray-900">
-              ₹{pkg.pricePerAdult.toLocaleString("en-IN")}
+              ₹{pkg.amountPerAdult.toLocaleString("en-IN")}
             </p>
           </div>
           <div>
             <p className="text-gray-500 text-xs">Per Child</p>
             <p className="font-semibold text-gray-900">
-              ₹{pkg.pricePerChild.toLocaleString("en-IN")}
+              ₹{pkg.amountPerChild.toLocaleString("en-IN")}
             </p>
           </div>
         </div>
@@ -118,10 +109,10 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
             </svg>
             Next: {formattedNextDate}
           </span>
-          {upcomingDatesCount > 1 && (
+          {pkg.noOfUpcomingDates > 1 && (
             <Badge variant="secondary" className="text-xs font-normal">
-              +{upcomingDatesCount - 1} more date
-              {upcomingDatesCount > 2 ? "s" : ""}
+              +{pkg.noOfUpcomingDates - 1} more date
+              {pkg.noOfUpcomingDates > 2 ? "s" : ""}
             </Badge>
           )}
         </div>

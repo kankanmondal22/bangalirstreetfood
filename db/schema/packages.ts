@@ -18,6 +18,8 @@ export const packagesTable = pgTable("packages", {
     "minimum_booking_amount_per_person_in_inr",
   ).notNull(),
   highlights: text("highlights").array().notNull(), // comma-separated list of highlights
+  thumbnail: text("thumbnail_url"), // URL to the package thumbnail image
+  images: text("image_urls").array().notNull().default([]), // array of URLs to package images
   maxGroupSize: integer("max_group_size").notNull(), // maximum number of people allowed in a group booking
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

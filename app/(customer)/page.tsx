@@ -1,12 +1,15 @@
+import BeachScene from "@/components/AnimatedBeachScene";
 import { ComponentExample } from "@/components/component-example";
 
 export default function Page() {
-    return (
-        //hero
+  return (
+    //hero
 
-        <div>
-            <div className="mx-w-5xl">hero</div>
-            <ComponentExample />{" "}
-        </div>
-    );
+    <div>
+      <div className="mx-w-5xl">
+        <BeachScene />
+      </div>
+      <ComponentExample />{" "}
+    </div>
+  );
 }

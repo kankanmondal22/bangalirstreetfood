@@ -22,6 +22,13 @@
       "when": 1772633766807,
       "tag": "0002_huge_lyja",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773336457292,
+      "tag": "0003_brainy_professor_monster",
+      "breakpoints": true
     }
   ]
 }

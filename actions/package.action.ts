@@ -14,8 +14,7 @@ import {
 } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
-import { eq, inArray } from "drizzle-orm";
-import { start } from "repl";
+import { count, countDistinct, eq, inArray, min } from "drizzle-orm";
 
 export const fetchPackages = async ({
   page,
@@ -37,6 +36,43 @@ export const fetchPackages = async ({
   } catch (error) {
     console.error("Error fetching packages:", error);
     throw new Error("Failed to fetch packages");
+  }
+};
+
+export const fetchPackagesForGrid = async (
+  page?: number,
+  pageSize?: number,
+) => {
+  try {
+    const limit = pageSize ? pageSize : 20;
+    const offset = page && page > 0 ? (page - 1) * limit : 0 | 0;
+
+    const packages = await db
+      .select({
+        id: packagesTable.id,
+        title: packagesTable.packageTitle,
+        duration: packagesTable.duration,
+        highlights: packagesTable.highlights,
+        amountPerAdult: packagesTable.amountPerAdult,
+        amountPerChild: packagesTable.amountPerChild,
+        thumbnail: packagesTable.thumbnail,
+        nextDate: min(travelDatesTable.startDate),
+        noOfUpcomingDates: countDistinct(travelDatesTable.startDate),
+      })
+      .from(packagesTable)
+      .innerJoin(
+        travelDatesTable,
+        eq(packagesTable.id, travelDatesTable.packageId),
+      )
+      .groupBy(packagesTable.id)
+      .limit(limit)
+      .offset(offset);
+    console.log(packages);
+
+    return packages;
+  } catch (error) {
+    console.error("Error fetching packages for grid:", error);
+    throw new Error("Failed to fetch packages for grid");
   }
 };
 
