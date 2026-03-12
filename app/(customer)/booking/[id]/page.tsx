@@ -21,6 +21,7 @@ const BookPackage = async ({
             width={1500}
             height={1500}
             loading="eager"
+            priority
             className="rounded-xl mb-4 overflow-hidden object-cover w-full max-h-96"
           />
           <div className="absolute z-1 inset-0 bg-linear-to-t from-black/60 to-transparent rounded-xl"></div>
