@@ -29,7 +29,7 @@ import { Badge } from "../ui/badge";
 
 const BookingForm = () => {
   const packageDetails = packageData[0];
-  const [checkedSameWhatsapp, setCheckedSameWhatsapp] = useState(false);
+  const [checkedSameWhatsapp, setCheckedSameWhatsapp] = useState(true);
 
   const form = useForm<IBookingFormData>({
     resolver: zodResolver(bookingSchema) as Resolver<IBookingFormData>,
@@ -78,325 +78,321 @@ const BookingForm = () => {
   }, [phoneNumberWatch, checkedSameWhatsapp, form.setValue, form]);
 
   return (
-    <Card className=" bg-white w-full  mx-auto">
-      <CardHeader>
-        <CardTitle className="px-8">
-          Book Your Package :{" "}
-          <span className="font-semibold text-teal-600">
-            {packageDetails.title}
-          </span>
-        </CardTitle>
-        <CardDescription className="px-8">
-          Please fill out the form below to book your package. Make sure to
-          provide accurate information to ensure a smooth booking process.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form
-          id="booking-form"
-          className="p-8 pt-4 mx-auto flex flex-col gap-1"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          {/* No of Adult & No of Children */}
-          <div className="flex gap-2 justify-between">
-            <Controller
-              name="noOfAdults"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="noOfAdults">No. Of Adults</FieldLabel>
-                  <Input
-                    {...field}
-                    type="number"
-                    id="noOfAdults"
-                    aria-invalid={fieldState.invalid}
-                    aria-describedby="noOfAdults-error"
-                    placeholder="e.g. 2"
-                    autoComplete="off"
-                  />
-                  <div className="min-h-5" id="noOfAdults-error">
-                    <FieldError errors={[fieldState.error]} />
-                  </div>
-                </Field>
-              )}
-            />
-            <Controller
-              name="noOfChildren"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="noOfChildren">
-                    No. Of Children
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    type="number"
-                    id="noOfChildren"
-                    aria-invalid={fieldState.invalid}
-                    aria-describedby="noOfChildren-error"
-                    placeholder="e.g. 1"
-                    autoComplete="off"
-                  />
-                  <div className="min-h-5" id="noOfChildren-error">
-                    <FieldError errors={[fieldState.error]} />
-                  </div>
-                </Field>
-              )}
-            />
-            {/* Travel Date */}
-            <Controller
-              name="travelDate"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldContent>
-                    <FieldLabel className="mb-1 " htmlFor="travelDate">
-                      Travel Date
-                    </FieldLabel>
-                    <Select
-                      name={field.name}
-                      value={field.value}
-                      onValueChange={(value) => field.onChange(value)}
-                    >
-                      <SelectTrigger
-                        id="travelDate"
-                        aria-invalid={fieldState.invalid}
-                        aria-describedby="travelDate-error"
-                        className="w-full"
-                      >
-                        <SelectValue placeholder="Select travel date" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        {packageDetails.availableDates.map((avlDate) => (
-                          <SelectItem key={avlDate} value={avlDate}>
-                            {new Date(avlDate).toLocaleDateString("en-US", {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <div className="min-h-5" id="travelDate-error">
+    <div className="flex gap-4">
+      <Card className=" bg-white w-full max-w-3xl mx-auto">
+        <CardHeader className="sr-only">
+          <CardTitle className="px-8">
+            Book Your Package : {packageDetails.title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form
+            id="booking-form"
+            className="p-8 pt-4 mx-auto flex flex-col gap-1"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            {/* No of Adult & No of Children */}
+            <div className="flex gap-2 justify-between">
+              <Controller
+                name="noOfAdults"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="noOfAdults">No. Of Adults</FieldLabel>
+                    <Input
+                      {...field}
+                      type="number"
+                      id="noOfAdults"
+                      min={1}
+                      aria-invalid={fieldState.invalid}
+                      aria-describedby="noOfAdults-error"
+                      placeholder="e.g. 2"
+                      autoComplete="off"
+                    />
+                    <div className="min-h-5" id="noOfAdults-error">
                       <FieldError errors={[fieldState.error]} />
                     </div>
-                  </FieldContent>
-                </Field>
-              )}
-            />
-          </div>
-          <div className="flex justify-between gap-2">
-            <Controller
-              name="primaryContactFirstName"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="primaryContactFirstName">
-                    First Name
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="primaryContactFirstName"
-                    aria-invalid={fieldState.invalid}
-                    aria-describedby="primaryContactFirstName-error"
-                    placeholder="e.g. John"
-                    autoComplete="given-name"
-                  />
-                  <div className="min-h-5" id="primaryContactFirstName-error">
-                    <FieldError errors={[fieldState.error]} />
-                  </div>
-                </Field>
-              )}
-            />
-            <Controller
-              name="primaryContactLastName"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="primaryContactLastName">
-                    Last Name
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="primaryContactLastName"
-                    aria-invalid={fieldState.invalid}
-                    aria-describedby="primaryContactLastName-error"
-                    placeholder="e.g. Doe"
-                    autoComplete="family-name"
-                  />
-                  <div className="min-h-5" id="primaryContactLastName-error">
-                    <FieldError errors={[fieldState.error]} />
-                  </div>
-                </Field>
-              )}
-            />
-          </div>
-          <Controller
-            name="primaryContactEmail"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="primaryContactEmail">Email</FieldLabel>
-                <Input
-                  {...field}
-                  id="primaryContactEmail"
-                  type="email"
-                  aria-invalid={fieldState.invalid}
-                  aria-describedby="primaryContactEmail-error"
-                  placeholder="e.g. john@example.com"
-                  autoComplete="email"
-                />
-                <div className="min-h-5" id="primaryContactEmail-error">
-                  <FieldError errors={[fieldState.error]} />
-                </div>
-              </Field>
-            )}
-          />
-          {/* Phone Number */}
-          <Controller
-            name="primaryContactPhone"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="primaryContactPhone">
-                  Phone Number
-                </FieldLabel>
-                <Input
-                  {...field}
-                  id="primaryContactPhone"
-                  type="tel"
-                  aria-invalid={fieldState.invalid}
-                  aria-describedby="primaryContactPhone-error"
-                  placeholder="e.g. 9876543210"
-                  autoComplete="tel"
-                />
-                <div className="min-h-5" id="primaryContactPhone-error">
-                  <FieldError errors={[fieldState.error]} />
-                </div>
-              </Field>
-            )}
-          />
-          {/* Whatsapp number -> an input box at left and a button ("same as phone number") at right*/}
-          <div className="flex items-center gap-2">
-            <Controller
-              name="primaryContactWhatsApp"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="primaryContactWhatsApp">
-                    WhatsApp Number
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="primaryContactWhatsApp"
-                    type="tel"
-                    aria-invalid={fieldState.invalid}
-                    aria-describedby="primaryContactWhatsApp-error"
-                    placeholder="e.g. 9876543210"
-                    autoComplete="tel"
-                    readOnly={checkedSameWhatsapp}
-                  />
-                  <div className="min-h-5" id="primaryContactWhatsApp-error">
-                    <FieldError errors={[fieldState.error]} />
-                  </div>
-                </Field>
-              )}
-            />
-            {/* <Button
-              type="button"
-              variant="default"
-              className=""
-              onClick={() => {
-                const phoneValue = form.getValues("primaryContactPhone");
-                form.setValue("primaryContactWhatsApp", phoneValue);
-              }}
-            >
-              Same as Phone Number
-            </Button> */}
-            <div className="flex min-w-24 items-center gap-1">
-              <Checkbox
-                id="sameAsPhone"
-                checked={checkedSameWhatsapp}
-                onCheckedChange={handleWhatsappCheckboxChange}
+                  </Field>
+                )}
               />
-              <Label className="w-fit min-w-52">Same as Phone Number</Label>
+              <Controller
+                name="noOfChildren"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="noOfChildren">
+                      No. Of Children
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      type="number"
+                      id="noOfChildren"
+                      min={0}
+                      aria-invalid={fieldState.invalid}
+                      aria-describedby="noOfChildren-error"
+                      placeholder="e.g. 1"
+                      autoComplete="off"
+                    />
+                    <div className="min-h-5" id="noOfChildren-error">
+                      <FieldError errors={[fieldState.error]} />
+                    </div>
+                  </Field>
+                )}
+              />
+              {/* Travel Date */}
+              <Controller
+                name="travelDate"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldContent>
+                      <FieldLabel className="mb-1 " htmlFor="travelDate">
+                        Travel Date
+                      </FieldLabel>
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        onValueChange={(value) => field.onChange(value)}
+                      >
+                        <SelectTrigger
+                          id="travelDate"
+                          aria-invalid={fieldState.invalid}
+                          aria-describedby="travelDate-error"
+                          className="w-full"
+                        >
+                          <SelectValue placeholder="Select travel date" />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                          {packageDetails.availableDates.map((avlDate) => (
+                            <SelectItem key={avlDate} value={avlDate}>
+                              {new Date(avlDate).toLocaleDateString("en-US", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <div className="min-h-5" id="travelDate-error">
+                        <FieldError errors={[fieldState.error]} />
+                      </div>
+                    </FieldContent>
+                  </Field>
+                )}
+              />
             </div>
-          </div>
-          {/* Booking Amount */}
-          <Controller
-            name="bookingAmount"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="bookingAmount">
-                  Booking Amount (₹) - Minimum ₹
-                  {packageDetails.minBookingAmount} Per Person
-                </FieldLabel>
-                <Input
-                  {...field}
-                  type="number"
-                  id="bookingAmount"
-                  aria-invalid={fieldState.invalid}
-                  aria-describedby="bookingAmount-error"
-                  placeholder={`e.g. ${packageDetails.minBookingAmount}`}
-                  autoComplete="off"
-                />
-                <div className="min-h-5" id="bookingAmount-error">
-                  <FieldError errors={[fieldState.error]} />
-                </div>
-              </Field>
-            )}
-          />
-          {/* Additional Information */}
-          <Controller
-            name="additionalInformation"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="additionalInformation">
-                  Additional Information (Optional)
-                </FieldLabel>
-                <Textarea
-                  {...field}
-                  id="additionalInformation"
-                  aria-invalid={fieldState.invalid}
-                  aria-describedby="additionalInformation-error"
-                  placeholder="Any specific requirements or information you'd like to share with us?"
-                  rows={8}
-                />
-                <div className="min-h-5" id="additionalInformation-error">
-                  <FieldError errors={[fieldState.error]} />
-                </div>
-              </Field>
-            )}
-          />
+            <div className="flex justify-between gap-2">
+              <Controller
+                name="primaryContactFirstName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="primaryContactFirstName">
+                      First Name
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="primaryContactFirstName"
+                      aria-invalid={fieldState.invalid}
+                      aria-describedby="primaryContactFirstName-error"
+                      placeholder="e.g. John"
+                      autoComplete="given-name"
+                    />
+                    <div className="min-h-5" id="primaryContactFirstName-error">
+                      <FieldError errors={[fieldState.error]} />
+                    </div>
+                  </Field>
+                )}
+              />
+              <Controller
+                name="primaryContactLastName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="primaryContactLastName">
+                      Last Name
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="primaryContactLastName"
+                      aria-invalid={fieldState.invalid}
+                      aria-describedby="primaryContactLastName-error"
+                      placeholder="e.g. Doe"
+                      autoComplete="family-name"
+                    />
+                    <div className="min-h-5" id="primaryContactLastName-error">
+                      <FieldError errors={[fieldState.error]} />
+                    </div>
+                  </Field>
+                )}
+              />
+              <Controller
+                name="primaryContactEmail"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="primaryContactEmail">Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id="primaryContactEmail"
+                      type="email"
+                      aria-invalid={fieldState.invalid}
+                      aria-describedby="primaryContactEmail-error"
+                      placeholder="e.g. john@example.com"
+                      autoComplete="email"
+                    />
+                    <div className="min-h-5" id="primaryContactEmail-error">
+                      <FieldError errors={[fieldState.error]} />
+                    </div>
+                  </Field>
+                )}
+              />
+            </div>
 
-          {/* Booking Summary */}
-          <BookingSummary
-            packageDetails={packageDetails}
-            control={form.control}
-          />
+            {/* Phone Number */}
+            <div className="flex">
+              <Controller
+                name="primaryContactPhone"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    className="w-full max-w-50"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldLabel htmlFor="primaryContactPhone">
+                      Phone Number
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="primaryContactPhone"
+                      type="tel"
+                      aria-invalid={fieldState.invalid}
+                      aria-describedby="primaryContactPhone-error"
+                      placeholder="e.g. 9876543210"
+                      autoComplete="tel"
+                      className="max-w-48"
+                    />
+                    <div className="min-h-5" id="primaryContactPhone-error">
+                      <FieldError errors={[fieldState.error]} />
+                    </div>
+                  </Field>
+                )}
+              />
+              <div className="flex grow justify-start items-center gap-2">
+                <Controller
+                  name="primaryContactWhatsApp"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className="max-w-52"
+                    >
+                      <FieldLabel htmlFor="primaryContactWhatsApp">
+                        WhatsApp Number
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="primaryContactWhatsApp"
+                        type="tel"
+                        aria-invalid={fieldState.invalid}
+                        aria-describedby="primaryContactWhatsApp-error"
+                        placeholder="e.g. 9876543210"
+                        autoComplete="tel"
+                        readOnly={checkedSameWhatsapp}
+                        className="max-w-48 w-full"
+                      />
+                      <div
+                        className="min-h-5"
+                        id="primaryContactWhatsApp-error"
+                      >
+                        <FieldError errors={[fieldState.error]} />
+                      </div>
+                    </Field>
+                  )}
+                />
+                <div className="flex min-w-24 items-center gap-1">
+                  <Checkbox
+                    id="sameAsPhone"
+                    checked={checkedSameWhatsapp}
+                    onCheckedChange={handleWhatsappCheckboxChange}
+                  />
+                  <Label className=" text-sm">Same as Phone Number</Label>
+                </div>
+              </div>
+            </div>
+            {/* Whatsapp number -> an input box at left and a button ("same as phone number") at right*/}
+            {/* Booking Amount */}
+            <Controller
+              name="bookingAmount"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="bookingAmount">
+                    Booking Amount (₹) - Minimum ₹
+                    {packageDetails.minBookingAmount} Per Person
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    id="bookingAmount"
+                    aria-invalid={fieldState.invalid}
+                    aria-describedby="bookingAmount-error"
+                    placeholder={`e.g. ${packageDetails.minBookingAmount}`}
+                    autoComplete="off"
+                  />
+                  <div className="min-h-5" id="bookingAmount-error">
+                    <FieldError errors={[fieldState.error]} />
+                  </div>
+                </Field>
+              )}
+            />
+            {/* Additional Information */}
+            <Controller
+              name="additionalInformation"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="additionalInformation">
+                    Additional Information (Optional)
+                  </FieldLabel>
+                  <Textarea
+                    {...field}
+                    id="additionalInformation"
+                    aria-invalid={fieldState.invalid}
+                    aria-describedby="additionalInformation-error"
+                    placeholder="Any specific requirements or information you'd like to share with us?"
+                    rows={8}
+                  />
+                  <div className="min-h-5" id="additionalInformation-error">
+                    <FieldError errors={[fieldState.error]} />
+                  </div>
+                </Field>
+              )}
+            />
 
-          <Field orientation="horizontal" className="my-6">
-            <Button
-              //   disabled={!form.formState.isValid}
-              type="submit"
-              form="booking-form"
-            >
-              Proceed to Pay
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => form.reset()}
-            >
-              Reset
-            </Button>
-          </Field>
-        </form>
-      </CardContent>
-    </Card>
+            <Field orientation="horizontal" className="my-6">
+              <Button
+                //   disabled={!form.formState.isValid}
+                type="submit"
+                form="booking-form"
+              >
+                Proceed to Pay
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => form.reset()}
+              >
+                Reset
+              </Button>
+            </Field>
+          </form>
+        </CardContent>
+      </Card>
+      {/* Booking Summary */}
+      <BookingSummary packageDetails={packageDetails} control={form.control} />
+    </div>
   );
 };
 
@@ -428,7 +424,7 @@ function BookingSummary({
     : "Not selected";
 
   return (
-    <div className="rounded-xl border-2 border-teal-600 bg-teal-50 p-5 space-y-4">
+    <div className="rounded-xl max-w-md border-2 border-teal-600 bg-teal-50 p-5 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900">Booking Summary</h3>

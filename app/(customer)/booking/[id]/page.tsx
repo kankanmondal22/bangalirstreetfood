@@ -14,15 +14,22 @@ const BookPackage = async ({
   return (
     <div className="bg-gray-100 flex flex-col gap-8 py-12">
       <div className=" mx-auto">
-        <div className="">
+        <div className="relative">
           <Image
-            src={packageDetails?.images[0] || "/placeholder.jpg"}
+            src={packageDetails?.images[0] || "/pahar.jpeg"}
             alt="Package Image"
             width={1500}
             height={1500}
             loading="eager"
-            className="rounded-lg overflow-hidden aspect-video object-cover w-full"
+            className="rounded-xl mb-4 overflow-hidden object-cover w-full max-h-96"
           />
+
+          <div className="absolute bottom-4 left-4 text-white px-4 py-2 rounded">
+            <h2 className="text-2xl font-bold">
+              {packageDetails?.title || "Package Title"}
+            </h2>
+            <p className="text-sm">{packageDetails?.duration || "Duration"}</p>
+          </div>
         </div>
         <BookingForm />
       </div>
