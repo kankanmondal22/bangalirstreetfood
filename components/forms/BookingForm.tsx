@@ -376,6 +376,7 @@ const BookingForm = () => {
                 //   disabled={!form.formState.isValid}
                 type="submit"
                 form="booking-form"
+                className="font-semibold "
               >
                 Proceed to Pay
               </Button>
