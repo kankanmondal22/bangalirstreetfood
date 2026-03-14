@@ -1,5 +1,7 @@
 "use server";
 
+import db from "@/db";
+import { packagesTable } from "@/db/schema";
 // ============================================================================
 // PAYMENT FLOW OVERVIEW (Razorpay — Partial Payment / Booking Amount Model)
 // ============================================================================
@@ -30,7 +32,8 @@
 //   advisory locks / atomic INSERT...SELECT for concurrency safety.
 // ============================================================================
 
-import type { IBookingFormData } from "@/types/booking";
+import { bookingSchema, type IBookingFormData } from "@/types/booking";
+import { eq } from "drizzle-orm";
 
 export const createBooking = async (
   packageId: string,
@@ -45,24 +48,70 @@ export const createBooking = async (
   // - formData: IBookingFormData (validated by Zod on frontend, RE-VALIDATE here)
   // Step 1: Server-side input validation (NEVER trust frontend)
   // - Re-validate formData using bookingSchema.safeParse()
+  const formDataResult = bookingSchema.safeParse(formData);
+  if (!formDataResult.success) {
+    throw new Error("Invalid booking data");
+  }
   // - Validate packageId is non-empty and valid UUID format
+  if (
+    !packageId ||
+    !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+      packageId,
+    )
+  ) {
+    throw new Error("Invalid package ID");
+  }
   // - Validate formData.travelDate is a valid date string AND is in the future
+  const travelDate = new Date(formData.travelDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set to start of today for accurate comparison
+  if (isNaN(travelDate.getTime()) || travelDate < today) {
+    throw new Error("Invalid travel date");
+  }
   // - Validate formData.noOfAdults >= 1
+  if (formData.noOfAdults < 1) {
+    throw new Error("At least one adult must be included");
+  }
   // - Validate formData.noOfChildren >= 0
+  if (formData.noOfChildren < 0) {
+    throw new Error("Number of children cannot be negative");
+  }
   // - Compute totalParticipants = noOfAdults + noOfChildren
+  const totalParticipants = formData.noOfAdults + formData.noOfChildren;
   // - Ensure totalParticipants > 0
+  if (totalParticipants <= 0) {
+    throw new Error("Total participants must be positive");
+  }
   // - Validate contact fields:
   //     primaryContactFirstName, primaryContactLastName (non-empty)
   //     primaryContactEmail (valid email)
   //     primaryContactPhone (10–15 digits)
   //     primaryContactWhatsApp (10–13 digits)
+  if (
+    !formData.primaryContactFirstName ||
+    !formData.primaryContactLastName ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.primaryContactEmail) ||
+    !/^\d{10,15}$/.test(formData.primaryContactPhone) ||
+    !/^\d{10,13}$/.test(formData.primaryContactWhatsApp)
+  ) {
+    throw new Error("Invalid contact information");
+  }
   // - Validate foodPreference is one of: "Veg", "Non-Veg", "Mixed"
+  if (!["Veg", "Non-Veg", "Mixed"].includes(formData.foodPreference)) {
+    throw new Error("Invalid food preference");
+  }
   // Step 2: Fetch package from DB (NO row lock needed yet)
   // - SELECT id, title, pricePerAdult, pricePerChild, maxParticipants,
   //         minBookingAmount, availableDates, status
   //   FROM packages WHERE id = ?
   // - Reject if not found or status !== "ACTIVE"
   // - Reject if formData.travelDate is NOT in package.availableDates
+  const packageData = await db
+    .select()
+    .from(packagesTable)
+    .where(eq(packagesTable.id, packageId)); // Implement this DB function
+  console.log(packageData);
+
   // Step 3: Recalculate pricing on server (NEVER trust frontend amounts)
   // - totalAmount = (noOfAdults × pricePerAdult) + (noOfChildren × pricePerChild)
   // - minRequired = minBookingAmount × totalParticipants

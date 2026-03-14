@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, FieldContent, FieldError, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { packageData } from "@/mockData";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -14,21 +13,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
+import { createBooking } from "@/actions/booking.action";
 
-const BookingForm = () => {
-  const packageDetails = packageData[0];
+const BookingForm = ({
+  packageId,
+  packageDetails,
+}: {
+  packageId: string;
+  packageDetails: {
+    title: string;
+    minBookingAmount: number;
+    pricePerAdult: number;
+    pricePerChild: number;
+    duration: string;
+    availableDates: {
+      id: string;
+      startDate: string;
+    }[];
+  };
+}) => {
   const [checkedSameWhatsapp, setCheckedSameWhatsapp] = useState(true);
 
   const form = useForm<IBookingFormData>({
@@ -51,9 +60,10 @@ const BookingForm = () => {
     name: "primaryContactPhone",
     control: form.control,
   });
-  const onSubmit = (data: IBookingFormData) => {
+  const onSubmit = async (data: IBookingFormData) => {
     // Here you can handle the form submission, e.g., send the data to an API endpoint
     try {
+      await createBooking(packageId, data);
       console.log(data);
     } catch (_error) {
       console.log(_error || "Error");
@@ -164,12 +174,15 @@ const BookingForm = () => {
                         </SelectTrigger>
                         <SelectContent position="popper">
                           {packageDetails.availableDates.map((avlDate) => (
-                            <SelectItem key={avlDate} value={avlDate}>
-                              {new Date(avlDate).toLocaleDateString("en-US", {
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric",
-                              })}
+                            <SelectItem key={avlDate.id} value={avlDate.id}>
+                              {new Date(avlDate.startDate).toLocaleDateString(
+                                "en-US",
+                                {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -403,7 +416,17 @@ function BookingSummary({
   packageDetails,
   control,
 }: {
-  packageDetails: (typeof packageData)[0];
+  packageDetails: {
+    title: string;
+    minBookingAmount: number;
+    pricePerAdult: number;
+    pricePerChild: number;
+    duration: string;
+    availableDates: {
+      id: string;
+      startDate: string;
+    }[];
+  };
   control: ReturnType<typeof useForm<IBookingFormData>>["control"];
 }) {
   const noOfAdults = useWatch({ control, name: "noOfAdults" });

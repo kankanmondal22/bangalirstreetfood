@@ -17,6 +17,7 @@ import { randomUUID } from "crypto";
 import { countDistinct, desc, eq, inArray, min } from "drizzle-orm";
 import { duration } from "drizzle-orm/gel-core";
 import { ar, it } from "date-fns/locale";
+import { title } from "process";
 
 export const fetchPackages = async ({
   page,
@@ -235,20 +236,54 @@ export const getPackageDetailsByIdForBooking = async (id: string) => {
   // - remainingSeats = maxParticipants - reserved
   // - status: "AVAILABLE" | "LIMITED" | "SOLD_OUT"
   // - Filter out past dates
-  //
-  // Step 6: Return:
-  // {
-  //   id,
-  //   title,
-  //   pricePerAdult,
-  //   pricePerChild,
-  //   maxParticipants,
-  //   minBookingAmount,
-  //   dates: [
-  //     { date: "2026-03-10", remainingSeats: 8, status: "AVAILABLE" },
-  //     { date: "2026-03-17", remainingSeats: 2, status: "LIMITED" },
-  //   ]
-  // }
+  const query = await db
+    .select({
+      title: packagesTable.packageTitle,
+      availableDates: {
+        id: travelDatesTable.id,
+        startDate: travelDatesTable.startDate,
+      },
+      minBookingAmount: packagesTable.minimumBookingAmountPerPerson,
+      pricePerAdult: packagesTable.amountPerAdult,
+      pricePerChild: packagesTable.amountPerChild,
+      duration: packagesTable.duration,
+    })
+
+    .from(packagesTable)
+    .innerJoin(
+      travelDatesTable,
+      eq(packagesTable.id, travelDatesTable.packageId),
+    )
+    .where(eq(packagesTable.id, id));
+
+  if (!query || query.length === 0) {
+    throw new Error("Package not found");
+  }
+  // send the availableDates as array of objects [{id:"", startDate: ""}, {id:"", startDate: ""}] using .reduce
+  const base = query[0];
+
+  const result = query.reduce(
+    (acc, row) => {
+      if (row.availableDates?.startDate) {
+        acc.availableDates.push({
+          id: row.availableDates.id,
+          startDate: row.availableDates.startDate,
+        });
+      }
+      return acc;
+    },
+    {
+      title: base.title,
+      minBookingAmount: base.minBookingAmount,
+      pricePerAdult: base.pricePerAdult,
+      pricePerChild: base.pricePerChild,
+      duration: base.duration,
+      availableDates: [] as { id: string; startDate: string }[],
+    },
+  );
+
+  return result;
+
   //
   // IMPORTANT:
   // - Never return calculated total price — only base prices
