@@ -21,7 +21,7 @@ const IndividualPackagePage = async ({
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Hero Image */}
-      <div className="relative mx-2 max-h-112 overflow-hidden bg-teal-50">
+      <div className="relative mx-auto max-h-112 max-w-6xl overflow-hidden bg-teal-50">
         <Image
           src={packageDetails.thumbnail || "/placeholder.jpg"}
           alt={packageDetails.title}
