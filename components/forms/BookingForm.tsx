@@ -20,6 +20,8 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { createBooking } from "@/actions/booking.action";
+import Payment from "../Payment";
+import { toast } from "sonner";
 
 const BookingForm = ({
   packageId,
@@ -385,14 +387,39 @@ const BookingForm = ({
             />
 
             <Field orientation="horizontal" className="my-6">
-              <Button
-                //   disabled={!form.formState.isValid}
-                type="submit"
-                form="booking-form"
-                className="font-semibold "
+              <Payment
+                companyName="Bangalir Street Food"
+                currency="INR"
+                onPaymentSuccess={() => {
+                  toast.success("Payment successful!");
+                }}
+                onPaymentFailure={() => {
+                  toast.error("Payment failed!");
+                }}
+                description={`Booking advance payment for ${packageDetails.title} package`}
+                amountInRupees={form.getValues("bookingAmount")}
+                customerData={{
+                  firstName: form.getValues("primaryContactFirstName"),
+                  lastName: form.getValues("primaryContactLastName"),
+                  email: form.getValues("primaryContactEmail"),
+                  phone: form.getValues("primaryContactPhone"),
+                }}
+                bookingData={form.getValues()}
+                totalAmountPayable={
+                  // (children * amount per children) + (adult * amount per adult)
+                  form.getValues("noOfAdults") * packageDetails.pricePerAdult +
+                  form.getValues("noOfChildren") * packageDetails.pricePerChild
+                }
               >
+                {/* <Button
+                  //   disabled={!form.formState.isValid}
+                  type="submit"
+                  form="booking-form"
+                  className="font-semibold"
+                > */}
                 Proceed to Pay
-              </Button>
+                {/* </Button> */}
+              </Payment>
               <Button
                 type="button"
                 variant="outline"

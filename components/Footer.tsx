@@ -64,6 +64,12 @@ const Footer = () => {
           reserved.
         </div>
       </div>
+      <div className="bg-teal-950 text-teal-100 font-semibold w-full p-4 text-center">
+        Designed & Developed by&nbsp;{" "}
+        <Link href="https://steadfaststudio.in" className="underline italic">
+          SteadFast
+        </Link>
+      </div>
     </footer>
   );
 };

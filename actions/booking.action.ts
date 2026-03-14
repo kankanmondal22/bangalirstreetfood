@@ -376,3 +376,5 @@ export const cleanupExpiredBookings = async () => {
   // Create /api/cron/cleanup-bookings/route.ts that calls this function
   // and verifies CRON_SECRET header for security.
 };
+
+export const getPaymentSuccessData = async (paymentId: string) => {};

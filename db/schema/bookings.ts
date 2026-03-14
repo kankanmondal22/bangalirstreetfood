@@ -34,7 +34,7 @@ export const bookingsTable = pgTable(
     totalAmountPayable: integer("total_amount_payable").notNull(), // in INR
 
     // payment details
-    amountPaid: integer("amount_paid").default(0),
+    amountPaid: integer("amount_paid").default(0).notNull(), // in INR
     paymentStatus: text("payment_status").notNull().default("PENDING"),
     razorpayOrderId: text("razorpay_order_id").notNull(),
     razorpayPaymentId: text("razorpay_payment_id"),
