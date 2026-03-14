@@ -62,6 +62,7 @@ const BookingForm = ({
     name: "primaryContactPhone",
     control: form.control,
   });
+  const watchedFormData = useWatch({ control: form.control });
   const onSubmit = async (data: IBookingFormData) => {
     // Here you can handle the form submission, e.g., send the data to an API endpoint
     try {
@@ -397,26 +398,44 @@ const BookingForm = ({
                   toast.error("Payment failed!");
                 }}
                 description={`Booking advance payment for ${packageDetails.title} package`}
-                amountInRupees={form.getValues("bookingAmount")}
+                amountInRupees={watchedFormData.bookingAmount || 0}
                 customerData={{
-                  firstName: form.getValues("primaryContactFirstName"),
-                  lastName: form.getValues("primaryContactLastName"),
-                  email: form.getValues("primaryContactEmail"),
-                  phone: form.getValues("primaryContactPhone"),
+                  firstName: watchedFormData.primaryContactFirstName || "",
+                  lastName: watchedFormData.primaryContactLastName || "",
+                  email: watchedFormData.primaryContactEmail || "",
+                  phone: watchedFormData.primaryContactPhone || "",
                 }}
-                bookingData={form.getValues()}
+                bookingData={{
+                  noOfChildren: watchedFormData.noOfChildren || 0,
+                  noOfAdults: watchedFormData.noOfAdults || 0,
+                  bookingAmount: watchedFormData.bookingAmount || 0,
+                  primaryContactFirstName:
+                    watchedFormData.primaryContactFirstName || "",
+                  primaryContactLastName:
+                    watchedFormData.primaryContactLastName || "",
+                  primaryContactEmail:
+                    watchedFormData.primaryContactEmail || "",
+                  primaryContactPhone:
+                    watchedFormData.primaryContactPhone || "",
+                  primaryContactWhatsApp:
+                    watchedFormData.primaryContactWhatsApp || "",
+                  foodPreference: watchedFormData.foodPreference || "Non-Veg",
+                  additionalInformation:
+                    watchedFormData.additionalInformation || "",
+                  travelDate: watchedFormData.travelDate || "",
+                }}
                 totalAmountPayable={
                   // (children * amount per children) + (adult * amount per adult)
-                  form.getValues("noOfAdults") * packageDetails.pricePerAdult +
-                  form.getValues("noOfChildren") * packageDetails.pricePerChild
+                  (watchedFormData.noOfAdults || 0) *
+                    packageDetails.pricePerAdult +
+                  (watchedFormData.noOfChildren || 0) *
+                    packageDetails.pricePerChild
                 }
+                handleValidateFormData={async () => {
+                  const isValid = await form.trigger();
+                  return isValid;
+                }}
               >
-                {/* <Button
-                  //   disabled={!form.formState.isValid}
-                  type="submit"
-                  form="booking-form"
-                  className="font-semibold"
-                > */}
                 Proceed to Pay
                 {/* </Button> */}
               </Payment>

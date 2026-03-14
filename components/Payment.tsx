@@ -45,6 +45,7 @@ interface PaymentProps {
   notes?: Record<string, string>;
   bookingData: IBookingFormData;
   totalAmountPayable: number;
+  handleValidateFormData?: () => Promise<boolean> | boolean;
 }
 
 const Payment: React.FC<PaymentProps> = ({
@@ -61,12 +62,11 @@ const Payment: React.FC<PaymentProps> = ({
   notes,
   bookingData,
   totalAmountPayable,
+  handleValidateFormData,
 }) => {
   const router = useRouter();
 
   const [isProcessing, setProcessing] = useState(false);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-  const [scriptError, setScriptError] = useState(false);
 
   // Convert rupees to paise (smallest currency unit)
   const amountInPaise = amountInRupees * 100;
@@ -106,14 +106,18 @@ const Payment: React.FC<PaymentProps> = ({
    */
   const handlePayment = useCallback(async () => {
     // Validation
-
-    if (!scriptLoaded) {
-      toast.error("Payment gateway is loading. Please try again.");
-      return;
+    if (handleValidateFormData) {
+      const isFormValid = await handleValidateFormData();
+      if (!isFormValid) {
+        toast.error("Please fix the highlighted form fields before payment.");
+        return;
+      }
     }
 
-    if (scriptError) {
-      toast.error("Payment gateway failed to load. Please refresh the page.");
+    if (typeof window === "undefined" || !window.Razorpay) {
+      toast.error(
+        "Payment gateway failed to load. Please refresh the page and try again.",
+      );
       return;
     }
 
@@ -123,7 +127,6 @@ const Payment: React.FC<PaymentProps> = ({
     }
 
     setProcessing(true);
-
     try {
       // Step 1: Create order on server
       toast.loading("Initializing payment...");
@@ -244,14 +247,14 @@ const Payment: React.FC<PaymentProps> = ({
     companyName,
     description,
     themeColor,
-    scriptLoaded,
-    scriptError,
     verifyPayment,
     onPaymentSuccess,
     onPaymentFailure,
     notes,
     bookingData,
     totalAmountPayable,
+    handleValidateFormData,
+    router,
   ]);
 
   return (
@@ -259,11 +262,9 @@ const Payment: React.FC<PaymentProps> = ({
       <Script
         src="https://checkout.razorpay.com/v1/checkout.js"
         onLoad={() => {
-          setScriptLoaded(true);
           console.log("Razorpay SDK loaded successfully");
         }}
         onError={() => {
-          setScriptError(true);
           console.error("Failed to load Razorpay SDK");
           toast.error("Payment gateway failed to load");
         }}
@@ -271,7 +272,7 @@ const Payment: React.FC<PaymentProps> = ({
       />
       <Button
         onClick={handlePayment}
-        disabled={disabled || isProcessing || scriptError || !scriptLoaded}
+        disabled={disabled || isProcessing}
         className="w-fit"
         type="button"
       >
