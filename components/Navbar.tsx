@@ -17,7 +17,7 @@ const Navbar = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
-        <header className="print:static print:shadow-none mx-2">
+        <header className="print:static print:shadow-none mx-2 ">
             {/* Top Banner – Logo & Brand */}
             <div className="bg-white border-b">
                 <div className="max-w-5xl mx-auto flex items-center justify-center gap-6 py-4 px-4">

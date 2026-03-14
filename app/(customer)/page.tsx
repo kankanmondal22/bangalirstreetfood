@@ -1,13 +1,14 @@
-import BeachScene from "@/components/AnimatedBeachScene";
+// import BeachScene from "@/components/AnimatedBeachScene";
 import { ComponentExample } from "@/components/component-example";
-import Image from "next/image";
+import HeroVideo from "@/components/HeroVideo";
+import Home from "@/components/home";
 
 export default function Page() {
     return (
         //hero
 
-        <div>
-            <div className="mx-w-5xl">
+        <div className="w-full">
+            {/* <div className="mx-w-5xl">
                 <Image
                     src="/hero.png"
                     width={1920}
@@ -15,9 +16,12 @@ export default function Page() {
                     alt="Hero Image"
                     className="w-full max-w-5xl mx-auto h-auto object-cover m-2"
                 />
-                <BeachScene />
-            </div>
-            <ComponentExample />{" "}
+            </div> */}
+            <HeroVideo />
+            <Home />
+            <section className="rounded-t-3xl bg-background pt-6">
+                <ComponentExample />{" "}
+            </section>
         </div>
     );
 }
