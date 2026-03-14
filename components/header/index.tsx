@@ -17,16 +17,16 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="print:static print:shadow-none print:hidden mx-2">
+    <header className="mx-2 print:static print:hidden print:shadow-none">
       {/* Top Banner – Logo & Brand */}
-      <div className="bg-white border-b">
-        <div className="max-w-5xl mx-auto flex items-center justify-center gap-6 py-4 px-4">
+      <div className="bg-white">
+        <div className="mx-auto flex max-w-5xl items-center justify-center gap-6 px-4 py-4">
           <Image
             src="/bangalir_street_food_logo1.jpg"
             alt="Bangalir Street Food Logo"
             width={500}
             height={500}
-            className="h-24 w-24 object-cover rounded-full"
+            className="h-24 w-24 rounded-full object-cover"
           />
           <Image
             src="/khobarchoriadin.png"
@@ -39,8 +39,8 @@ const Navbar = () => {
       </div>
 
       {/* Main Nav Bar */}
-      <div className="sticky top-0 z-50 bg-teal-700 shadow-sm border-b border-gray-200">
-        <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-2">
+      <div className="sticky top-0 z-50 mx-auto max-w-6xl border-b border-gray-200 bg-teal-700 shadow-sm">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2">
           {/* Small logo in navbar */}
           <Link href="/" className="shrink-0">
             <Image
@@ -48,12 +48,12 @@ const Navbar = () => {
               alt="Logo"
               width={100}
               height={100}
-              className="h-16 object-contain w-full my-1 "
+              className="my-1 h-16 w-full object-contain"
             />
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden items-center gap-1 md:flex">
             {navigationLinks.map((link) => {
               const isActive =
                 link.href === "/"
@@ -88,7 +88,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+            className="rounded-lg p-2 text-gray-600 hover:bg-gray-100 md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
@@ -126,7 +126,7 @@ const Navbar = () => {
 
         {/* Mobile Nav */}
         {mobileOpen && (
-          <nav className="md:hidden border-t border-gray-100 bg-white px-4 pb-4 pt-2 space-y-1">
+          <nav className="space-y-1 border-t border-gray-100 bg-white px-4 pt-2 pb-4 md:hidden">
             {navigationLinks.map((link) => {
               const isActive =
                 link.href === "/"
@@ -138,7 +138,7 @@ const Navbar = () => {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
                     isActive
                       ? "bg-teal-50 text-teal-700"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -150,7 +150,7 @@ const Navbar = () => {
             })}
             <Button
               asChild
-              className="w-full mt-2"
+              className="mt-2 w-full"
               size="sm"
               variant={"accent"}
             >

@@ -119,12 +119,12 @@ export function TourForm() {
   }
 
   return (
-    <Card className="w-full max-w-3xl mx-auto border-t-4 border-t-primary shadow-lg">
+    <Card className="border-t-primary mx-auto w-full max-w-3xl border-t-4 shadow-lg">
       <CardHeader className="bg-muted/40 border-b pb-6">
         <CardTitle className="text-2xl font-bold tracking-tight">
           Create Tour Package
         </CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">
+        <CardDescription className="text-muted-foreground text-sm">
           Add tour details including pricing, highlights and itinerary.
         </CardDescription>
       </CardHeader>
@@ -203,7 +203,7 @@ export function TourForm() {
                           <PopoverTrigger asChild>
                             <Badge
                               variant="success"
-                              className="cursor-pointer flex items-center gap-1"
+                              className="flex cursor-pointer items-center gap-1"
                             >
                               <PlusIcon className="h-3 w-3" />
                               Add
@@ -253,7 +253,7 @@ export function TourForm() {
             />
 
             {/* Pricing */}
-            <div className="grid grid-cols-2 gap-4 bg-amber-50/40 dark:bg-amber-950/20 p-4 rounded-lg border border-amber-200/60 dark:border-amber-800/30">
+            <div className="grid grid-cols-2 gap-4 rounded-lg border border-amber-200/60 bg-amber-50/40 p-4 dark:border-amber-800/30 dark:bg-amber-950/20">
               <Controller
                 name="amountAdult"
                 control={form.control}
@@ -281,7 +281,7 @@ export function TourForm() {
             </div>
 
             {/* Min booking + max group */}
-            <div className="grid grid-cols-2 gap-4 bg-sky-50/40 dark:bg-sky-950/20 p-4 rounded-lg border border-sky-200/60 dark:border-sky-800/30">
+            <div className="grid grid-cols-2 gap-4 rounded-lg border border-sky-200/60 bg-sky-50/40 p-4 dark:border-sky-800/30 dark:bg-sky-950/20">
               <Controller
                 name="minBookingAmount"
                 control={form.control}
@@ -309,26 +309,26 @@ export function TourForm() {
             </div>
 
             {/* Highlights Array */}
-            <FieldSet className="bg-muted/20 rounded-lg border border-border p-4">
-              <div className="flex justify-between items-center">
-                <FieldLegend className="text-primary font-semibold uppercase tracking-wide text-xs">
+            <FieldSet className="bg-muted/20 border-border rounded-lg border p-4">
+              <div className="flex items-center justify-between">
+                <FieldLegend className="text-primary text-xs font-semibold tracking-wide uppercase">
                   Highlights
                 </FieldLegend>
                 <AddHighlightDialog form={form} />
               </div>
 
-              <div className="flex flex-col rounded-md overflow-hidden border border-border">
+              <div className="border-border flex flex-col overflow-hidden rounded-md border">
                 {highlights.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-6 italic">
+                  <p className="text-muted-foreground py-6 text-center text-sm italic">
                     No highlights yet
                   </p>
                 )}
                 {highlights.map((item, index) => (
                   <ul
                     key={index}
-                    className="w-full gap-1 hover:bg-accent/50 pl-3 border-b border-border last:border-b-0 py-2 list-disc list-inside flex justify-between items-center"
+                    className="hover:bg-accent/50 border-border flex w-full list-inside list-disc items-center justify-between gap-1 border-b py-2 pl-3 last:border-b-0"
                   >
-                    <li className="font-medium text-foreground">{item}</li>
+                    <li className="text-foreground font-medium">{item}</li>
                     <Button
                       variant={"destructive"}
                       type="button"
@@ -340,7 +340,7 @@ export function TourForm() {
                           shouldValidate: true,
                         });
                       }}
-                      className="ml-1 text-muted-foreground hover:text-foreground"
+                      className="text-muted-foreground hover:text-foreground ml-1"
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -353,9 +353,9 @@ export function TourForm() {
               )}
             </FieldSet>
             {/* Itinerary Array */}
-            <FieldSet className="bg-muted/20 rounded-lg border border-border p-4">
-              <div className="flex justify-between items-center">
-                <FieldLegend className="text-primary font-semibold uppercase tracking-wide text-xs">
+            <FieldSet className="bg-muted/20 border-border rounded-lg border p-4">
+              <div className="flex items-center justify-between">
+                <FieldLegend className="text-primary text-xs font-semibold tracking-wide uppercase">
                   Itinerary
                 </FieldLegend>
                 <FieldDescription>
@@ -364,15 +364,15 @@ export function TourForm() {
               </div>
               <div className="rounded-md border">
                 <table className="w-full text-sm">
-                  <thead className="bg-primary/10 border-b border-primary/20">
+                  <thead className="bg-primary/10 border-primary/20 border-b">
                     <tr>
-                      <th className="px-4 py-3 text-left font-semibold text-primary">
+                      <th className="text-primary px-4 py-3 text-left font-semibold">
                         Day
                       </th>
-                      <th className="px-4 py-3 text-left font-semibold text-primary">
+                      <th className="text-primary px-4 py-3 text-left font-semibold">
                         Description
                       </th>
-                      <th className="px-4 py-3 text-right font-semibold text-primary">
+                      <th className="text-primary px-4 py-3 text-right font-semibold">
                         Actions
                       </th>
                     </tr>
@@ -383,7 +383,7 @@ export function TourForm() {
                       <tr>
                         <td
                           colSpan={3}
-                          className="px-4 py-8 text-center text-sm text-muted-foreground italic"
+                          className="text-muted-foreground px-4 py-8 text-center text-sm italic"
                         >
                           No itinerary added yet
                         </td>
@@ -393,7 +393,7 @@ export function TourForm() {
                       <tr key={index} className="border-t">
                         <td className="px-4 py-3 font-medium">{item.day}</td>
 
-                        <td className="px-4 py-3 text-muted-foreground">
+                        <td className="text-muted-foreground px-4 py-3">
                           <span className="line-clamp-2">
                             {item.description}
                           </span>
@@ -443,7 +443,7 @@ export function TourForm() {
                   accept="image/*"
                   onChange={(e) => handleImageUpload(e.target.files)}
                 />
-                <div className="grid grid-cols-3 gap-4 mt-4">
+                <div className="mt-4 grid grid-cols-3 gap-4">
                   {previewImages.map((src, i) => (
                     <Image
                       key={i}

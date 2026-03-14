@@ -1,5 +1,5 @@
 // import BeachScene from "@/components/AnimatedBeachScene";
-import { ComponentExample } from "@/components/component-example";
+// import { ComponentExample } from "@/components/component-example";
 import HeroVideo from "@/components/HeroVideo";
 import Home from "@/components/home";
 
@@ -19,9 +19,9 @@ export default function Page() {
             </div> */}
             <HeroVideo />
             <Home />
-            <section className="rounded-t-3xl bg-background pt-6">
+            {/* <section className="rounded-t-3xl bg-background pt-6">
                 <ComponentExample />{" "}
-            </section>
+            </section> */}
         </div>
     );
 }

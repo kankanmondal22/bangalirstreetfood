@@ -92,7 +92,7 @@ const BookingForm = ({
 
   return (
     <div className="flex gap-4">
-      <Card className=" bg-white w-full max-w-3xl mx-auto">
+      <Card className="mx-auto w-full max-w-3xl bg-white">
         <CardHeader className="sr-only">
           <CardTitle className="px-8">
             Book Your Package : {packageDetails.title}
@@ -101,11 +101,11 @@ const BookingForm = ({
         <CardContent>
           <form
             id="booking-form"
-            className="p-8 pt-4 mx-auto flex flex-col gap-1"
+            className="mx-auto flex flex-col gap-1 p-8 pt-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             {/* No of Adult & No of Children */}
-            <div className="flex gap-2 justify-between">
+            <div className="flex justify-between gap-2">
               <Controller
                 name="noOfAdults"
                 control={form.control}
@@ -159,7 +159,7 @@ const BookingForm = ({
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldContent>
-                      <FieldLabel className="mb-1 " htmlFor="travelDate">
+                      <FieldLabel className="mb-1" htmlFor="travelDate">
                         Travel Date
                       </FieldLabel>
                       <Select
@@ -295,7 +295,7 @@ const BookingForm = ({
                   </Field>
                 )}
               />
-              <div className="flex grow justify-start items-center gap-2">
+              <div className="flex grow items-center justify-start gap-2">
                 <Controller
                   name="primaryContactWhatsApp"
                   control={form.control}
@@ -316,7 +316,7 @@ const BookingForm = ({
                         placeholder="e.g. 9876543210"
                         autoComplete="tel"
                         readOnly={checkedSameWhatsapp}
-                        className="max-w-48 w-full"
+                        className="w-full max-w-48"
                       />
                       <div
                         className="min-h-5"
@@ -333,7 +333,7 @@ const BookingForm = ({
                     checked={checkedSameWhatsapp}
                     onCheckedChange={handleWhatsappCheckboxChange}
                   />
-                  <Label className=" text-sm">Same as Phone Number</Label>
+                  <Label className="text-sm">Same as Phone Number</Label>
                 </div>
               </div>
             </div>
@@ -494,11 +494,11 @@ function BookingSummary({
     : "Not selected";
 
   return (
-    <div className="rounded-xl max-w-md border-2 border-teal-600 bg-teal-50 p-5 space-y-4">
+    <div className="max-w-md space-y-4 rounded-xl border-2 border-teal-600 bg-teal-50 p-5">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900">Booking Summary</h3>
-        <Badge variant="secondary" className="text-teal-900 bg-teal-200">
+        <Badge variant="secondary" className="bg-teal-200 text-teal-900">
           {packageDetails.duration}
         </Badge>
       </div>
@@ -506,7 +506,7 @@ function BookingSummary({
       <Separator className="bg-teal-500" />
 
       {/* Package Name */}
-      <p className="  text-teal-900 font-semibold">{packageDetails.title}</p>
+      <p className="font-semibold text-teal-900">{packageDetails.title}</p>
 
       {/* Details Grid */}
       <div className="grid grid-cols-3 gap-3">
@@ -552,7 +552,7 @@ function BookingSummary({
       <Separator className="bg-teal-600" />
 
       {/* Total */}
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <span className="font-semibold text-gray-900">Total Amount</span>
         <span className="text-xl font-bold text-teal-600">
           ₹{totalAmount.toLocaleString("en-IN")}
@@ -560,7 +560,7 @@ function BookingSummary({
       </div>
 
       {/* Payment Split */}
-      <div className="rounded-lg bg-white border-2 border-teal-500 p-3 space-y-1.5 text-sm">
+      <div className="space-y-1.5 rounded-lg border-2 border-teal-500 bg-white p-3 text-sm">
         <div className="flex justify-between">
           <span className="text-gray-600">Paying Now</span>
           <span className="font-medium text-gray-900">
@@ -576,7 +576,7 @@ function BookingSummary({
       </div>
 
       {/* Note */}
-      <p className="text-xs text-gray-500 leading-relaxed">
+      <p className="text-xs leading-relaxed text-gray-500">
         Pay a minimum of ₹
         {packageDetails.minBookingAmount.toLocaleString("en-IN")} per person to
         confirm your booking. The remaining amount can be paid later.
@@ -587,7 +587,7 @@ function BookingSummary({
 
 function SummaryItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-white/70 border-2 border-teal-500 px-3 py-2 text-center">
+    <div className="rounded-lg border-2 border-teal-500 bg-white/70 px-3 py-2 text-center">
       <p className="text-xs text-gray-500">{label}</p>
       <p className="text-sm font-semibold text-gray-800">{value}</p>
     </div>

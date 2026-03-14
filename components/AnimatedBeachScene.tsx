@@ -245,7 +245,7 @@ function TreeStump() {
       viewBox="0 0 260 320"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
+      className="h-full w-full"
     >
       <defs>
         <linearGradient id="stumpGrad" x1="0" y1="0" x2="1" y2="0">
@@ -355,16 +355,16 @@ function TreeStump() {
 
 export default function BeachScene() {
   return (
-    <div className="relative h-screen w-full overflow-hidden flex flex-col justify-end bg-sky-300">
+    <div className="relative flex h-screen w-full flex-col justify-end overflow-hidden bg-sky-300">
       {/* SKY CLOUDS */}
-      <div className="absolute inset-0 pointer-events-none">
-        <Cloud className="top-[10%] left-[-20%] animate-cloudSlow opacity-80" />
-        <Cloud className="top-[25%] left-[-30%] animate-cloudMedium opacity-60 scale-75" />
-        <Cloud className="top-[5%] left-[-15%] animate-cloudFast opacity-70 scale-110" />
+      <div className="pointer-events-none absolute inset-0">
+        <Cloud className="animate-cloudSlow top-[10%] left-[-20%] opacity-80" />
+        <Cloud className="animate-cloudMedium top-[25%] left-[-30%] scale-75 opacity-60" />
+        <Cloud className="animate-cloudFast top-[5%] left-[-15%] scale-110 opacity-70" />
       </div>
 
       {/* SEA */}
-      <div className="relative w-full h-[38%] bg-cyan-600 overflow-hidden">
+      <div className="relative h-[38%] w-full overflow-hidden bg-cyan-600">
         {/* Ripple rows */}
         <WaveRow top="15%" speed="waveSlow" opacity={0.35} />
         <WaveRow top="35%" speed="waveMedium" opacity={0.3} />
@@ -376,7 +376,7 @@ export default function BeachScene() {
       </div>
 
       {/* SAND */}
-      <div className="relative w-full h-[25%] bg-amber-200 shadow-[inset_0_20px_40px_rgba(0,0,0,0.1)]">
+      <div className="relative h-[25%] w-full bg-amber-200 shadow-[inset_0_20px_40px_rgba(0,0,0,0.1)]">
         <SandTexture />
       </div>
 
@@ -489,11 +489,11 @@ function WaveRow({
 
 function FoamWave() {
   return (
-    <div className="absolute bottom-0 w-[200%] left-0 foamWave">
+    <div className="foamWave absolute bottom-0 left-0 w-[200%]">
       <svg
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
-        className="w-full h-[60px]"
+        className="h-[60px] w-full"
       >
         <path
           d="

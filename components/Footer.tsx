@@ -9,7 +9,7 @@ const quickLinks = [
 
 const Footer = () => {
   return (
-    <footer className="bg-teal-900 text-gray-100 m-2 mt-12 print:hidden">
+    <footer className="m-2 mt-12 bg-teal-900 text-gray-100 print:hidden">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid gap-8 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-3">
           <div className="sm:col-span-2 lg:col-span-1">
@@ -29,7 +29,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-bold uppercase tracking-wide sm:text-xl">
+            <h4 className="text-lg font-bold tracking-wide uppercase sm:text-xl">
               Quick Links
             </h4>
             <ul className="mt-1 space-y-2">
@@ -47,7 +47,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-bold uppercase tracking-wide sm:text-xl">
+            <h4 className="text-lg font-bold tracking-wide uppercase sm:text-xl">
               Contact
             </h4>
             <p className="mt-3 break-words">
@@ -64,9 +64,9 @@ const Footer = () => {
           reserved.
         </div>
       </div>
-      <div className="bg-teal-950 text-teal-100 font-semibold w-full p-4 text-center">
+      <div className="w-full bg-teal-950 p-4 text-center font-semibold text-teal-100">
         Designed & Developed by&nbsp;{" "}
-        <Link href="https://steadfaststudio.in" className="underline italic">
+        <Link href="https://steadfaststudio.in" className="italic underline">
           SteadFast
         </Link>
       </div>

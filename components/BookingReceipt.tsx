@@ -46,9 +46,9 @@ const BookingReceipt = ({
   };
 
   return (
-    <Card className="w-full max-w-2xl bg-white shadow-lg print:shadow-none print:border-2">
+    <Card className="w-full max-w-2xl bg-white shadow-lg print:border-2 print:shadow-none">
       {/* Success Header */}
-      <CardHeader className="text-center pb-2">
+      <CardHeader className="pb-2 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 print:bg-green-200">
           <svg
             className="h-8 w-8 text-green-600"
@@ -90,11 +90,11 @@ const BookingReceipt = ({
             <h3 className="font-semibold text-gray-900">
               {bookingData.packageTitle}
             </h3>
-            <Badge variant="secondary" className="text-teal-700 bg-teal-100">
+            <Badge variant="secondary" className="bg-teal-100 text-teal-700">
               {bookingData.duration}
             </Badge>
           </div>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="mt-1 text-sm text-gray-500">
             Travel Date:{" "}
             <span className="font-medium text-gray-700">
               {formattedTravelDate}
@@ -106,7 +106,7 @@ const BookingReceipt = ({
 
         {/* Traveller Details */}
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold tracking-wide text-gray-700 uppercase">
             Contact Details
           </h4>
           <div className="grid grid-cols-2 gap-3 text-sm">
@@ -135,10 +135,10 @@ const BookingReceipt = ({
 
         {/* Pricing Summary */}
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+          <h4 className="text-sm font-semibold tracking-wide text-gray-700 uppercase">
             Payment Summary
           </h4>
-          <div className="rounded-xl border border-teal-200 bg-teal-50/40 p-4 space-y-3">
+          <div className="space-y-3 rounded-xl border border-teal-200 bg-teal-50/40 p-4">
             {/* Guest breakdown */}
             <div className="grid grid-cols-3 gap-3">
               <SummaryCard
@@ -189,7 +189,7 @@ const BookingReceipt = ({
             <Separator className="bg-teal-200" />
 
             {/* Total */}
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <span className="font-semibold text-gray-900">Total Amount</span>
               <span className="text-xl font-bold text-teal-600">
                 ₹{totalAmount.toLocaleString("en-IN")}
@@ -197,7 +197,7 @@ const BookingReceipt = ({
             </div>
 
             {/* Payment split */}
-            <div className="rounded-lg bg-white/70 border border-teal-100 p-3 space-y-1.5 text-sm">
+            <div className="space-y-1.5 rounded-lg border border-teal-100 bg-white/70 p-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Amount Paid</span>
                 <span className="font-medium text-green-600">
@@ -219,7 +219,7 @@ const BookingReceipt = ({
         <Separator className="print:hidden" />
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 print:hidden">
+        <div className="flex flex-col gap-3 sm:flex-row print:hidden">
           <Button onClick={handlePrint} className="flex-1">
             <svg
               className="mr-2 h-4 w-4"
@@ -241,7 +241,7 @@ const BookingReceipt = ({
           </Button>
         </div>
 
-        <p className="text-xs text-center text-gray-400 print:hidden">
+        <p className="text-center text-xs text-gray-400 print:hidden">
           If you have any questions, please contact us at{" "}
           <a href="mailto:support@bangalirstreetfood.com" className="underline">
             support@bangalirstreetfood.com
@@ -253,7 +253,7 @@ const BookingReceipt = ({
 };
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg bg-white/70 border border-teal-100 px-3 py-2 text-center">
+    <div className="rounded-lg border border-teal-100 bg-white/70 px-3 py-2 text-center">
       <p className="text-xs text-gray-500">{label}</p>
       <p className="text-sm font-semibold text-gray-800">{value}</p>
     </div>

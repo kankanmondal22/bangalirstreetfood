@@ -33,7 +33,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
     : "No upcoming dates";
 
   return (
-    <Card className="group flex flex-col h-full overflow-hidden transition-shadow hover:shadow-md pt-0">
+    <Card className="group flex h-full flex-col overflow-hidden pt-0 transition-shadow hover:shadow-md">
       {/* Image */}
       <div className="relative overflow-hidden">
         <Image
@@ -41,7 +41,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
           alt={pkg.title}
           width={600}
           height={400}
-          className="w-full aspect-4/3 object-cover transition-transform duration-300 group-hover:scale-105 bg-teal-50"
+          className="aspect-4/3 w-full bg-teal-50 object-cover transition-transform duration-300 group-hover:scale-105"
         />
         {/* Duration badge overlaid on image */}
         <Badge
@@ -54,7 +54,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
 
       {/* Content */}
       <CardHeader className="pb-0">
-        <CardTitle className="text-lg font-semibold leading-snug min-h-14 line-clamp-2">
+        <CardTitle className="line-clamp-2 min-h-14 text-lg leading-snug font-semibold">
           {pkg.title}
         </CardTitle>
       </CardHeader>
@@ -78,13 +78,13 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
         {/* Pricing row */}
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div>
-            <p className="text-gray-500 text-xs">Per Adult</p>
+            <p className="text-xs text-gray-500">Per Adult</p>
             <p className="font-semibold text-gray-900">
               ₹{pkg.amountPerAdult.toLocaleString("en-IN")}
             </p>
           </div>
           <div>
-            <p className="text-gray-500 text-xs">Per Child</p>
+            <p className="text-xs text-gray-500">Per Child</p>
             <p className="font-semibold text-gray-900">
               ₹{pkg.amountPerChild.toLocaleString("en-IN")}
             </p>
@@ -119,7 +119,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
       </CardContent>
 
       {/* Actions */}
-      <CardFooter className="flex gap-2 pt-0 mt-auto">
+      <CardFooter className="mt-auto flex gap-2 pt-0">
         <Button variant="outline" className="flex-1" asChild>
           <Link href={`/package/${pkg.id}`}>View Details</Link>
         </Button>
