@@ -13,9 +13,9 @@ export default async function BookingSuccessPage({
 
   if (!paymentId || typeof paymentId !== "string") {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded shadow text-center">
-          <h1 className="text-2xl font-bold mb-4">Invalid Payment ID</h1>
+      <main className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="rounded bg-white p-8 text-center shadow">
+          <h1 className="mb-4 text-2xl font-bold">Invalid Payment ID</h1>
           <p className="text-gray-600">No valid payment ID provided.</p>
         </div>
       </main>
@@ -50,7 +50,7 @@ export default async function BookingSuccessPage({
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 flex items-start justify-center py-12 px-4">
+    <main className="flex min-h-screen items-start justify-center bg-gray-50 px-4 py-12">
       <BookingReceipt bookingData={bookingData} />
     </main>
   );
