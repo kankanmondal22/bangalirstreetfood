@@ -21,16 +21,16 @@ const BookPackage = async ({
 
   if (!packageDetails) {
     return (
-      <div className="bg-gray-100 flex items-center justify-center h-screen">
-        <p className="text-red-500 text-lg">Package not found.</p>
+      <div className="flex h-screen items-center justify-center bg-gray-100">
+        <p className="text-lg text-red-500">Package not found.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-100 flex flex-col gap-8 py-12">
-      <div className=" mx-auto">
-        <div className="relative ">
+    <div className="flex flex-col gap-8 bg-gray-100 py-12">
+      <div className="mx-auto">
+        <div className="relative">
           <Image
             src={"/pahar.jpeg"}
             alt="Package Image"
@@ -38,11 +38,11 @@ const BookPackage = async ({
             height={1500}
             loading="eager"
             priority
-            className="rounded-xl mb-4 overflow-hidden object-cover w-full max-h-96"
+            className="mb-4 max-h-96 w-full overflow-hidden rounded-xl object-cover"
           />
-          <div className="absolute z-1 inset-0 bg-linear-to-t from-black/60 to-transparent rounded-xl"></div>
+          <div className="absolute inset-0 z-1 rounded-xl bg-linear-to-t from-black/60 to-transparent"></div>
 
-          <div className="absolute z-2 bottom-4 left-4 text-white px-4 py-2 rounded">
+          <div className="absolute bottom-4 left-4 z-2 rounded px-4 py-2 text-white">
             <h2 className="text-2xl font-bold">
               {packageDetails?.title || "Package Title"}
             </h2>

@@ -25,7 +25,7 @@ export default function NotFound() {
   });
 
   return (
-    <div className="flex min-h-[80vh] flex-col items-center justify-center text-center px-6">
+    <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
       {/* Spiral Sun */}
       <svg
         width="148"
@@ -57,9 +57,9 @@ export default function NotFound() {
       </svg>
 
       {/* 404 text */}
-      <h1 className="text-5xl font-bold text-gray-900 mb-3">404</h1>
+      <h1 className="mb-3 text-5xl font-bold text-gray-900">404</h1>
 
-      <p className="text-lg text-gray-600 mb-6 max-w-md">
+      <p className="mb-6 max-w-md text-lg text-gray-600">
         Looks like this road doesn’t lead to any street food stall. Let’s take
         you back home.
       </p>

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { packageData } from "@/mockData";
 import { UUID } from "crypto";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,62 +14,60 @@ const IndividualPackagePage = async ({
   params: Promise<{ id: string | UUID }>;
 }) => {
   const { id } = await params;
-  const pkg = packageData.find((p) => p.id === id);
   const packageDetails = await getPackageDetailsById(id);
 
   if (!packageDetails) return notFound();
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Hero Image */}
-      <div className="relative max-h-112 overflow-hidden bg-teal-50 mx-2">
+      <div className="relative mx-auto max-h-112 max-w-6xl overflow-hidden bg-teal-50">
         <Image
           src={packageDetails.thumbnail || "/placeholder.jpg"}
           alt={packageDetails.title}
           width={1500}
           height={1500}
           priority
-          className="w-full h-full max-h-112 object-cover"
+          className="h-full max-h-112 w-full object-cover"
         />
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
         {/* Title overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 max-w-5xl mx-auto">
+        <div className="absolute right-0 bottom-0 left-0 mx-auto max-w-5xl p-6 md:p-10">
           <Badge className="mb-3 bg-teal-600 text-white">
             {packageDetails.duration}
           </Badge>
-          <h1 className="text-2xl md:text-4xl font-bold text-white leading-tight">
+          <h1 className="text-2xl leading-tight font-bold text-white md:text-4xl">
             {packageDetails.title}
           </h1>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-5xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 py-8 lg:grid-cols-3">
         {/* Left Column – Details */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="space-y-8 lg:col-span-2">
           {/* Description */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Package Overview
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="leading-relaxed text-gray-700">
               {packageDetails.description}
             </p>
           </section>
           {/* Highlights */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Highlights
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {packageDetails.highlights.map((highlight) => (
                 <div
                   key={highlight}
                   className="flex items-start gap-3 rounded-lg border border-gray-200 bg-white p-4"
                 >
                   <svg
-                    className="h-5 w-5 text-teal-600 mt-0.5 shrink-0"
+                    className="mt-0.5 h-5 w-5 shrink-0 text-teal-600"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth={2}
@@ -92,7 +89,7 @@ const IndividualPackagePage = async ({
 
           {/* Available Dates */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Available Dates
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -102,7 +99,7 @@ const IndividualPackagePage = async ({
                 return (
                   <div
                     key={date}
-                    className={`rounded-lg border px-4 py-3 text-center min-w-28 ${
+                    className={`min-w-28 rounded-lg border px-4 py-3 text-center ${
                       isPast
                         ? "border-gray-200 bg-gray-50 text-gray-400 line-through"
                         : "border-teal-600 bg-teal-50 text-teal-800"
@@ -134,10 +131,10 @@ const IndividualPackagePage = async ({
 
           {/* Info Grid */}
           <section>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Trip Details
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <InfoCard label="Duration" value={packageDetails.duration} />
               <InfoCard
                 label="Max Group Size"
@@ -152,8 +149,9 @@ const IndividualPackagePage = async ({
                 value={`${packageDetails.availableDates.length} dates`}
               />
               <div className="col-span-full">
+                {/* iterinary table */}
                 <Separator />
-                <table className="w-full text-left mt-6 border-collapse overflow-hidden rounded-lg border border-teal-600">
+                <table className="mt-6 w-full border-collapse rounded-lg border border-teal-600 text-left">
                   <thead>
                     <tr className="bg-teal-600 text-white">
                       <th className="p-3 text-sm font-semibold">Day</th>
@@ -168,7 +166,7 @@ const IndividualPackagePage = async ({
                           index % 2 === 0 ? "bg-teal-50/50" : "bg-white"
                         }`}
                       >
-                        <td className="p-3 text-sm font-semibold text-teal-700 whitespace-nowrap">
+                        <td className="p-3 text-sm font-semibold whitespace-nowrap text-teal-700">
                           Day {day.day}
                         </td>
                         <td className="p-3 text-sm text-gray-700">
@@ -180,7 +178,6 @@ const IndividualPackagePage = async ({
                 </table>
               </div>
             </div>
-            {/* iterinary table */}
           </section>
         </div>
 
@@ -193,7 +190,7 @@ const IndividualPackagePage = async ({
             <CardContent className="space-y-4">
               {/* Price rows */}
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-500">Per Adult</p>
                     <p className="text-2xl font-bold text-teal-600">
@@ -210,7 +207,7 @@ const IndividualPackagePage = async ({
 
                 <Separator />
 
-                <div className="rounded-lg bg-amber-50 border border-amber-200 p-3">
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
                   <p className="text-xs text-amber-800">
                     <span className="font-semibold">Minimum booking:</span> ₹
                     {packageDetails.minBookingAmount.toLocaleString("en-IN")}{" "}
@@ -223,7 +220,7 @@ const IndividualPackagePage = async ({
               <Button asChild className="w-full" size="lg">
                 <Link href={`/booking/${packageDetails.id}`}>Book Now</Link>
               </Button>
-              <p className="text-xs text-center text-gray-400">
+              <p className="text-center text-xs text-gray-400">
                 No hidden charges. Free cancellation up to 48hrs before travel.
               </p>
             </CardContent>
@@ -238,7 +235,7 @@ function InfoCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white px-4 py-3 text-center">
       <p className="text-xs text-gray-500">{label}</p>
-      <p className="text-sm font-semibold text-gray-900 mt-0.5">{value}</p>
+      <p className="mt-0.5 text-sm font-semibold text-gray-900">{value}</p>
     </div>
   );
 }
