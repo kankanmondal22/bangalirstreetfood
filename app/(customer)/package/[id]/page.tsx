@@ -20,7 +20,6 @@ const IndividualPackagePage = async ({
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Hero Image */}
       <div className="relative mx-auto max-h-112 max-w-6xl overflow-hidden bg-teal-50">
         <Image
           src={packageDetails.thumbnail || "/placeholder.jpg"}
@@ -150,8 +149,9 @@ const IndividualPackagePage = async ({
                 value={`${packageDetails.availableDates.length} dates`}
               />
               <div className="col-span-full">
+                {/* iterinary table */}
                 <Separator />
-                <table className="mt-6 w-full border-collapse overflow-hidden rounded-lg border border-teal-600 text-left">
+                <table className="mt-6 w-full border-collapse rounded-lg border border-teal-600 text-left">
                   <thead>
                     <tr className="bg-teal-600 text-white">
                       <th className="p-3 text-sm font-semibold">Day</th>
@@ -178,7 +178,6 @@ const IndividualPackagePage = async ({
                 </table>
               </div>
             </div>
-            {/* iterinary table */}
           </section>
         </div>
 
