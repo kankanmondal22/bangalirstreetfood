@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import {
   Field,
   FieldContent,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -56,7 +55,7 @@ export default function LoginForm() {
     }, 1000);
     toast.success("Login Submitted:", {
       description: (
-        <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
+        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
           <code>{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
@@ -66,8 +65,8 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="bg-gray-100 p-12 flex items-center justify-center">
-      <Card className="w-full max-w-md m-12">
+    <div className="flex items-center justify-center bg-gray-100 p-12">
+      <Card className="m-12 w-full max-w-md">
         <CardHeader>
           <CardTitle>Login</CardTitle>
         </CardHeader>
@@ -118,16 +117,16 @@ export default function LoginForm() {
                         type="button"
                         variant="ghost"
                         size="icon-xs"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
+                        className="absolute top-1/2 right-2 -translate-y-1/2 p-1"
                         onClick={() => setShowPassword(!showPassword)}
                         aria-label={
                           showPassword ? "Hide password" : "Show password"
                         }
                       >
                         {showPassword ? (
-                          <EyeOffIcon className="w-4 h-4" />
+                          <EyeOffIcon className="h-4 w-4" />
                         ) : (
-                          <EyeIcon className="w-4 h-4" />
+                          <EyeIcon className="h-4 w-4" />
                         )}
                       </Button>
                     </FieldContent>
