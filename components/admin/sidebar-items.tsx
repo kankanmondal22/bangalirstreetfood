@@ -35,6 +35,7 @@ export function SidebarItems({
               isActive={pathname === item.url}
               asChild
               tooltip={item.name}
+              // variant="outline"
             >
               <a href={item.url}>
                 {item.icon && <item.icon />}

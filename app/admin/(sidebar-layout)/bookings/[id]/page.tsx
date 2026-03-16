@@ -1,6 +1,7 @@
 // import { getBookingDetailsById } from "@/actions/booking.action";
 import { getBookingDetailsById } from "@/app/admin/_actions/bookings";
 import PageTitle from "@/app/admin/_components/PageTitle";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableHeader,
@@ -46,7 +47,7 @@ const ViewBookingsPage = async ({
             <TableHead>Status</TableHead>
             {/* booking details */}
             {/* no of guests=> adults, children */}
-            <TableHead>No. of Guests</TableHead>
+            <TableHead>Guests</TableHead>
             {/* additional details */}
             <TableHead>Additional Request</TableHead>
             {/* payment related details */}
@@ -95,9 +96,23 @@ const ViewBookingsPage = async ({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{/* status */}</TableCell>
                 <TableCell>
-                  <div className="flex flex-row items-center gap-4">
+                  <Badge
+                    variant={
+                      booking.bookingDetails.status.toLowerCase() ===
+                      "confirmed"
+                        ? "success"
+                        : booking.bookingDetails.status.toLowerCase() ===
+                            "pending"
+                          ? "warning"
+                          : "destructive"
+                    }
+                  >
+                    {booking.bookingDetails.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col items-center gap-4">
                     <div className="bg-muted/50 flex items-center gap-2 rounded-md px-2 py-1">
                       <UserRound size={16} className="text-indigo-600" />
                       <span className="text-sm font-medium">
@@ -122,7 +137,11 @@ const ViewBookingsPage = async ({
                   <br />
                   Total Payable: {booking.paymentDetails.totalPayable}
                 </TableCell>
-                <TableCell>{booking.paymentDetails.paymentId}</TableCell>
+                <TableCell>
+                  <span className="bg-gray-100 p-0.5 font-mono">
+                    {booking.paymentDetails.paymentId}
+                  </span>
+                </TableCell>
               </TableRow>
             ))
           ) : (
