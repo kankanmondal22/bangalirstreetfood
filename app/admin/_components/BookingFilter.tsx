@@ -50,11 +50,11 @@ export default function BookingFilters({
             setDate("");
           }}
         >
-          <SelectTrigger className="w-[220px] bg-white">
+          <SelectTrigger className="w-[250px] bg-white">
             <SelectValue placeholder="Select Package" />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectGroup>
               {packages.map((p) => (
                 <SelectItem key={p} value={p}>
@@ -73,15 +73,20 @@ export default function BookingFilters({
         <Label>Date</Label>
 
         <Select value={date} onValueChange={setDate} disabled={!pkg}>
-          <SelectTrigger className="w-[220px] bg-white">
+          <SelectTrigger className="w-55 bg-white">
             <SelectValue placeholder="Select Date" />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectGroup>
               {filteredDates.map((d) => (
                 <SelectItem key={d.id} value={d.id}>
-                  {d.date}
+                  {/* show date as 12 Mar, 2026 */}
+                  {new Date(d.date).toLocaleDateString("en-US", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </SelectItem>
               ))}
             </SelectGroup>

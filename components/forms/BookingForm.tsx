@@ -485,8 +485,12 @@ function BookingSummary({
     noOfChildren * packageDetails.pricePerChild;
   const dueAmount = totalAmount - bookingAmount;
 
-  const formattedDate = travelDate
-    ? new Date(travelDate).toLocaleDateString("en-US", {
+  const selectedDate = packageDetails.availableDates.find(
+    (date) => date.id === travelDate,
+  )?.startDate;
+
+  const formattedDate = selectedDate
+    ? new Date(selectedDate).toLocaleDateString("en-US", {
         day: "numeric",
         month: "short",
         year: "numeric",

@@ -4,6 +4,8 @@ import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { Info, Copy, Check } from "lucide-react";
+import { useState } from "react";
 
 export const metaData = {
   title: "Booking Receipt - Bangalir Street Food",
@@ -40,7 +42,13 @@ const BookingReceipt = ({
     month: "short",
     year: "numeric",
   });
+  const [copied, setCopied] = useState(false);
 
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(bookingData.bookingId);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 5000);
+  };
   const handlePrint = () => {
     window.print();
   };
@@ -51,7 +59,7 @@ const BookingReceipt = ({
       <CardHeader className="pb-2 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 print:bg-green-200">
           <svg
-            className="h-8 w-8 text-green-600"
+            className="h-8 w-8 text-green-600 print:hidden"
             fill="none"
             stroke="currentColor"
             strokeWidth={2.5}
@@ -77,11 +85,31 @@ const BookingReceipt = ({
 
       <CardContent className="space-y-6 px-6 pb-8">
         {/* Booking ID */}
+        <div className="mb-2 px-2 text-sm text-yellow-600 print:hidden">
+          <Info className="mr-1 inline h-4 w-4" />
+          Please save this Booking ID for future reference.
+        </div>
         <div className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-3 print:bg-gray-100">
           <span className="text-sm text-gray-500">Booking ID</span>
-          <span className="font-mono font-semibold text-gray-800">
-            {bookingData.bookingId}
-          </span>
+
+          <div className="flex items-center gap-2">
+            <span className="font-mono font-semibold text-gray-800">
+              {bookingData.bookingId}
+            </span>
+
+            <Button
+              size="icon"
+              variant="ghost"
+              className="h-7 w-7"
+              onClick={handleCopy}
+            >
+              {copied ? (
+                <Check className="h-4 w-4 text-green-600" />
+              ) : (
+                <Copy className="h-4 w-4 text-gray-500" />
+              )}
+            </Button>
+          </div>
         </div>
 
         {/* Package Info */}
@@ -140,7 +168,7 @@ const BookingReceipt = ({
           </h4>
           <div className="space-y-3 rounded-xl border border-teal-200 bg-teal-50/40 p-4">
             {/* Guest breakdown */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-3 print:hidden">
               <SummaryCard
                 label="Adults"
                 value={String(bookingData.noOfAdults)}
@@ -234,17 +262,17 @@ const BookingReceipt = ({
                 d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6v-8z"
               />
             </svg>
-            Print Receipt
+            Download Receipt
           </Button>
           <Button variant="outline" className="flex-1" asChild>
             <Link href="/">Back to Home</Link>
           </Button>
         </div>
 
-        <p className="text-center text-xs text-gray-400 print:hidden">
-          If you have any questions, please contact us at{" "}
-          <a href="mailto:support@bangalirstreetfood.com" className="underline">
-            support@bangalirstreetfood.com
+        <p className="text-center text-sm font-semibold text-red-500 print:hidden">
+          If you face any issues, please contact us at{" "}
+          <a href="tel:+919876543210" className="underline">
+            +91 98765 43210
           </a>
         </p>
       </CardContent>
