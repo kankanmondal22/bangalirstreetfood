@@ -282,43 +282,6 @@ export const rejectBooking = async (bookingId: string) => {
   // A FAILED booking is automatically excluded from seat counts.
 };
 
-export const getBookingDetailsById = async (bookingId: string) => {
-  // PURPOSE:
-  // Fetch booking details for /booking/success page display.
-  // Also used on /booking/failure page.
-  // Step 1: Validate bookingId
-  // Step 2: Fetch booking by bookingId
-  // - JOIN packages table to get: title, duration, coverImage
-  // - If not found → return { success: false, error: "NOT_FOUND" }
-  // Step 3: Return booking summary:
-  // {
-  //   bookingReference,
-  //   packageTitle,
-  //   packageDuration,
-  //   travelDate (selectedDate),
-  //   noOfAdults,
-  //   noOfChildren,
-  //   pricePerAdult (from package at time of booking — consider snapshotting),
-  //   pricePerChild,
-  //   totalAmount,
-  //   bookingAmount (paid now),
-  //   dueAmount (remaining),
-  //   primaryContactFirstName,
-  //   primaryContactLastName,
-  //   primaryContactEmail,
-  //   primaryContactPhone,
-  //   foodPreference,
-  //   status,
-  //   paymentStatus,
-  // }
-  //
-  // SECURITY NOTE:
-  // Since there's no auth, anyone with the bookingId can view details.
-  // Use bookingReference (short, shareable) for public display,
-  // and internal UUID (bookingId) for API lookups.
-  // Consider rate limiting this endpoint to prevent enumeration.
-};
-
 export const checkPackageAvailability = async (packageId: string) => {
   // PURPOSE:
   // Return availability status for each date of a package.
