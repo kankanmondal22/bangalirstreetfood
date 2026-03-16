@@ -177,3 +177,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+@utility glassmorphic {
+  @apply rounded-lg border border-white/20 bg-white/30 backdrop-blur-md;
+}
