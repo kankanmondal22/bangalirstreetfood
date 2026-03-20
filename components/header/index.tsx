@@ -17,9 +17,9 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="mx-2 print:static print:hidden print:shadow-none">
+    <header className="print:static print:hidden print:shadow-none">
       {/* Top Banner – Logo & Brand */}
-      <div className="bg-white">
+      {/* <div className="bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-center gap-6 px-4 py-4">
           <Image
             src="/bangalir_street_food_logo1.jpg"
@@ -36,10 +36,10 @@ const Navbar = () => {
             className="h-20 w-auto object-contain"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Main Nav Bar */}
-      <div className="sticky top-0 z-50 mx-auto max-w-6xl border-b border-gray-200 bg-teal-700 shadow-sm">
+      <div className="sticky top-0 z-50 border-b border-gray-200 bg-teal-900 shadow-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2">
           {/* Small logo in navbar */}
           <Link href="/" className="shrink-0">

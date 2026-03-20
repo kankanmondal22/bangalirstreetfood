@@ -64,7 +64,7 @@ export default function HeroVideo() {
     <section ref={sectionRef} className="my-2 w-full px-2">
       <video
         ref={videoRef}
-        className="mx-auto block h-auto w-full object-contain will-change-transform md:max-w-6xl"
+        className="block h-auto w-full object-contain will-change-transform"
         src="/herovideo.mp4"
         autoPlay
         loop

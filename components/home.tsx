@@ -53,7 +53,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className="mx-auto my-6 flex w-full max-w-6xl gap-6">
+      <div className="my-6 flex w-full gap-6 px-4">
         <div className="flex h-64 w-full basis-2/3 items-end"></div>
 
         <div className="basis-1/3 border-3 border-dashed border-yellow-500 p-4 text-yellow-700">
