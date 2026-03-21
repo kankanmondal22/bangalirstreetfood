@@ -50,7 +50,7 @@ export default function BookingFilters({
             setDate("");
           }}
         >
-          <SelectTrigger className="w-[250px] bg-white">
+          <SelectTrigger className="w-62.5 bg-white">
             <SelectValue placeholder="Select Package" />
           </SelectTrigger>
 

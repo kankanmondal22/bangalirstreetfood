@@ -40,6 +40,11 @@ export const bookingsTable = pgTable(
     razorpayPaymentId: text("razorpay_payment_id"),
     razorpaySignature: text("razorpay_signature"),
 
+    // for passwordless login and booking management
+    secretToken: varchar("secret_token", { length: 64 })
+      .notNull()
+      .default("abc"),
+
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
