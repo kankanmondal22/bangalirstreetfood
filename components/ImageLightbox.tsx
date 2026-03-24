@@ -31,17 +31,23 @@ export default function ImageLightbox({
   }, [images.length, initialIndex]);
 
   const [currentIndex, setCurrentIndex] = useState(safeInitialIndex);
+  const [lastInitialIndex, setLastInitialIndex] = useState(safeInitialIndex);
+
+  // Reset currentIndex when initialIndex changes
+  if (safeInitialIndex !== lastInitialIndex) {
+    setCurrentIndex(safeInitialIndex);
+    setLastInitialIndex(safeInitialIndex);
+  }
 
   useEffect(() => {
     if (isOpen) {
-      setCurrentIndex(safeInitialIndex);
       document.body.style.overflow = "hidden";
     }
 
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isOpen, safeInitialIndex]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen || !images.length) return;
