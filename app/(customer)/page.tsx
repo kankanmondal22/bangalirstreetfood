@@ -2,6 +2,8 @@
 // import { ComponentExample } from "@/components/component-example";
 import HeroVideo from "@/components/HeroVideo";
 import Home from "@/components/home";
+import PackageGallery from "@/components/PackageGallery";
+import SocialMediaVideoCard from "@/components/SocialMediaVideoCard";
 // import { Button } from "@/components/ui/button";
 
 export default function Page() {
@@ -20,6 +22,9 @@ export default function Page() {
             </div> */}
       <HeroVideo />
       <Home />
+      <SocialMediaVideoCard />
+        <PackageGallery />
+
       {/* <div className="m-6">
         <Button variant="shadow" className="">
           Click me
