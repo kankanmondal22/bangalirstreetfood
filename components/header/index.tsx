@@ -4,7 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const navigationLinks = [
   { name: "Home", href: "/" },
@@ -14,10 +16,37 @@ const navigationLinks = [
 
 const Navbar = () => {
   const pathname = usePathname();
+  const headerRef = useRef<HTMLDivElement>(null);
+
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useGSAP(() => {
+    const navTween = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#header",
+        start: "center center",
+        markers: true,
+      },
+    });
+    navTween.fromTo(
+      "#header",
+      {
+        backgroundColor: "transparent",
+      },
+      {
+        backgroundColor: "white",
+        duration: 1,
+        ease: "power2.out",
+      },
+    );
+  });
+
   return (
-    <header className="print:static print:hidden print:shadow-none">
+    <header
+      ref={headerRef}
+      className="fixed top-0 right-0 left-0 z-50 w-full transition-all duration-300"
+      id="header"
+    >
       {/* Top Banner – Logo & Brand */}
       {/* <div className="bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-center gap-6 px-4 py-4">
@@ -39,7 +68,7 @@ const Navbar = () => {
       </div> */}
 
       {/* Main Nav Bar */}
-      <div className="sticky top-0 z-50 border-b border-gray-200 bg-teal-900 shadow-sm">
+      <div className="z-50 border-b border-gray-200 shadow-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2">
           {/* Small logo in navbar */}
           <Link href="/" className="shrink-0">
@@ -68,8 +97,8 @@ const Navbar = () => {
                   size="sm"
                   className={
                     isActive
-                      ? "text-teal-700"
-                      : "text-white hover:text-teal-700"
+                      ? "text-teal-600"
+                      : "text-teal-700 hover:text-teal-600"
                   }
                 >
                   <Link className="font-semibold" href={link.href}>

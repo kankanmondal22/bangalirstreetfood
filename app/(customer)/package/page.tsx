@@ -64,9 +64,11 @@ const Packages = async ({
   return (
     <main className="m-2 min-h-screen bg-gray-50">
       {/* Hero / Header */}
-      <section className="px-4 py-14 text-center text-teal-700">
-        <h1 className="text-3xl font-bold md:text-4xl">Our Packages</h1>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-teal-500 md:text-base">
+      <section className="px-4 py-14 text-center">
+        <h1 className="font-handwriting text-3xl font-bold md:text-4xl">
+          Our Packages
+        </h1>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-teal-700 md:text-base">
           Explore our hand-picked travel experiences. Pick the one that excites
           you and book your next adventure today!
         </p>

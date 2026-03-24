@@ -61,7 +61,7 @@ export default function HeroVideo() {
   // }, []);
 
   return (
-    <section ref={sectionRef} className="my-2 w-full px-2">
+    <section ref={sectionRef} className="my-2 w-full px-2" id="hero-video">
       <video
         ref={videoRef}
         className="block h-auto w-full object-contain will-change-transform"
