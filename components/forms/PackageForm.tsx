@@ -51,7 +51,15 @@ import { createPackage } from "@/actions/package.action";
 import { InsertPackage } from "@/db/schema";
 import { useRouter } from "next/navigation";
 
-export function TourForm() {
+type TourFormProps = {
+  tour?: {
+    id: string;
+    title: string;
+    description: string;
+  };
+};
+
+export function TourForm({ tour }: TourFormProps) {
   const router = useRouter();
 
   const form = useForm<IPackageFrom>({

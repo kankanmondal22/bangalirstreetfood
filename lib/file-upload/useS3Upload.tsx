@@ -8,10 +8,13 @@ interface UploadResponse {
 }
 
 export function useS3Upload() {
-  const [uploading, setUploading] = useState(false);
+  const [activeUploads, setActiveUploads] = useState(0);
+
+  const beginUpload = () => setActiveUploads((count) => count + 1);
+  const endUpload = () => setActiveUploads((count) => Math.max(0, count - 1));
 
   const uploadFile = async (file: File): Promise<string> => {
-    setUploading(true);
+    beginUpload();
     try {
       const { data } = await axios.post<UploadResponse>("/api/upload", {
         fileName: file.name,
@@ -24,13 +27,16 @@ export function useS3Upload() {
 
       return data.publicUrl;
     } finally {
-      setUploading(false);
+      endUpload();
     }
   };
 
   const uploadMultiple = async (files: File[]): Promise<string[]> => {
+    if (!files.length) return [];
     return Promise.all(files.map(uploadFile));
   };
+
+  const uploading = activeUploads > 0;
 
   return { uploadFile, uploadMultiple, uploading };
 }

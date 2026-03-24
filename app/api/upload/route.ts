@@ -7,17 +7,30 @@ import {
   isValidFileType,
 } from "@/lib/file-upload/s3";
 
+function hasInvalidAwsCredentialConfig(): boolean {
+  const hasAccessKey = Boolean(process.env.AWS_ACCESS_KEY);
+  const hasSecretKey = Boolean(process.env.AWS_SECRET_KEY);
+  return hasAccessKey !== hasSecretKey;
+}
+
 export async function POST(req: Request) {
   try {
     // Validate environment variables
-    if (
-      !process.env.AWS_REGION ||
-      !process.env.AWS_ACCESS_KEY ||
-      !process.env.AWS_SECRET_KEY ||
-      !process.env.AWS_BUCKET_NAME
-    ) {
+    if (!process.env.AWS_REGION || !process.env.AWS_BUCKET_NAME) {
       return Response.json(
         { error: "Missing AWS configuration" },
+        { status: 500 },
+      );
+    }
+
+    if (hasInvalidAwsCredentialConfig()) {
+      console.log("invalid credential");
+
+      return Response.json(
+        {
+          error:
+            "Invalid AWS credential configuration. Set both AWS_ACCESS_KEY and AWS_SECRET_KEY or neither.",
+        },
         { status: 500 },
       );
     }
@@ -71,14 +84,19 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   try {
     // Validate environment variables
-    if (
-      !process.env.AWS_REGION ||
-      !process.env.AWS_ACCESS_KEY ||
-      !process.env.AWS_SECRET_KEY ||
-      !process.env.AWS_BUCKET_NAME
-    ) {
+    if (!process.env.AWS_REGION || !process.env.AWS_BUCKET_NAME) {
       return Response.json(
         { error: "Missing AWS configuration" },
+        { status: 500 },
+      );
+    }
+
+    if (hasInvalidAwsCredentialConfig()) {
+      return Response.json(
+        {
+          error:
+            "Invalid AWS credential configuration. Set both AWS_ACCESS_KEY and AWS_SECRET_KEY or neither.",
+        },
         { status: 500 },
       );
     }

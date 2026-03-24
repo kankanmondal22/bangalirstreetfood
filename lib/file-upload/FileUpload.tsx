@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Upload, X, FileIcon, ImageIcon } from "lucide-react";
+import { Upload, X, FileIcon } from "lucide-react";
+import Image from "next/image";
 import { useS3Upload } from "./useS3Upload";
 
 interface FileUploadProps {
@@ -23,7 +24,7 @@ export default function FileUpload({
   value = [],
   onChange,
   multiple = false,
-  accept = "*/*",
+  accept = "image/*",
   maxFiles = 5,
   autoUpload = true,
   showPreview = true,
@@ -31,25 +32,32 @@ export default function FileUpload({
   helperText,
 }: FileUploadProps) {
   const [files, setFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState<string[]>(value);
+  const [previewUrls, setPreviewUrls] = useState<string[]>(() => value);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>(() => value);
 
   const { uploadFile, uploadMultiple, uploading } = useS3Upload();
 
   useEffect(() => {
     return () => {
       previewUrls.forEach((url) => {
-        if (!url.startsWith("http")) URL.revokeObjectURL(url);
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
       });
     };
-  }, []);
+  }, [previewUrls]);
 
   const handleFiles = async (selected: FileList | null) => {
     if (!selected) return;
 
     let newFiles = Array.from(selected);
 
-    if (!multiple) newFiles = [newFiles[0]];
+    if (!newFiles.length) return;
+
+    if (!multiple) newFiles = newFiles.slice(0, 1);
     if (multiple) newFiles = newFiles.slice(0, maxFiles);
+
+    if (!newFiles.length) return;
 
     setFiles(newFiles);
 
@@ -63,6 +71,8 @@ export default function FileUpload({
         ? await uploadMultiple(newFiles)
         : [await uploadFile(newFiles[0])];
 
+      setUploadedUrls(urls);
+      setPreviewUrls(urls);
       onChange?.(urls);
     }
   };
@@ -74,13 +84,25 @@ export default function FileUpload({
       ? await uploadMultiple(files)
       : [await uploadFile(files[0])];
 
+    setUploadedUrls(urls);
+    setPreviewUrls(urls);
     onChange?.(urls);
   };
 
   const removeFile = (index: number) => {
-    const updated = previewUrls.filter((_, i) => i !== index);
-    setPreviewUrls(updated);
-    onChange?.(updated);
+    const nextFiles = files.filter((_, i) => i !== index);
+    const nextPreviewUrls = previewUrls.filter((_, i) => i !== index);
+    const nextUploadedUrls = uploadedUrls.filter((_, i) => i !== index);
+
+    const removedUrl = previewUrls[index];
+    if (removedUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(removedUrl);
+    }
+
+    setFiles(nextFiles);
+    setPreviewUrls(nextPreviewUrls);
+    setUploadedUrls(nextUploadedUrls);
+    onChange?.(nextUploadedUrls);
   };
 
   const isImage = (url: string) =>
@@ -114,7 +136,15 @@ export default function FileUpload({
             <div key={i} className="relative rounded border p-2">
               <div className="flex h-24 items-center justify-center rounded bg-gray-50">
                 {isImage(url) ? (
-                  <img src={url} className="max-h-full object-contain" />
+                  <div className="relative h-full w-full">
+                    <Image
+                      src={url}
+                      alt={`Upload preview ${i + 1}`}
+                      fill
+                      unoptimized
+                      className="object-contain"
+                    />
+                  </div>
                 ) : (
                   <FileIcon />
                 )}
