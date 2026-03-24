@@ -24,7 +24,7 @@ const Navbar = () => {
     const navTween = gsap.timeline({
       scrollTrigger: {
         trigger: "#header",
-        start: "center center",
+        start: "center end",
         markers: true,
       },
     });
@@ -73,11 +73,11 @@ const Navbar = () => {
           {/* Small logo in navbar */}
           <Link href="/" className="shrink-0">
             <Image
-              src="/sadakodhai.png"
+              src="/kalokodhai.png"
               alt="Logo"
-              width={100}
+              width={200}
               height={100}
-              className="my-1 h-16 w-full object-contain"
+              className="my-1 h-16 w-full object-cover"
             />
           </Link>
 

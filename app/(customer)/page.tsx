@@ -1,8 +1,8 @@
 // import BeachScene from "@/components/AnimatedBeachScene";
-import { ComponentExample } from "@/components/component-example";
+// import { ComponentExample } from "@/components/component-example";
 import HeroVideo from "@/components/HeroVideo";
 import Home from "@/components/home";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
@@ -20,11 +20,11 @@ export default function Page() {
             </div> */}
       <HeroVideo />
       <Home />
-      <div className="m-6">
+      {/* <div className="m-6">
         <Button variant="shadow" className="">
           Click me
         </Button>
-      </div>
+      </div> */}
       {/* <section className="bg-background rounded-t-3xl pt-6">
         <ComponentExample />{" "}
       </section> */}
