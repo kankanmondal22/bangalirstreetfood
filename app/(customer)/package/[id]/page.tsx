@@ -76,7 +76,7 @@ const IndividualPackagePage = async ({
         <div className="space-y-8 lg:col-span-2">
           {/* Description */}
           <section>
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">
+            <h2 className="mb-4 text-2xl font-semibold text-gray-900">
               Package Overview
             </h2>
             <p className="leading-relaxed text-gray-700">
@@ -88,7 +88,7 @@ const IndividualPackagePage = async ({
             <h2 className="mb-4 text-lg font-semibold text-gray-900">
               Highlights
             </h2>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="flex flex-wrap gap-3">
               {packageDetails.highlights.map((highlight) => (
                 <div
                   key={highlight}
@@ -165,17 +165,14 @@ const IndividualPackagePage = async ({
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <InfoCard label="Duration" value={packageDetails.duration} />
               <InfoCard
-                label="Max Group Size"
+                label="Min Group Size"
                 value={`${packageDetails.maxGroupSize} people`}
               />
               <InfoCard
                 label="Min. Booking"
                 value={`₹${packageDetails.minBookingAmount.toLocaleString("en-IN")}`}
               />
-              <InfoCard
-                label="Available Dates"
-                value={`${packageDetails.availableDates.length} dates`}
-              />
+              <InfoCard label="Train Ticket" value={`Included`} />
               <div className="col-span-full">
                 {/* iterinary table */}
                 <Separator />
@@ -194,10 +191,10 @@ const IndividualPackagePage = async ({
                           index % 2 === 0 ? "bg-teal-50/50" : "bg-white"
                         }`}
                       >
-                        <td className="p-3 text-sm font-semibold whitespace-nowrap text-teal-700">
+                        <td className="w-12 bg-amber-50 p-3 text-sm font-semibold whitespace-nowrap text-teal-700">
                           Day {day.day}
                         </td>
-                        <td className="p-3 text-sm text-gray-700">
+                        <td className="p-3 text-sm whitespace-pre text-gray-700">
                           {day.activities}
                         </td>
                       </tr>
@@ -313,6 +310,12 @@ const IndividualPackagePage = async ({
             <li className="text-sm text-gray-700">
               The company is not responsible for any unforeseen circumstances
               that may affect the tour.
+            </li>
+            <li className="text-sm text-gray-700">
+              By default we will buy sleeper class train tickets for the trip.
+              If you want to upgrade to a higher class, please contact us at
+              least 2 weeks before departure. Additional charges may apply based
+              on the class of ticket and availability.
             </li>
           </ul>
         </div>
