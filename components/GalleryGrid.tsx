@@ -29,7 +29,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
           <div
             key={index}
             onClick={() => handleImageClick(index)}
-            className="aspect-3/2 cursor-pointer overflow-hidden rounded-xl border bg-white p-2 shadow-lg transition-transform duration-300 hover:scale-105"
+            className="aspect-3/2 cursor-pointer overflow-hidden rounded-xl border bg-white p-2 shadow transition-transform duration-300"
           >
             <Image
               src={image}

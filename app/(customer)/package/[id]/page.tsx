@@ -8,6 +8,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPackageDetailsById } from "@/actions/package.action";
 import GalleryGrid from "@/components/GalleryGrid";
+import { Check, X } from "lucide-react";
 
 const mockGallery = [
   "/pahar.jpeg",
@@ -17,6 +18,23 @@ const mockGallery = [
   "/pahar.jpeg",
   "/pahar2.jpeg",
 ];
+
+const mockIncluded = [
+  "Accommodation in 3-star hotels",
+  "Daily breakfast and dinner",
+  "Airport transfers",
+  "Guided city tours",
+];
+
+const mockExcluded = [
+  "International airfare",
+  "Travel insurance",
+  "Personal expenses",
+  "Tips and gratuities",
+];
+
+const mockAdditionalNotes =
+  "Please ensure you have a valid passport and visa for the duration of your trip. It is recommended to purchase travel insurance for your protection during the trip. The itinerary is subject to change based on weather conditions and other unforeseen circumstances.";
 
 const IndividualPackagePage = async ({
   params,
@@ -244,6 +262,36 @@ const IndividualPackagePage = async ({
       <div className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="text-2xl font-bold text-gray-900">Picture Gallery</h2>
         <GalleryGrid images={mockGallery} />
+      </div>
+
+      {/* Including & Excluding */}
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-3">
+        <div className="rounded-xl border bg-white px-5 py-6">
+          <h3 className="mb-3 text-xl font-semibold text-gray-900">Included</h3>
+          <ul>
+            {mockIncluded.map((item) => (
+              <li key={item} className="text-sm text-gray-700">
+                <Check className="mr-2 inline-block text-green-500" /> {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-xl border bg-white px-5 py-6">
+          <h3 className="mb-3 text-xl font-semibold text-gray-900">Excluded</h3>
+          <ul>
+            {mockExcluded.map((item) => (
+              <li key={item} className="text-sm text-gray-700">
+                <X className="mr-2 inline-block text-red-500" /> {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-xl border bg-white px-5 py-6">
+          <h3 className="mb-3 text-xl font-semibold text-gray-900">
+            Additional Notes
+          </h3>
+          <p className="text-sm text-gray-700">{mockAdditionalNotes}</p>
+        </div>
       </div>
 
       {/* Terms & Conditions */}

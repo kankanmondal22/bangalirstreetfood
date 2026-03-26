@@ -54,7 +54,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
 
       {/* Content */}
       <CardHeader className="pb-0">
-        <CardTitle className="line-clamp-2 min-h-14 text-lg leading-snug font-semibold">
+        <CardTitle className="line-clamp-2 text-lg leading-snug font-semibold">
           {pkg.title}
         </CardTitle>
       </CardHeader>
