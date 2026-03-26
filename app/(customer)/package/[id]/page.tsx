@@ -28,7 +28,7 @@ const IndividualPackagePage = async ({
   if (!packageDetails) return notFound();
 
   return (
-    <main className="mt-12 min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-9xl relative mx-auto max-h-132 overflow-hidden bg-teal-50">
         <Image
           src={packageDetails.thumbnail || "/pahar2.jpeg"}
@@ -257,7 +257,31 @@ const IndividualPackagePage = async ({
           ))}
         </div>
       </div>
-    </main>
+
+      {/* Terms & Conditions */}
+      <div className="mx-auto max-w-6xl px-4 py-12">
+        <h2 className="text-2xl font-bold text-gray-900">Terms & Conditions</h2>
+        <div className="mt-6 space-y-4">
+          <p className="text-sm text-gray-700">
+            Please read the following terms and conditions carefully before
+            booking your trip.
+          </p>
+          <ul className="list-disc space-y-2 pl-5">
+            <li className="text-sm text-gray-700">
+              Cancellations must be made at least 48 hours before the scheduled
+              departure.
+            </li>
+            <li className="text-sm text-gray-700">
+              Changes to the itinerary may be subject to additional charges.
+            </li>
+            <li className="text-sm text-gray-700">
+              The company is not responsible for any unforeseen circumstances
+              that may affect the tour.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 };
 
