@@ -177,7 +177,7 @@ const IndividualPackagePage = async ({
               />
               <InfoCard label="Train Ticket" value={`Included`} />
               <div className="col-span-full">
-                {/* iterinary table */}
+                {/* itinerary table */}
                 <Separator />
                 <table className="mt-6 w-full border-collapse rounded-lg border border-teal-600 text-left">
                   <thead>
@@ -194,7 +194,7 @@ const IndividualPackagePage = async ({
                           index % 2 === 0 ? "bg-teal-50/50" : "bg-white"
                         }`}
                       >
-                        <td className="w-12 bg-amber-50 border-r border-teal-600 p-3 text-sm font-semibold whitespace-nowrap text-teal-700">
+                        <td className="w-12 border-r border-teal-600 bg-amber-50 p-3 text-sm font-semibold whitespace-nowrap text-teal-700">
                           Day {day.day}
                         </td>
                         <td className="p-3 text-sm whitespace-pre text-gray-700">
@@ -268,20 +268,28 @@ const IndividualPackagePage = async ({
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-3">
         <div className="rounded-xl border bg-white px-5 py-6">
           <h3 className="mb-3 text-xl font-semibold text-gray-900">Included</h3>
-          <ul className="list-ch">
+          <ul className="space-y-2">
             {mockIncluded.map((item) => (
-              <li key={item} className="text-sm text-gray-700">
-                <Check className="mr-2 inline-block text-green-500" /> {item}
+              <li
+                key={item}
+                className="flex items-start gap-2 text-sm text-gray-700"
+              >
+                <Check className="mt-1 shrink-0 text-green-500" size={16} />
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
         <div className="rounded-xl border bg-white px-5 py-6">
           <h3 className="mb-3 text-xl font-semibold text-gray-900">Excluded</h3>
-          <ul className="list-check">
+          <ul className="space-y-2">
             {mockExcluded.map((item) => (
-              <li key={item} className="text-sm text-gray-700">
-                <X className="mr-2 inline-block text-red-500" /> {item}
+              <li
+                key={item}
+                className="flex items-start gap-2 text-sm text-gray-700"
+              >
+                <X className="mt-1 shrink-0 text-red-500" size={16} />
+                <span>{item}</span>
               </li>
             ))}
           </ul>

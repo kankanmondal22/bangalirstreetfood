@@ -51,26 +51,6 @@ const Navbar = () => {
       className="fixed top-0 right-0 left-0 z-50 w-full transition-all duration-300"
       id="header"
     >
-      {/* Top Banner – Logo & Brand */}
-      {/* <div className="bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-center gap-6 px-4 py-4">
-          <Image
-            src="/bangalir_street_food_logo1.jpg"
-            alt="Bangalir Street Food Logo"
-            width={500}
-            height={500}
-            className="h-24 w-24 rounded-full object-cover"
-          />
-          <Image
-            src="/khobarchoriadin.png"
-            alt="Bangalir Street Food"
-            width={800}
-            height={500}
-            className="h-20 w-auto object-contain"
-          />
-        </div>
-      </div> */}
-
       {/* Main Nav Bar */}
       <div className="z-50 border-b border-gray-200 shadow-sm">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2">
