@@ -32,8 +32,9 @@ export default function ImageLightbox({
 
   const [currentIndex, setCurrentIndex] = useState(safeInitialIndex);
   const [lastInitialIndex, setLastInitialIndex] = useState(safeInitialIndex);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
 
-  // Reset currentIndex when initialIndex changes
+  // Sync index when initialIndex changes
   if (safeInitialIndex !== lastInitialIndex) {
     setCurrentIndex(safeInitialIndex);
     setLastInitialIndex(safeInitialIndex);
@@ -69,9 +70,16 @@ export default function ImageLightbox({
   if (!isOpen || !images.length) return null;
 
   const currentImage = images[currentIndex];
-  const goPrev = () =>
+
+  const goPrev = () => {
+    setDirection("prev");
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  const goNext = () => setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const goNext = () => {
+    setDirection("next");
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
 
   return (
     <div
@@ -81,6 +89,7 @@ export default function ImageLightbox({
       aria-modal="true"
       aria-label="Image lightbox"
     >
+      {/* Close Button */}
       <button
         type="button"
         onClick={onClose}
@@ -90,10 +99,11 @@ export default function ImageLightbox({
         <X className="h-5 w-5" />
       </button>
 
+      {/* Prev Button */}
       <button
         type="button"
-        onClick={(event) => {
-          event.stopPropagation();
+        onClick={(e) => {
+          e.stopPropagation();
           goPrev();
         }}
         className="absolute left-4 rounded-full border border-white/30 bg-black/70 p-2 text-white hover:bg-black/70"
@@ -102,30 +112,47 @@ export default function ImageLightbox({
         <ChevronLeft className="h-6 w-6" />
       </button>
 
+      {/* Main Content */}
       <div
-        className="relative w-full max-w-5xl rounded-xl p-3"
-        onClick={(event) => event.stopPropagation()}
+        className="relative w-full max-w-3xl"
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative h-[45vh] w-full overflow-hidden rounded-lg sm:h-[60vh]">
-          <Image
-            src={currentImage.src}
-            alt={currentImage.alt}
-            fill
-            className="object-contain"
-            sizes="100vw"
-            priority
-          />
-        </div>
+        {/* Stacked layers (no rotation) */}
+        <div className="absolute inset-0 translate-x-2 translate-y-2 bg-white opacity-60 shadow-lg" />
+        <div className="absolute inset-0 translate-x-4 translate-y-4 bg-white opacity-40 shadow-md" />
 
-        <div className="mt-3 text-center text-sm text-white/90">
-          {currentImage.title ?? currentImage.alt}
+        {/* Main Polaroid */}
+        <div className="relative animate-[zoomIn_0.3s_ease] bg-white p-4 pb-8 shadow-2xl">
+          <div className="relative h-[45vh] w-full overflow-hidden bg-black sm:h-[60vh]">
+            <div className="relative h-[45vh] w-full overflow-hidden bg-black sm:h-[60vh]">
+              <div
+                key={currentImage.src}
+                className={`absolute inset-0 flex items-center justify-center ${direction === "next" ? "animate-slideInRight" : "animate-slideInLeft"} `}
+              >
+                <Image
+                  src={currentImage.src}
+                  alt={currentImage.alt}
+                  fill
+                  className="object-contain brightness-95 contrast-95"
+                  sizes="100vw"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Caption */}
+          <div className="font-handwriting mt-4 text-center text-2xl font-bold text-gray-800">
+            {currentImage.title ?? currentImage.alt}
+          </div>
         </div>
       </div>
 
+      {/* Next Button */}
       <button
         type="button"
-        onClick={(event) => {
-          event.stopPropagation();
+        onClick={(e) => {
+          e.stopPropagation();
           goNext();
         }}
         className="absolute right-4 rounded-full border border-white/30 bg-black/50 p-2 text-white hover:bg-black/70"
