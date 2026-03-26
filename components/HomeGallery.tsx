@@ -6,10 +6,10 @@ import { ArrowRight } from "lucide-react";
 const galleryImages = [
   { src: "/pahar.jpeg", alt: "Mountain view" },
   { src: "/pahar2.jpeg", alt: "Hill landscape" },
-  { src: "/kalokodhai.jpeg", alt: "Food close-up" },
-  { src: "/sadakodhai.jpeg", alt: "Street food platter" },
-  { src: "/hero.png", alt: "Travel destination" },
-  { src: "/khobarchoriadin.png", alt: "Local experience" },
+  { src: "/pahar.jpeg", alt: "Food close-up" },
+  { src: "/pahar2.jpeg", alt: "Street food platter" },
+  { src: "/pahar.jpeg", alt: "Travel destination" },
+  { src: "/pahar2.jpeg", alt: "Local experience" },
 ];
 
 const HomeGallery = () => {
@@ -36,7 +36,7 @@ const HomeGallery = () => {
         {galleryImages.map((image, index) => (
           <article
             key={`${image.src}-${index}`}
-            className="group overflow-hidden rounded-xl border border-red-100 bg-white p-2 shadow-sm"
+            className="group overflow-hidden rounded-xl bg-white shadow-sm"
           >
             <Image
               src={image.src}

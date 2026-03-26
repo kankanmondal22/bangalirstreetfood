@@ -5,16 +5,22 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const socialVideos = [
   {
-    src: "https://youtube.com/shorts/2cAhgYgrs8w?si=skP3ma8vSIBGlsaq",
+    src: "https://youtube.com/shorts/UPnzC6-hdMc?si=j5jE1kfwGrocJIL4",
   },
   {
-    src: "https://youtube.com/shorts/2cAhgYgrs8w?si=skP3ma8vSIBGlsaq",
+    src: "https://youtube.com/shorts/DrX5Q7TDqyk?si=YU3xYk7-ViLUtrrS",
   },
   {
-    src: "https://www.facebook.com/reel/1607947723575668",
+    src: "https://www.facebook.com/reel/26675466888737845",
   },
   {
-    src: "https://www.facebook.com/reel/1607947723575668",
+    src: "https://www.facebook.com/reel/4396231673945328",
+  },
+  {
+    src: "https://www.facebook.com/reel/1226729806282305",
+  },
+  {
+    src: "https://youtube.com/shorts/DN-VhE2nS2A?si=tgSM83ueaZ7O9oDO",
   },
 ];
 
