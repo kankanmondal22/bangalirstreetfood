@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
     <GsapProvider>
       <Header />
-      <main className="pt-20">
+      <main className="">
         {children}
         <Footer />
       </main>
