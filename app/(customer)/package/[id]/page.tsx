@@ -259,7 +259,7 @@ const IndividualPackagePage = async ({
       </div>
 
       {/* Terms & Conditions */}
-      <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="mx-auto max-w-6xl px-4 pt-12 pb-24">
         <h2 className="text-2xl font-bold text-gray-900">Terms & Conditions</h2>
         <div className="mt-6 space-y-4">
           <p className="text-sm text-gray-700">
