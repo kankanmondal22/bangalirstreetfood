@@ -20,17 +20,20 @@ const mockGallery = [
 ];
 
 const mockIncluded = [
-  "Accommodation in 3-star hotels",
-  "Daily breakfast and dinner",
+  "Accommodation (Houseboat + Hotel)",
+  "Daily breakfast, lunch and dinner",
   "Airport transfers",
-  "Guided city tours",
+  "Vehicle for sightseeing",
+  "Shikara ride",
+  "Train tickets for the trip",
 ];
 
 const mockExcluded = [
-  "International airfare",
+  "Flight tickets",
   "Travel insurance",
   "Personal expenses",
   "Tips and gratuities",
+  "Activities e.g. gondola ride, ropeway, paragliding, etc.",
 ];
 
 const mockAdditionalNotes =
@@ -265,7 +268,7 @@ const IndividualPackagePage = async ({
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-3">
         <div className="rounded-xl border bg-white px-5 py-6">
           <h3 className="mb-3 text-xl font-semibold text-gray-900">Included</h3>
-          <ul>
+          <ul className="list-ch">
             {mockIncluded.map((item) => (
               <li key={item} className="text-sm text-gray-700">
                 <Check className="mr-2 inline-block text-green-500" /> {item}
@@ -275,7 +278,7 @@ const IndividualPackagePage = async ({
         </div>
         <div className="rounded-xl border bg-white px-5 py-6">
           <h3 className="mb-3 text-xl font-semibold text-gray-900">Excluded</h3>
-          <ul>
+          <ul className="list-check">
             {mockExcluded.map((item) => (
               <li key={item} className="text-sm text-gray-700">
                 <X className="mr-2 inline-block text-red-500" /> {item}
