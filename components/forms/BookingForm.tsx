@@ -387,6 +387,17 @@ const BookingForm = ({
               )}
             />
 
+            <Field orientation="horizontal" data-invalid>
+              <Checkbox
+                id="terms-checkbox-invalid"
+                name="terms-checkbox-invalid"
+                // aria-invalid
+              />
+              <FieldLabel htmlFor="terms-checkbox-invalid">
+                Accept terms and conditions
+              </FieldLabel>
+            </Field>
+
             <Field orientation="horizontal" className="my-6">
               <Payment
                 companyName="Bangalir Street Food"
