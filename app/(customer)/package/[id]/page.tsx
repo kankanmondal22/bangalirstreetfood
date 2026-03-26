@@ -191,7 +191,7 @@ const IndividualPackagePage = async ({
                           index % 2 === 0 ? "bg-teal-50/50" : "bg-white"
                         }`}
                       >
-                        <td className="w-12 bg-amber-50 p-3 text-sm font-semibold whitespace-nowrap text-teal-700">
+                        <td className="w-12 bg-amber-50 border-r-1 border-teal-600 p-3 text-sm font-semibold whitespace-nowrap text-teal-700">
                           Day {day.day}
                         </td>
                         <td className="p-3 text-sm whitespace-pre text-gray-700">
