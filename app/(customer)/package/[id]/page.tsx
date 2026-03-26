@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPackageDetailsById } from "@/actions/package.action";
+import GalleryGrid from "@/components/GalleryGrid";
 
 const mockGallery = [
   "/pahar.jpeg",
@@ -240,22 +241,7 @@ const IndividualPackagePage = async ({
       {/* picture gallery */}
       <div className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="text-2xl font-bold text-gray-900">Picture Gallery</h2>
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {mockGallery.map((image, index) => (
-            <div
-              key={index}
-              className="aspect-3/2 overflow-hidden rounded-xl border bg-white p-2"
-            >
-              <Image
-                src={image}
-                alt={`Gallery Image ${index + 1}`}
-                width={400}
-                height={400}
-                className="h-full w-full rounded-xl object-cover"
-              />
-            </div>
-          ))}
-        </div>
+        <GalleryGrid images={mockGallery} />
       </div>
     </main>
   );
