@@ -29,7 +29,7 @@ const Navbar = () => {
       scrollTrigger: {
         trigger: "#header",
         start: "center end",
-        markers: true,
+        // markers: true,
       },
     });
     navTween.fromTo(

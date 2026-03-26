@@ -230,7 +230,9 @@ const IndividualPackagePage = async ({
                 <Link href={`/booking/${packageDetails.id}`}>Book Now</Link>
               </Button>
               <p className="text-center text-xs text-gray-400">
-                No hidden charges. Free cancellation up to 48hrs before travel.
+                Please read the{" "}
+                <span className="underline">terms and conditions</span> below
+                carefully before booking your trip.
               </p>
             </CardContent>
           </Card>
