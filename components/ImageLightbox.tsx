@@ -32,7 +32,6 @@ export default function ImageLightbox({
 
   const [currentIndex, setCurrentIndex] = useState(safeInitialIndex);
   const [lastInitialIndex, setLastInitialIndex] = useState(safeInitialIndex);
-  const [direction, setDirection] = useState<"next" | "prev">("next");
 
   // Sync index when initialIndex changes
   if (safeInitialIndex !== lastInitialIndex) {
@@ -71,15 +70,10 @@ export default function ImageLightbox({
 
   const currentImage = images[currentIndex];
 
-  const goPrev = () => {
-    setDirection("prev");
+  const goPrev = () =>
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
 
-  const goNext = () => {
-    setDirection("next");
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
+  const goNext = () => setCurrentIndex((prev) => (prev + 1) % images.length);
 
   return (
     <div
@@ -124,25 +118,19 @@ export default function ImageLightbox({
         {/* Main Polaroid */}
         <div className="relative animate-[zoomIn_0.3s_ease] bg-white p-4 pb-8 shadow-2xl">
           <div className="relative h-[45vh] w-full overflow-hidden bg-black sm:h-[60vh]">
-            <div className="relative h-[45vh] w-full overflow-hidden bg-black sm:h-[60vh]">
-              <div
-                key={currentImage.src}
-                className={`absolute inset-0 flex items-center justify-center ${direction === "next" ? "animate-slideInRight" : "animate-slideInLeft"} `}
-              >
-                <Image
-                  src={currentImage.src}
-                  alt={currentImage.alt}
-                  fill
-                  className="object-contain brightness-95 contrast-95"
-                  sizes="100vw"
-                  priority
-                />
-              </div>
-            </div>
+            <Image
+              key={currentImage.src}
+              src={currentImage.src}
+              alt={currentImage.alt}
+              fill
+              className="object-contain brightness-95 contrast-95 transition-opacity duration-300"
+              sizes="100vw"
+              priority
+            />
           </div>
 
           {/* Caption */}
-          <div className="font-handwriting mt-4 text-center text-2xl font-bold text-gray-800">
+          <div className="font-handwriting mt-4 text-center text-4xl font-bold text-gray-800">
             {currentImage.title ?? currentImage.alt}
           </div>
         </div>
