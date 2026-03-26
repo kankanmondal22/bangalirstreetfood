@@ -11,8 +11,10 @@ export default function RootLayout({
   return (
     <GsapProvider>
       <Header />
-      {children}
-      <Footer />
+      <main className="py-20">
+        {children}
+        <Footer />
+      </main>
     </GsapProvider>
   );
 }

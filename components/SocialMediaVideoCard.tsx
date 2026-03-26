@@ -1,5 +1,7 @@
 "use client";
 import React, { useRef } from "react";
+import { Button } from "./ui/button";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const socialVideos = [
   {
@@ -89,10 +91,10 @@ const SocialMediaVideoCard = () => {
             Social Media Videos
           </h2>
           <div className="flex items-center gap-2">
-            <button
+            <Button
               type="button"
+              size={"icon"}
               aria-label="Scroll social videos left"
-              className="rounded-full border border-red-900 px-2.5 py-1.5 text-sm text-red-900 transition-colors hover:bg-red-900 hover:text-white sm:px-3 sm:py-2 sm:text-base"
               onClick={() =>
                 socialTrackRef.current?.scrollBy({
                   left: -340,
@@ -100,12 +102,12 @@ const SocialMediaVideoCard = () => {
                 })
               }
             >
-              ←
-            </button>
-            <button
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <Button
               type="button"
+              size={"icon"}
               aria-label="Scroll social videos right"
-              className="rounded-full border border-red-900 px-2.5 py-1.5 text-sm text-red-900 transition-colors hover:bg-red-900 hover:text-white sm:px-3 sm:py-2 sm:text-base"
               onClick={() =>
                 socialTrackRef.current?.scrollBy({
                   left: 340,
@@ -113,8 +115,8 @@ const SocialMediaVideoCard = () => {
                 })
               }
             >
-              →
-            </button>
+              <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
         </div>
 

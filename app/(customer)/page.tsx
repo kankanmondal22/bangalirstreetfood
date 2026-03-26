@@ -1,9 +1,11 @@
 // import BeachScene from "@/components/AnimatedBeachScene";
 // import { ComponentExample } from "@/components/component-example";
+import { PropertyCard } from "@/components/DynamicCard";
 import HeroVideo from "@/components/HeroVideo";
 import Home from "@/components/home";
-import PackageGallery from "@/components/PackageGallery";
+import HomeGallery from "@/components/HomeGallery";
 import SocialMediaVideoCard from "@/components/SocialMediaVideoCard";
+// import FacebookPost from "@/components/socials/FacebookPost";
 // import { Button } from "@/components/ui/button";
 
 export default function Page() {
@@ -11,28 +13,24 @@ export default function Page() {
     //hero
 
     <div className="w-full">
-      {/* <div className="mx-w-5xl">
-                <Image
-                    src="/hero.png"
-                    width={1920}
-                    height={1080}
-                    alt="Hero Image"
-                    className="w-full max-w-5xl mx-auto h-auto object-cover m-2"
-                />
-            </div> */}
       <HeroVideo />
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
+        <PropertyCard
+          title="Beachfront Villa"
+          description="Experience the ultimate beachfront getaway in our luxurious villa, where you can wake up to the sound of waves, enjoy stunning ocean views from your private terrace, and relax in your own infinity pool just steps away from the sandy shore."
+          badges={["4.8 ★★★★★", "3 Night Stay"]}
+          imageUrl="/pahar.jpeg"
+        />
+        <PropertyCard
+          title="Beachfront Villa"
+          description="Experience the ultimate beachfront getaway in our luxurious villa, where you can wake up to the sound of waves, enjoy stunning ocean views from your private terrace, and relax in your own infinity pool just steps away from the sandy shore."
+          badges={["4.8 ★★★★★", "3 Night Stay"]}
+          imageUrl="/pahar2.jpeg"
+        />
+      </div>
       <Home />
       <SocialMediaVideoCard />
-        <PackageGallery />
-
-      {/* <div className="m-6">
-        <Button variant="shadow" className="">
-          Click me
-        </Button>
-      </div> */}
-      {/* <section className="bg-background rounded-t-3xl pt-6">
-        <ComponentExample />{" "}
-      </section> */}
+      <HomeGallery />
     </div>
   );
 }

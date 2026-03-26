@@ -11,6 +11,10 @@ import gsap from "gsap";
 const navigationLinks = [
   { name: "Home", href: "/" },
   { name: "Packages", href: "/package" },
+  {
+    name: "Gallery",
+    href: "/gallery",
+  },
   { name: "Our Story", href: "/about" },
 ];
 

@@ -36,8 +36,6 @@ const images = [
   },
 ];
 
-
-
 const Home = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   const tweenRef = useRef<ReturnType<typeof gsap.to> | null>(null);
@@ -77,23 +75,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      {/* <div className="my-6 flex w-full gap-6 px-4">
-        <div className="flex h-64 w-full basis-2/3 items-end"></div>
-
-        <div className="basis-1/3 border-3 border-dashed border-yellow-500 p-4 text-yellow-700">
-          <p className="font-bold">Notice</p>
-          <ul className="list-disc pl-5">
-            <li>North Sikkim Tour: Explore the Valleys...</li>
-            <li>10 Best Places to Visit in Dooars</li>
-            <li>2026 Book Your Darjeeling Trip...</li>
-            <li>Plan a Delhi to Sikkim Trip</li>
-          </ul>
-        </div>
-      </div> */}
-
+    <div className="mx-auto w-full max-w-6xl px-4">
       {/* Image Marquee Section */}
-      <h1 className="mx-auto max-w-6xl px-4 pt-4 pb-6 text-3xl font-extrabold text-red-950 sm:text-4xl md:text-5xl">
+      <h1 className="mt-16 mb-6 pb-6 text-3xl font-extrabold text-red-950 sm:text-4xl">
         Escape & Explore with us
       </h1>
       <section
@@ -115,10 +99,8 @@ const Home = () => {
                 height={260}
                 className="h-auto w-[72vw] max-w-95 rounded-2xl transition-transform duration-300 group-hover:scale-105 sm:w-[320px] md:w-95"
               />
-              {/* Always visible title */}
               <div className="bg-liner-to-t absolute inset-x-0 bottom-0 from-black to-transparent p-4">
                 <p className="text-2xl font-bold text-white">{item.title}</p>
-                {/* Subtitle only on hover */}
                 <p className="max-h-0 overflow-hidden text-sm text-gray-200 transition-all duration-300 group-hover:max-h-10">
                   {item.subtitle}
                 </p>
@@ -130,7 +112,6 @@ const Home = () => {
           ))}
         </div>
       </section>
-     
     </div>
   );
 };

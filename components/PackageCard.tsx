@@ -37,7 +37,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
       {/* Image */}
       <div className="relative overflow-hidden">
         <Image
-          src={pkg.thumbnail || "/placeholder.jpg"}
+          src={pkg.thumbnail || "/pahar.jpeg"}
           alt={pkg.title}
           width={600}
           height={400}

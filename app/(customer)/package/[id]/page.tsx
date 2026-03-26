@@ -8,6 +8,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPackageDetailsById } from "@/actions/package.action";
 
+const mockGallery = [
+  "/pahar.jpeg",
+  "/pahar2.jpeg",
+  "/pahar.jpeg",
+  "/pahar2.jpeg",
+  "/pahar.jpeg",
+  "/pahar2.jpeg",
+];
+
 const IndividualPackagePage = async ({
   params,
 }: {
@@ -19,20 +28,20 @@ const IndividualPackagePage = async ({
   if (!packageDetails) return notFound();
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="relative mx-auto max-h-112 max-w-6xl overflow-hidden bg-teal-50">
+    <main className="mt-12 min-h-screen bg-gray-50">
+      <div className="max-w-9xl relative mx-auto max-h-132 overflow-hidden bg-teal-50">
         <Image
-          src={packageDetails.thumbnail || "/placeholder.jpg"}
+          src={packageDetails.thumbnail || "/pahar2.jpeg"}
           alt={packageDetails.title}
           width={1500}
-          height={1500}
+          height={2000}
           priority
-          className="h-full max-h-112 w-full object-cover"
+          className="h-full max-h-132 w-full object-cover"
         />
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
         {/* Title overlay */}
-        <div className="absolute right-0 bottom-0 left-0 mx-auto max-w-5xl p-6 md:p-10">
+        <div className="absolute right-0 bottom-0 left-0 mx-auto max-w-6xl p-6 md:p-10">
           <Badge className="mb-3 bg-teal-600 text-white">
             {packageDetails.duration}
           </Badge>
@@ -43,7 +52,7 @@ const IndividualPackagePage = async ({
       </div>
 
       {/* Content */}
-      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 py-8 lg:grid-cols-3">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-8 lg:grid-cols-3">
         {/* Left Column – Details */}
         <div className="space-y-8 lg:col-span-2">
           {/* Description */}
@@ -183,7 +192,7 @@ const IndividualPackagePage = async ({
 
         {/* Right Column – Pricing Sidebar */}
         <div className="lg:col-span-1">
-          <Card className="sticky top-8 shadow-md">
+          <Card className="sticky top-25 shadow-md">
             <CardHeader className="pb-0">
               <CardTitle className="text-lg">Pricing</CardTitle>
             </CardHeader>
@@ -225,6 +234,27 @@ const IndividualPackagePage = async ({
               </p>
             </CardContent>
           </Card>
+        </div>
+      </div>
+
+      {/* picture gallery */}
+      <div className="mx-auto max-w-6xl px-4 py-12">
+        <h2 className="text-2xl font-bold text-gray-900">Picture Gallery</h2>
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {mockGallery.map((image, index) => (
+            <div
+              key={index}
+              className="aspect-3/2 overflow-hidden rounded-xl border bg-white p-2"
+            >
+              <Image
+                src={image}
+                alt={`Gallery Image ${index + 1}`}
+                width={400}
+                height={400}
+                className="h-full w-full rounded-xl object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </main>
