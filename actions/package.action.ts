@@ -118,6 +118,7 @@ export const getPackageDetailsById = async (id: string) => {
       .select({
         id: packagesTable.id,
         thumbnail: packagesTable.thumbnail,
+        imageGallery: packagesTable.images,
         title: packagesTable.packageTitle,
         description: packagesTable.packageDescription,
         duration: packagesTable.duration,
@@ -183,6 +184,7 @@ export const getPackageDetailsById = async (id: string) => {
         minBookingAmount: base.minBookingAmount,
         pricePerAdult: base.pricePerAdult,
         pricePerChild: base.pricePerChild,
+        imageGallery: base.imageGallery,
 
         availableDates: new Set<string>(),
         itinerary: [] as { day: number; activities: string }[],

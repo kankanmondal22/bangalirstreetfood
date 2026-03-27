@@ -261,7 +261,7 @@ const IndividualPackagePage = async ({
       {/* picture gallery */}
       <div className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="text-2xl font-bold text-gray-900">Picture Gallery</h2>
-        <GalleryGrid images={mockGallery} />
+        <GalleryGrid images={packageDetails.imageGallery} />
       </div>
 
       {/* Including & Excluding */}
