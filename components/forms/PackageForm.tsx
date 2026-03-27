@@ -577,7 +577,7 @@ export function TourForm({ initialData }: TourFormProps) {
             {/* Thumbnail Upload */}
             <Field>
               <FieldLabel>Thumbnail Image</FieldLabel>
-              <FieldDescription className="text-muted-foreground text-xs mb-2">
+              <FieldDescription className="text-muted-foreground mb-2 text-xs">
                 Main image displayed on package cards
               </FieldDescription>
               <FieldContent>
@@ -594,21 +594,21 @@ export function TourForm({ initialData }: TourFormProps) {
                     <button
                       type="button"
                       onClick={removeThumbnail}
-                      className="absolute -top-2 -right-2 rounded-full bg-destructive p-1 text-white shadow-md hover:bg-destructive/90"
+                      className="bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 rounded-full p-1 text-white shadow-md"
                     >
                       <X size={14} />
                     </button>
                   </div>
                 ) : (
-                  <div className="relative cursor-pointer rounded-lg border-2 border-dashed p-6 text-center hover:border-primary/50">
+                  <div className="hover:border-primary/50 relative cursor-pointer rounded-lg border-2 border-dashed p-6 text-center">
                     <input
                       type="file"
                       accept="image/*"
                       onChange={(e) => handleThumbnailUpload(e.target.files)}
                       className="absolute inset-0 cursor-pointer opacity-0"
                     />
-                    <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">
+                    <Upload className="text-muted-foreground mx-auto mb-2 h-8 w-8" />
+                    <p className="text-muted-foreground text-sm">
                       Click or drag to upload thumbnail
                     </p>
                   </div>
@@ -619,12 +619,12 @@ export function TourForm({ initialData }: TourFormProps) {
             {/* Gallery Images Upload */}
             <Field>
               <FieldLabel>Gallery Images</FieldLabel>
-              <FieldDescription className="text-muted-foreground text-xs mb-2">
+              <FieldDescription className="text-muted-foreground mb-2 text-xs">
                 Upload images for the gallery (must be a multiple of 3)
               </FieldDescription>
               <FieldContent>
                 {/* Upload box */}
-                <div className="relative cursor-pointer rounded-lg border-2 border-dashed p-6 text-center hover:border-primary/50">
+                <div className="hover:border-primary/50 relative cursor-pointer rounded-lg border-2 border-dashed p-6 text-center">
                   <input
                     type="file"
                     multiple
@@ -632,8 +632,8 @@ export function TourForm({ initialData }: TourFormProps) {
                     onChange={(e) => handleImageUpload(e.target.files)}
                     className="absolute inset-0 cursor-pointer opacity-0"
                   />
-                  <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-                  <p className="text-sm text-muted-foreground">
+                  <Upload className="text-muted-foreground mx-auto mb-2 h-8 w-8" />
+                  <p className="text-muted-foreground text-sm">
                     Click or drag to upload images
                   </p>
                 </div>
@@ -657,7 +657,7 @@ export function TourForm({ initialData }: TourFormProps) {
                 {/* Existing images preview */}
                 {existingImages.length > 0 && (
                   <div className="mt-4">
-                    <p className="text-xs font-medium text-muted-foreground mb-2">
+                    <p className="text-muted-foreground mb-2 text-xs font-medium">
                       Existing Images
                     </p>
                     <div className="grid grid-cols-3 gap-4">
@@ -668,13 +668,13 @@ export function TourForm({ initialData }: TourFormProps) {
                             alt={`existing image ${i + 1}`}
                             width={120}
                             height={120}
-                            className="rounded-md object-cover w-full h-24"
+                            className="h-24 w-full rounded-md object-cover"
                             unoptimized
                           />
                           <button
                             type="button"
                             onClick={() => removeExistingImage(i)}
-                            className="absolute -top-2 -right-2 rounded-full bg-destructive p-1 text-white shadow-md hover:bg-destructive/90"
+                            className="bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 rounded-full p-1 text-white shadow-md"
                           >
                             <X size={14} />
                           </button>
@@ -687,7 +687,7 @@ export function TourForm({ initialData }: TourFormProps) {
                 {/* New images preview */}
                 {newImagePreviews.length > 0 && (
                   <div className="mt-4">
-                    <p className="text-xs font-medium text-muted-foreground mb-2">
+                    <p className="text-muted-foreground mb-2 text-xs font-medium">
                       New Images (to be uploaded)
                     </p>
                     <div className="grid grid-cols-3 gap-4">
@@ -698,13 +698,13 @@ export function TourForm({ initialData }: TourFormProps) {
                             alt={`new image ${i + 1}`}
                             width={120}
                             height={120}
-                            className="rounded-md object-cover w-full h-24"
+                            className="h-24 w-full rounded-md object-cover"
                             unoptimized
                           />
                           <button
                             type="button"
                             onClick={() => removeNewImage(i)}
-                            className="absolute -top-2 -right-2 rounded-full bg-destructive p-1 text-white shadow-md hover:bg-destructive/90"
+                            className="bg-destructive hover:bg-destructive/90 absolute -top-2 -right-2 rounded-full p-1 text-white shadow-md"
                           >
                             <X size={14} />
                           </button>
