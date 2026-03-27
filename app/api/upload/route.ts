@@ -8,15 +8,15 @@ import {
 } from "@/lib/file-upload/s3";
 
 function hasInvalidAwsCredentialConfig(): boolean {
-  const hasAccessKey = Boolean(process.env.AWS_ACCESS_KEY);
-  const hasSecretKey = Boolean(process.env.AWS_SECRET_KEY);
+  const hasAccessKey = Boolean(process.env.AWS_ACCESS_KEY_ID);
+  const hasSecretKey = Boolean(process.env.AWS_SECRET_KEY_ID);
   return hasAccessKey !== hasSecretKey;
 }
 
 export async function POST(req: Request) {
   try {
     // Validate environment variables
-    if (!process.env.AWS_REGION || !process.env.AWS_BUCKET_NAME) {
+    if (!process.env.AWS_REGION_ID || !process.env.AWS_BUCKET_NAME_ID) {
       return Response.json(
         { error: "Missing AWS configuration" },
         { status: 500 },
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     const key = `uploads/${Date.now()}-${sanitizedFileName}`;
 
     const command = new PutObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME!,
+      Bucket: process.env.AWS_BUCKET_NAME_ID!,
       Key: key,
       ContentType: fileType,
     });
@@ -84,7 +84,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   try {
     // Validate environment variables
-    if (!process.env.AWS_REGION || !process.env.AWS_BUCKET_NAME) {
+    if (!process.env.AWS_REGION_ID || !process.env.AWS_BUCKET_NAME_ID) {
       return Response.json(
         { error: "Missing AWS configuration" },
         { status: 500 },
@@ -109,7 +109,7 @@ export async function DELETE(req: Request) {
     }
 
     const command = new DeleteObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME!,
+      Bucket: process.env.AWS_BUCKET_NAME_ID!,
       Key: key,
     });
 

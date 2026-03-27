@@ -14,10 +14,10 @@ const s3ClientConfig: {
   region: process.env.AWS_REGION,
 };
 
-if (process.env.AWS_ACCESS_KEY && process.env.AWS_SECRET_KEY) {
+if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_KEY_ID) {
   s3ClientConfig.credentials = {
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_KEY_ID,
   };
 }
 
@@ -29,7 +29,7 @@ export const s3Client = new S3Client({
  * Constructs the public URL for an S3 object
  */
 export function getS3PublicUrl(key: string): string {
-  return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+  return `https://${process.env.AWS_BUCKET_NAME_ID}.s3.${process.env.AWS_REGION_ID}.amazonaws.com/${key}`;
 }
 
 /**
