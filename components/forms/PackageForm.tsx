@@ -75,6 +75,9 @@ export function TourForm({ initialData }: TourFormProps) {
     resolver: zodResolver(packageFormSchema) as Resolver<IPackageFrom>,
     defaultValues: {
       highlights: initialData?.highlights ?? [],
+      included: initialData?.included ?? [],
+      excluded: initialData?.excluded ?? [],
+      notes: initialData?.notes ?? "",
       itinerary: initialData?.itinerary ?? [{ day: 1, description: "Pick up" }],
       images: [],
       thumbnail: undefined,
@@ -92,6 +95,16 @@ export function TourForm({ initialData }: TourFormProps) {
   const highlights = useWatch({
     control: form.control,
     name: "highlights",
+  });
+
+  const included = useWatch({
+    control: form.control,
+    name: "included",
+  });
+
+  const excluded = useWatch({
+    control: form.control,
+    name: "excluded",
   });
 
   const itinerary = useWatch({
@@ -220,6 +233,9 @@ export function TourForm({ initialData }: TourFormProps) {
         maxGroupSize: data.maxGroupSize,
         duration: data.duration,
         highlights: data.highlights,
+        included: data.included,
+        excluded: data.excluded,
+        notes: data.notes || null,
         thumbnail: finalThumbnailUrl,
         images: finalImageUrls,
       };
@@ -454,7 +470,12 @@ export function TourForm({ initialData }: TourFormProps) {
                 <FieldLegend className="text-primary text-xs font-semibold tracking-wide uppercase">
                   Highlights
                 </FieldLegend>
-                <AddHighlightDialog form={form} />
+                <AddStringItemDialog
+                  form={form}
+                  fieldName="highlights"
+                  dialogTitle="Add Highlight"
+                  placeholder="e.g. Beach sunset cruise"
+                />
               </div>
 
               <div className="border-border flex flex-col overflow-hidden rounded-md border">
@@ -464,27 +485,36 @@ export function TourForm({ initialData }: TourFormProps) {
                   </p>
                 )}
                 {highlights.map((item, index) => (
-                  <ul
+                  <div
                     key={index}
-                    className="hover:bg-accent/50 border-border flex w-full list-inside list-disc items-center justify-between gap-1 border-b py-2 pl-3 last:border-b-0"
+                    className="hover:bg-accent/50 border-border flex w-full items-center justify-between gap-1 border-b py-2 px-3 last:border-b-0"
                   >
-                    <li className="text-foreground font-medium">{item}</li>
-                    <Button
-                      variant={"destructive"}
-                      type="button"
-                      onClick={() => {
-                        const updated = highlights.filter(
-                          (_, i) => i !== index,
-                        );
-                        form.setValue("highlights", updated, {
-                          shouldValidate: true,
-                        });
-                      }}
-                      className="text-muted-foreground hover:text-foreground ml-1"
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </ul>
+                    <span className="text-foreground font-medium">{item}</span>
+                    <div className="flex gap-1">
+                      <EditStringItemDialog
+                        form={form}
+                        fieldName="highlights"
+                        index={index}
+                        defaultValue={item}
+                        dialogTitle="Edit Highlight"
+                      />
+                      <Button
+                        variant={"destructive"}
+                        type="button"
+                        size="icon-sm"
+                        onClick={() => {
+                          const updated = highlights.filter(
+                            (_, i) => i !== index,
+                          );
+                          form.setValue("highlights", updated, {
+                            shouldValidate: true,
+                          });
+                        }}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
                 ))}
               </div>
 
@@ -492,6 +522,135 @@ export function TourForm({ initialData }: TourFormProps) {
                 <FieldError errors={[form.formState.errors.highlights]} />
               )}
             </FieldSet>
+
+            {/* Included Array */}
+            <FieldSet className="bg-muted/20 border-border rounded-lg border p-4">
+              <div className="flex items-center justify-between">
+                <FieldLegend className="text-primary text-xs font-semibold tracking-wide uppercase">
+                  What&apos;s Included
+                </FieldLegend>
+                <AddStringItemDialog
+                  form={form}
+                  fieldName="included"
+                  dialogTitle="Add Included Item"
+                  placeholder="e.g. Breakfast included"
+                />
+              </div>
+
+              <div className="border-border flex flex-col overflow-hidden rounded-md border">
+                {included.length === 0 && (
+                  <p className="text-muted-foreground py-6 text-center text-sm italic">
+                    No items added yet
+                  </p>
+                )}
+                {included.map((item, index) => (
+                  <div
+                    key={index}
+                    className="hover:bg-accent/50 border-border flex w-full items-center justify-between gap-1 border-b py-2 px-3 last:border-b-0"
+                  >
+                    <span className="text-foreground font-medium">{item}</span>
+                    <div className="flex gap-1">
+                      <EditStringItemDialog
+                        form={form}
+                        fieldName="included"
+                        index={index}
+                        defaultValue={item}
+                        dialogTitle="Edit Included Item"
+                      />
+                      <Button
+                        variant={"destructive"}
+                        type="button"
+                        size="icon-sm"
+                        onClick={() => {
+                          const updated = included.filter(
+                            (_, i) => i !== index,
+                          );
+                          form.setValue("included", updated, {
+                            shouldValidate: true,
+                          });
+                        }}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </FieldSet>
+
+            {/* Excluded Array */}
+            <FieldSet className="bg-muted/20 border-border rounded-lg border p-4">
+              <div className="flex items-center justify-between">
+                <FieldLegend className="text-primary text-xs font-semibold tracking-wide uppercase">
+                  What&apos;s Not Included
+                </FieldLegend>
+                <AddStringItemDialog
+                  form={form}
+                  fieldName="excluded"
+                  dialogTitle="Add Excluded Item"
+                  placeholder="e.g. Personal expenses"
+                />
+              </div>
+
+              <div className="border-border flex flex-col overflow-hidden rounded-md border">
+                {excluded.length === 0 && (
+                  <p className="text-muted-foreground py-6 text-center text-sm italic">
+                    No items added yet
+                  </p>
+                )}
+                {excluded.map((item, index) => (
+                  <div
+                    key={index}
+                    className="hover:bg-accent/50 border-border flex w-full items-center justify-between gap-1 border-b py-2 px-3 last:border-b-0"
+                  >
+                    <span className="text-foreground font-medium">{item}</span>
+                    <div className="flex gap-1">
+                      <EditStringItemDialog
+                        form={form}
+                        fieldName="excluded"
+                        index={index}
+                        defaultValue={item}
+                        dialogTitle="Edit Excluded Item"
+                      />
+                      <Button
+                        variant={"destructive"}
+                        type="button"
+                        size="icon-sm"
+                        onClick={() => {
+                          const updated = excluded.filter(
+                            (_, i) => i !== index,
+                          );
+                          form.setValue("excluded", updated, {
+                            shouldValidate: true,
+                          });
+                        }}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </FieldSet>
+
+            {/* Notes */}
+            <Controller
+              name="notes"
+              control={form.control}
+              render={({ field }) => (
+                <Field>
+                  <FieldLabel>Additional Notes</FieldLabel>
+                  <FieldContent>
+                    <Textarea
+                      {...field}
+                      placeholder="Any additional information or notes about the package..."
+                      rows={4}
+                    />
+                  </FieldContent>
+                </Field>
+              )}
+            />
+
             {/* Itinerary Array */}
             <FieldSet className="bg-muted/20 border-border rounded-lg border p-4">
               <div className="flex items-center justify-between">
@@ -743,16 +902,26 @@ export function TourForm({ initialData }: TourFormProps) {
   );
 }
 
-function AddHighlightDialog({ form }: { form: UseFormReturn<IPackageFrom> }) {
+function AddStringItemDialog({
+  form,
+  fieldName,
+  dialogTitle,
+  placeholder,
+}: {
+  form: UseFormReturn<IPackageFrom>;
+  fieldName: "highlights" | "included" | "excluded";
+  dialogTitle: string;
+  placeholder: string;
+}) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
-  const highlights = form.watch("highlights");
+  const items = form.watch(fieldName);
 
   function handleAdd() {
     if (!value.trim()) return;
 
-    form.setValue("highlights", [...highlights, value.trim()], {
+    form.setValue(fieldName, [...items, value.trim()], {
       shouldValidate: true,
     });
 
@@ -770,11 +939,11 @@ function AddHighlightDialog({ form }: { form: UseFormReturn<IPackageFrom> }) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Highlight</DialogTitle>
+          <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
 
         <Input
-          placeholder="e.g. Beach sunset cruise"
+          placeholder={placeholder}
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
@@ -790,6 +959,63 @@ function AddHighlightDialog({ form }: { form: UseFormReturn<IPackageFrom> }) {
           <Button type="button" onClick={handleAdd}>
             Add
           </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function EditStringItemDialog({
+  form,
+  fieldName,
+  index,
+  defaultValue,
+  dialogTitle,
+}: {
+  form: UseFormReturn<IPackageFrom>;
+  fieldName: "highlights" | "included" | "excluded";
+  index: number;
+  defaultValue: string;
+  dialogTitle: string;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(defaultValue);
+
+  const items = form.watch(fieldName);
+
+  function handleSave() {
+    if (!value.trim()) return;
+
+    const updated = [...items];
+    updated[index] = value.trim();
+
+    form.setValue(fieldName, updated, { shouldValidate: true });
+    setOpen(false);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button size="icon-sm" variant="secondary">
+          Edit
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{dialogTitle}</DialogTitle>
+        </DialogHeader>
+
+        <Input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

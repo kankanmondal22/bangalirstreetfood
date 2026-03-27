@@ -17,7 +17,10 @@ export const packagesTable = pgTable("packages", {
   minimumBookingAmountPerPerson: integer(
     "minimum_booking_amount_per_person_in_inr",
   ).notNull(),
-  highlights: text("highlights").array().notNull(), // comma-separated list of highlights
+  highlights: text("highlights").array().notNull(), // array of highlight strings
+  included: text("included").array().notNull().default([]), // what's included in the package
+  excluded: text("excluded").array().notNull().default([]), // what's not included in the package
+  notes: text("notes"), // additional notes for the package
   thumbnail: text("thumbnail_url"), // URL to the package thumbnail image
   images: text("image_urls").array().notNull().default([]), // array of URLs to package images
   maxGroupSize: integer("max_group_size").notNull(), // maximum number of people allowed in a group booking

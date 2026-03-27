@@ -17,6 +17,9 @@ export const packageFormSchema = z.object({
   maxGroupSize: z.coerce.number().min(1),
 
   highlights: z.array(z.string()).min(1, "Add at least one highlight."),
+  included: z.array(z.string()).default([]),
+  excluded: z.array(z.string()).default([]),
+  notes: z.string().optional(),
 
   itinerary: z
     .array(
@@ -50,6 +53,9 @@ export type PackageEditData = {
   minimumBookingAmountPerPerson: number;
   maxGroupSize: number;
   highlights: string[];
+  included: string[];
+  excluded: string[];
+  notes: string | null;
   thumbnail: string | null;
   images: string[];
   itinerary: ItineraryItem[];

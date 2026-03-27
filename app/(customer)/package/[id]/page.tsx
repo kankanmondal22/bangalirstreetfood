@@ -10,15 +10,6 @@ import { getPackageDetailsById } from "@/actions/package.action";
 import GalleryGrid from "@/components/GalleryGrid";
 import { Check, X } from "lucide-react";
 
-const mockGallery = [
-  "/pahar.jpeg",
-  "/pahar2.jpeg",
-  "/pahar.jpeg",
-  "/pahar2.jpeg",
-  "/pahar.jpeg",
-  "/pahar2.jpeg",
-];
-
 const mockIncluded = [
   "Accommodation (Houseboat + Hotel)",
   "Daily breakfast, lunch and dinner",
@@ -269,7 +260,7 @@ const IndividualPackagePage = async ({
         <div className="rounded-xl border bg-white px-5 py-6">
           <h3 className="mb-3 text-xl font-semibold text-gray-900">Included</h3>
           <ul className="space-y-2">
-            {mockIncluded.map((item) => (
+            {packageDetails.included?.map((item) => (
               <li
                 key={item}
                 className="flex items-start gap-2 text-sm text-gray-700"
@@ -283,7 +274,7 @@ const IndividualPackagePage = async ({
         <div className="rounded-xl border bg-white px-5 py-6">
           <h3 className="mb-3 text-xl font-semibold text-gray-900">Excluded</h3>
           <ul className="space-y-2">
-            {mockExcluded.map((item) => (
+            {packageDetails.excluded?.map((item) => (
               <li
                 key={item}
                 className="flex items-start gap-2 text-sm text-gray-700"
@@ -294,12 +285,16 @@ const IndividualPackagePage = async ({
             ))}
           </ul>
         </div>
-        <div className="rounded-xl border bg-white px-5 py-6">
-          <h3 className="mb-3 text-xl font-semibold text-gray-900">
-            Additional Notes
-          </h3>
-          <p className="text-sm text-gray-700">{mockAdditionalNotes}</p>
-        </div>
+        {packageDetails.notes && (
+          <div className="rounded-xl border bg-white px-5 py-6">
+            <h3 className="mb-3 text-xl font-semibold text-gray-900">
+              Additional Notes
+            </h3>
+            <p className="text-sm whitespace-pre-line text-gray-700">
+              {packageDetails.notes}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Terms & Conditions */}

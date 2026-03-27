@@ -128,6 +128,9 @@ export const getPackageDetailsById = async (id: string) => {
         minBookingAmount: packagesTable.minimumBookingAmountPerPerson,
         pricePerAdult: packagesTable.amountPerAdult,
         pricePerChild: packagesTable.amountPerChild,
+        included: packagesTable.included,
+        excluded: packagesTable.excluded,
+        notes: packagesTable.notes,
         // itinerary
         itinerary: {
           day: itineraryTable.day,
@@ -185,6 +188,9 @@ export const getPackageDetailsById = async (id: string) => {
         pricePerAdult: base.pricePerAdult,
         pricePerChild: base.pricePerChild,
         imageGallery: base.imageGallery,
+        included: base.included,
+        excluded: base.excluded,
+        notes: base.notes,
 
         availableDates: new Set<string>(),
         itinerary: [] as { day: number; activities: string }[],
@@ -461,6 +467,9 @@ export const getPackageDataForEditing = async (
       minimumBookingAmountPerPerson: pkg.minimumBookingAmountPerPerson,
       maxGroupSize: pkg.maxGroupSize,
       highlights: pkg.highlights,
+      included: pkg.included,
+      excluded: pkg.excluded,
+      notes: pkg.notes,
       thumbnail: pkg.thumbnail,
       images: pkg.images,
       itinerary: itineraryData.map((item) => ({
