@@ -91,7 +91,7 @@ const SocialMediaVideoCard = () => {
     <div>
       {" "}
       {/* Social Media Videos Section */}
-      <section className="mx-auto max-w-6xl px-4">
+      <section className="mx-auto max-w-6xl px-4 mt-10">
         <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-2xl font-bold text-red-950 sm:text-3xl">
             The Stories we created
