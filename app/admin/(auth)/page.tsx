@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/card";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import SubmitButton from "@/components/submit-button";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.email("Enter a valid email address."),
@@ -31,6 +32,14 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const router = useRouter();
+
+  // const [isLoggedIn, setIsLoggedIn] = React.useState(true); // Replace with actual authentication logic
+
+  // if (isLoggedIn) {
+  //   router.push("/admin/dashboard");
+  // }
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
