@@ -5,14 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Controller,
   Resolver,
-  // useFieldArray,
   useForm,
   UseFormReturn,
   useWatch,
 } from "react-hook-form";
 import { toast } from "sonner";
 import Image from "next/image";
-import { XIcon, PlusIcon, X } from "lucide-react";
+import { XIcon, PlusIcon, X, Upload, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -43,39 +42,50 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { format, startOfDay } from "date-fns";
-import { IPackageFrom, packageFormSchema } from "@/types/package";
+import {
+  IPackageFrom,
+  packageFormSchema,
+  PackageEditData,
+} from "@/types/package";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Badge } from "../ui/badge";
 import { Calendar } from "../ui/calendar";
-import { createPackage } from "@/actions/package.action";
+import { createPackage, updatePackage } from "@/actions/package.action";
 import { InsertPackage } from "@/db/schema";
 import { useRouter } from "next/navigation";
+import { useS3Upload } from "@/lib/file-upload/useS3Upload";
 
 type TourFormProps = {
-  tour?: {
-    id: string;
-    title: string;
-    description: string;
-  };
+  initialData?: PackageEditData;
 };
 
-export function TourForm({ tour }: TourFormProps) {
+export function TourForm({ initialData }: TourFormProps) {
   const router = useRouter();
+  const isEditMode = Boolean(initialData);
+  const { uploadFile, uploadMultiple, uploading } = useS3Upload();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  // Track original images for cleanup during update
+  const originalImagesRef = React.useRef<string[]>(initialData?.images ?? []);
+  const originalThumbnailRef = React.useRef<string | null>(
+    initialData?.thumbnail ?? null,
+  );
 
   const form = useForm<IPackageFrom>({
     resolver: zodResolver(packageFormSchema) as Resolver<IPackageFrom>,
     defaultValues: {
-      highlights: [],
-      itinerary: [{ day: 1, description: "Pick up" }],
+      highlights: initialData?.highlights ?? [],
+      itinerary: initialData?.itinerary ?? [{ day: 1, description: "Pick up" }],
       images: [],
-      amountAdult: 0,
-      amountChild: 0,
-      minBookingAmount: 0,
-      maxGroupSize: 0,
-      journeyDates: [],
-      description: "",
-      duration: "",
-      title: "",
+      thumbnail: undefined,
+      amountAdult: initialData?.amountPerAdult ?? 0,
+      amountChild: initialData?.amountPerChild ?? 0,
+      minBookingAmount: initialData?.minimumBookingAmountPerPerson ?? 0,
+      maxGroupSize: initialData?.maxGroupSize ?? 0,
+      journeyDates: initialData?.journeyDates ?? [],
+      description: initialData?.description ?? "",
+      duration: initialData?.duration ?? "",
+      title: initialData?.title ?? "",
     },
   });
 
@@ -89,51 +99,173 @@ export function TourForm({ tour }: TourFormProps) {
     name: "itinerary",
   });
 
-  const [previewImages, setPreviewImages] = React.useState<string[]>([]);
+  // Thumbnail state - stores either existing URL or File
+  const [thumbnailPreview, setThumbnailPreview] = React.useState<string | null>(
+    initialData?.thumbnail ?? null,
+  );
+  const [thumbnailFile, setThumbnailFile] = React.useState<File | null>(null);
+
+  // Images state - stores existing URLs and new Files separately
+  const [existingImages, setExistingImages] = React.useState<string[]>(
+    initialData?.images ?? [],
+  );
+  const [newImageFiles, setNewImageFiles] = React.useState<File[]>([]);
+  const [newImagePreviews, setNewImagePreviews] = React.useState<string[]>([]);
+
+  // Total images count (existing + new) must be multiple of 3
+  const totalImagesCount = existingImages.length + newImageFiles.length;
+
+  function handleThumbnailUpload(files: FileList | null) {
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    setThumbnailFile(file);
+    const preview = URL.createObjectURL(file);
+    setThumbnailPreview(preview);
+    form.setValue("thumbnail", file);
+  }
+
+  function removeThumbnail() {
+    if (thumbnailPreview?.startsWith("blob:")) {
+      URL.revokeObjectURL(thumbnailPreview);
+    }
+    setThumbnailPreview(null);
+    setThumbnailFile(null);
+    form.setValue("thumbnail", undefined);
+  }
 
   function handleImageUpload(files: FileList | null) {
     if (!files) return;
+
     const fileArray = Array.from(files);
-    form.setValue("images", fileArray);
+    setNewImageFiles((prev) => [...prev, ...fileArray]);
 
     const previews = fileArray.map((file) => URL.createObjectURL(file));
-    setPreviewImages(previews);
+    setNewImagePreviews((prev) => [...prev, ...previews]);
   }
 
-  async function onSubmit(data: IPackageFrom) {
-    const parsedData: InsertPackage = {
-      ...data,
-      packageTitle: data.title,
-      packageDescription: data.description,
-      amountPerAdult: data.amountAdult,
-      amountPerChild: data.amountChild,
-      minimumBookingAmountPerPerson: data.minBookingAmount,
-      maxGroupSize: data.maxGroupSize,
-      duration: data.duration,
-      highlights: data.highlights,
-      // itinerary: data.itinerary,
-    };
+  function removeExistingImage(index: number) {
+    setExistingImages((prev) => prev.filter((_, i) => i !== index));
+  }
 
-    await createPackage(parsedData, data.itinerary, data.journeyDates)
-      .then(() => {
+  function removeNewImage(index: number) {
+    const removedPreview = newImagePreviews[index];
+    if (removedPreview?.startsWith("blob:")) {
+      URL.revokeObjectURL(removedPreview);
+    }
+    setNewImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setNewImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  // Store refs for cleanup
+  const newImagePreviewsRef = React.useRef<string[]>([]);
+  const thumbnailPreviewRef = React.useRef<string | null>(null);
+
+  // Keep refs in sync
+  React.useEffect(() => {
+    newImagePreviewsRef.current = newImagePreviews;
+    thumbnailPreviewRef.current = thumbnailPreview;
+  }, [newImagePreviews, thumbnailPreview]);
+
+  // Cleanup blob URLs on unmount
+  React.useEffect(() => {
+    return () => {
+      newImagePreviewsRef.current.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+      if (thumbnailPreviewRef.current?.startsWith("blob:")) {
+        URL.revokeObjectURL(thumbnailPreviewRef.current);
+      }
+    };
+  }, []);
+
+  async function onSubmit(data: IPackageFrom) {
+    // Validate images count is multiple of 3
+    if (totalImagesCount > 0 && totalImagesCount % 3 !== 0) {
+      toast.error("Number of images must be a multiple of 3");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Upload thumbnail if new file selected
+      let finalThumbnailUrl: string | null = null;
+      if (thumbnailFile) {
+        finalThumbnailUrl = await uploadFile(thumbnailFile);
+      } else if (
+        thumbnailPreview &&
+        !thumbnailPreview.startsWith("blob:") &&
+        thumbnailPreview !== ""
+      ) {
+        // Keep existing thumbnail if no new one selected
+        finalThumbnailUrl = thumbnailPreview;
+      }
+
+      // Upload new images and combine with existing ones
+      let finalImageUrls: string[] = [...existingImages];
+      if (newImageFiles.length > 0) {
+        const uploadedUrls = await uploadMultiple(newImageFiles);
+        finalImageUrls = [...existingImages, ...uploadedUrls];
+      }
+
+      const parsedData: InsertPackage = {
+        packageTitle: data.title,
+        packageDescription: data.description,
+        amountPerAdult: data.amountAdult,
+        amountPerChild: data.amountChild,
+        minimumBookingAmountPerPerson: data.minBookingAmount,
+        maxGroupSize: data.maxGroupSize,
+        duration: data.duration,
+        highlights: data.highlights,
+        thumbnail: finalThumbnailUrl,
+        images: finalImageUrls,
+      };
+
+      if (isEditMode && initialData) {
+        // Update existing package
+        await updatePackage(
+          initialData.id,
+          parsedData,
+          data.itinerary,
+          data.journeyDates,
+          originalImagesRef.current,
+          finalImageUrls,
+          originalThumbnailRef.current,
+          finalThumbnailUrl,
+        );
+        toast.success("Tour Updated");
+      } else {
+        // Create new package
+        await createPackage(parsedData, data.itinerary, data.journeyDates);
         toast.success("Tour Created");
         form.reset();
-        // redirect
-        router.push("/admin/packages");
-      })
-      .catch((err) => {
-        toast.error("Failed to create tour: " + err.message);
-      });
+      }
+
+      router.push("/admin/packages");
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "An error occurred";
+      toast.error(
+        `Failed to ${isEditMode ? "update" : "create"} tour: ${errorMessage}`,
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <Card className="border-t-primary mx-auto w-full max-w-3xl border-t-4 shadow-lg">
       <CardHeader className="bg-muted/40 border-b pb-6">
         <CardTitle className="text-2xl font-bold tracking-tight">
-          Create Tour Package
+          {isEditMode ? "Edit Tour Package" : "Create Tour Package"}
         </CardTitle>
         <CardDescription className="text-muted-foreground text-sm">
-          Add tour details including pricing, highlights and itinerary.
+          {isEditMode
+            ? "Update tour details including pricing, highlights and itinerary."
+            : "Add tour details including pricing, highlights and itinerary."}
         </CardDescription>
       </CardHeader>
 
@@ -441,28 +573,146 @@ export function TourForm({ tour }: TourFormProps) {
                 <FieldError errors={[form.formState.errors.itinerary]} />
               )}
             </FieldSet>
-            {/* Image Upload */}
+
+            {/* Thumbnail Upload */}
             <Field>
-              <FieldLabel>Upload Images</FieldLabel>
+              <FieldLabel>Thumbnail Image</FieldLabel>
+              <FieldDescription className="text-muted-foreground text-xs mb-2">
+                Main image displayed on package cards
+              </FieldDescription>
               <FieldContent>
-                <Input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={(e) => handleImageUpload(e.target.files)}
-                />
-                <div className="mt-4 grid grid-cols-3 gap-4">
-                  {previewImages.map((src, i) => (
+                {thumbnailPreview ? (
+                  <div className="relative inline-block">
                     <Image
-                      key={i}
-                      src={src}
-                      alt="preview"
-                      width={120}
-                      height={120}
+                      src={thumbnailPreview}
+                      alt="thumbnail preview"
+                      width={200}
+                      height={150}
                       className="rounded-md object-cover"
+                      unoptimized
                     />
-                  ))}
+                    <button
+                      type="button"
+                      onClick={removeThumbnail}
+                      className="absolute -top-2 -right-2 rounded-full bg-destructive p-1 text-white shadow-md hover:bg-destructive/90"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative cursor-pointer rounded-lg border-2 border-dashed p-6 text-center hover:border-primary/50">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleThumbnailUpload(e.target.files)}
+                      className="absolute inset-0 cursor-pointer opacity-0"
+                    />
+                    <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
+                      Click or drag to upload thumbnail
+                    </p>
+                  </div>
+                )}
+              </FieldContent>
+            </Field>
+
+            {/* Gallery Images Upload */}
+            <Field>
+              <FieldLabel>Gallery Images</FieldLabel>
+              <FieldDescription className="text-muted-foreground text-xs mb-2">
+                Upload images for the gallery (must be a multiple of 3)
+              </FieldDescription>
+              <FieldContent>
+                {/* Upload box */}
+                <div className="relative cursor-pointer rounded-lg border-2 border-dashed p-6 text-center hover:border-primary/50">
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e.target.files)}
+                    className="absolute inset-0 cursor-pointer opacity-0"
+                  />
+                  <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">
+                    Click or drag to upload images
+                  </p>
                 </div>
+
+                {/* Images count indicator */}
+                {totalImagesCount > 0 && (
+                  <p
+                    className={`mt-2 text-sm ${
+                      totalImagesCount % 3 === 0
+                        ? "text-green-600"
+                        : "text-amber-600"
+                    }`}
+                  >
+                    {totalImagesCount} image{totalImagesCount !== 1 ? "s" : ""}{" "}
+                    selected
+                    {totalImagesCount % 3 !== 0 &&
+                      ` (need ${3 - (totalImagesCount % 3)} more for multiple of 3)`}
+                  </p>
+                )}
+
+                {/* Existing images preview */}
+                {existingImages.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">
+                      Existing Images
+                    </p>
+                    <div className="grid grid-cols-3 gap-4">
+                      {existingImages.map((src, i) => (
+                        <div key={`existing-${i}`} className="relative">
+                          <Image
+                            src={src}
+                            alt={`existing image ${i + 1}`}
+                            width={120}
+                            height={120}
+                            className="rounded-md object-cover w-full h-24"
+                            unoptimized
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(i)}
+                            className="absolute -top-2 -right-2 rounded-full bg-destructive p-1 text-white shadow-md hover:bg-destructive/90"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* New images preview */}
+                {newImagePreviews.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-xs font-medium text-muted-foreground mb-2">
+                      New Images (to be uploaded)
+                    </p>
+                    <div className="grid grid-cols-3 gap-4">
+                      {newImagePreviews.map((src, i) => (
+                        <div key={`new-${i}`} className="relative">
+                          <Image
+                            src={src}
+                            alt={`new image ${i + 1}`}
+                            width={120}
+                            height={120}
+                            className="rounded-md object-cover w-full h-24"
+                            unoptimized
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeNewImage(i)}
+                            className="absolute -top-2 -right-2 rounded-full bg-destructive p-1 text-white shadow-md hover:bg-destructive/90"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </FieldContent>
             </Field>
           </FieldGroup>
@@ -475,8 +725,18 @@ export function TourForm({ tour }: TourFormProps) {
           form="tour-form"
           size="lg"
           className="w-full font-semibold tracking-wide"
+          disabled={isSubmitting || uploading}
         >
-          Create Tour
+          {isSubmitting || uploading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              {isEditMode ? "Updating..." : "Creating..."}
+            </>
+          ) : isEditMode ? (
+            "Update Tour"
+          ) : (
+            "Create Tour"
+          )}
         </Button>
       </CardFooter>
     </Card>

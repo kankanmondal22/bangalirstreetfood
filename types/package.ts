@@ -29,7 +29,29 @@ export const packageFormSchema = z.object({
 
   journeyDates: z.array(z.date()).min(1, "Add at least one departure date."),
 
+  thumbnail: z.any().optional(),
   images: z.any().optional(),
 });
 
 export type IPackageFrom = z.infer<typeof packageFormSchema>;
+
+export type ItineraryItem = {
+  day: number;
+  description: string;
+};
+
+export type PackageEditData = {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  amountPerAdult: number;
+  amountPerChild: number;
+  minimumBookingAmountPerPerson: number;
+  maxGroupSize: number;
+  highlights: string[];
+  thumbnail: string | null;
+  images: string[];
+  itinerary: ItineraryItem[];
+  journeyDates: Date[];
+};

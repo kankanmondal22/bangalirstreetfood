@@ -1,10 +1,5 @@
 "use server";
 
-type ItineraryItem = {
-  day: number;
-  description: string;
-};
-
 import db from "@/db";
 import {
   InsertPackage,
@@ -14,10 +9,8 @@ import {
 } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
-import { countDistinct, desc, eq, inArray, min } from "drizzle-orm";
-import { duration } from "drizzle-orm/gel-core";
-import { ar, it } from "date-fns/locale";
-import { title } from "process";
+import { countDistinct, eq, inArray, min } from "drizzle-orm";
+import { ItineraryItem, PackageEditData } from "@/types/package";
 
 export const fetchPackages = async ({
   page,
@@ -416,3 +409,168 @@ export const fetchPackagesFormAdmin = async ({
     throw new Error("Failed to fetch packages");
   }
 };
+
+export const getPackageDataForEditing = async (
+  id: string,
+): Promise<PackageEditData | null> => {
+  try {
+    if (!id || typeof id !== "string") {
+      throw new Error("Invalid package ID");
+    }
+
+    // Fetch main package data
+    const packageData = await db
+      .select()
+      .from(packagesTable)
+      .where(eq(packagesTable.id, id))
+      .limit(1);
+
+    if (packageData.length === 0) {
+      return null;
+    }
+
+    const pkg = packageData[0];
+
+    // Fetch itinerary
+    const itineraryData = await db
+      .select({
+        day: itineraryTable.day,
+        description: itineraryTable.description,
+      })
+      .from(itineraryTable)
+      .where(eq(itineraryTable.packageId, id))
+      .orderBy(itineraryTable.day);
+
+    // Fetch travel dates
+    const travelDatesData = await db
+      .select({
+        startDate: travelDatesTable.startDate,
+      })
+      .from(travelDatesTable)
+      .where(eq(travelDatesTable.packageId, id));
+
+    return {
+      id: pkg.id,
+      title: pkg.packageTitle,
+      description: pkg.packageDescription,
+      duration: pkg.duration,
+      amountPerAdult: pkg.amountPerAdult,
+      amountPerChild: pkg.amountPerChild,
+      minimumBookingAmountPerPerson: pkg.minimumBookingAmountPerPerson,
+      maxGroupSize: pkg.maxGroupSize,
+      highlights: pkg.highlights,
+      thumbnail: pkg.thumbnail,
+      images: pkg.images,
+      itinerary: itineraryData.map((item) => ({
+        day: item.day,
+        description: item.description,
+      })),
+      journeyDates: travelDatesData.map((d) => new Date(d.startDate)),
+    };
+  } catch (error) {
+    console.error("Error fetching package for editing:", error);
+    throw new Error("Failed to fetch package for editing");
+  }
+};
+
+export const updatePackage = async (
+  packageId: string,
+  packageData: InsertPackage,
+  itineraryData: ItineraryItem[],
+  journeyDates: Date[],
+  oldImages: string[],
+  newImageUrls: string[],
+  oldThumbnail: string | null,
+  newThumbnailUrl: string | null,
+) => {
+  try {
+    if (itineraryData.length === 0) {
+      throw new Error("At least one itinerary item is required");
+    }
+
+    if (journeyDates.length === 0) {
+      throw new Error("At least one journey date is required");
+    }
+
+    await db.transaction(async (tx) => {
+      // Update main package data
+      await tx
+        .update(packagesTable)
+        .set({
+          ...packageData,
+          thumbnail: newThumbnailUrl,
+          images: newImageUrls,
+          updatedAt: new Date(),
+        })
+        .where(eq(packagesTable.id, packageId));
+
+      // Delete old itinerary and insert new
+      await tx
+        .delete(itineraryTable)
+        .where(eq(itineraryTable.packageId, packageId));
+
+      await tx.insert(itineraryTable).values(
+        itineraryData.map((item) => ({
+          packageId,
+          day: item.day,
+          description: item.description,
+        })),
+      );
+
+      // Delete old travel dates and insert new
+      await tx
+        .delete(travelDatesTable)
+        .where(eq(travelDatesTable.packageId, packageId));
+
+      await tx.insert(travelDatesTable).values(
+        journeyDates.map((date) => ({
+          packageId,
+          startDate: date.toISOString().split("T")[0],
+        })),
+      );
+    });
+
+    // Clean up old images that are no longer used
+    const imagesToDelete = oldImages.filter(
+      (img) => !newImageUrls.includes(img),
+    );
+
+    // Clean up old thumbnail if changed
+    if (oldThumbnail && oldThumbnail !== newThumbnailUrl) {
+      imagesToDelete.push(oldThumbnail);
+    }
+
+    // Delete removed images from S3
+    for (const imageUrl of imagesToDelete) {
+      try {
+        const key = extractS3KeyFromUrl(imageUrl);
+        if (key) {
+          await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ""}/api/upload`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ key }),
+          });
+        }
+      } catch (err) {
+        console.error("Failed to delete old image from S3:", err);
+      }
+    }
+
+    revalidatePath("/admin/packages");
+    revalidatePath("/packages");
+    revalidatePath(`/packages/${packageId}`);
+  } catch (error) {
+    console.error("Error updating package:", error);
+    throw new Error("Failed to update package");
+  }
+};
+
+function extractS3KeyFromUrl(url: string): string | null {
+  try {
+    const urlObj = new URL(url);
+    // Remove leading slash from pathname
+    return urlObj.pathname.substring(1);
+  } catch {
+    return null;
+  }
+}

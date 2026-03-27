@@ -74,9 +74,11 @@ const PackagesPage = async () => {
                     <Calendar className="h-4 w-4" />
                     Add Date
                   </Button>
-                  <Button variant="link">
-                    <Edit className="h-4 w-4" />
-                    Edit
+                  <Button variant="link" asChild>
+                    <Link href={`/admin/packages/edit/${pkg.id}`}>
+                      <Edit className="h-4 w-4" />
+                      Edit
+                    </Link>
                   </Button>
                   <Button variant="link" className="text-destructive">
                     Unpublish
