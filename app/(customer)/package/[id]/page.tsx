@@ -10,26 +10,6 @@ import { getPackageDetailsById } from "@/actions/package.action";
 import GalleryGrid from "@/components/GalleryGrid";
 import { Check, X } from "lucide-react";
 
-const mockIncluded = [
-  "Accommodation (Houseboat + Hotel)",
-  "Daily breakfast, lunch and dinner",
-  "Airport transfers",
-  "Vehicle for sightseeing",
-  "Shikara ride",
-  "Train tickets for the trip",
-];
-
-const mockExcluded = [
-  "Flight tickets",
-  "Travel insurance",
-  "Personal expenses",
-  "Tips and gratuities",
-  "Activities e.g. gondola ride, ropeway, paragliding, etc.",
-];
-
-const mockAdditionalNotes =
-  "Please ensure you have a valid passport and visa for the duration of your trip. It is recommended to purchase travel insurance for your protection during the trip. The itinerary is subject to change based on weather conditions and other unforeseen circumstances.";
-
 const IndividualPackagePage = async ({
   params,
 }: {
@@ -279,7 +259,7 @@ const IndividualPackagePage = async ({
                 key={item}
                 className="flex items-start gap-2 text-sm text-gray-700"
               >
-                <X className="mt-1 shrink-0 text-red-500" size={16} />
+                <X className="shrink-0 text-red-500" size={16} />
                 <span>{item}</span>
               </li>
             ))}
