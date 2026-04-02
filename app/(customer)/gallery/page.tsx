@@ -132,9 +132,9 @@ const GalleryPage = () => {
               height={300}
               className="h-56 w-full object-cover brightness-95 contrast-95 sepia-[0.2]"
             />
-            <div className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
+            <p className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
               {image.name}
-            </div>
+            </p>
           </button>
         ))}
       </div>
