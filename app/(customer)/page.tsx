@@ -93,7 +93,7 @@ export default function Page() {
         </div>
       </HomeSections>
       {/* The Stories we created*/}
-      <HomeSections className="max-w-none">
+      <HomeSections className="max-w-none bg-amber-50">
         <div className="mx-auto max-w-6xl p-8">
           <SocialMediaCarousel
             videos={videos}
@@ -188,6 +188,32 @@ export default function Page() {
             <Link href="/contact">Contact Us</Link>
           </Button>
         </div>
+      </HomeSections>
+      {/* FAQ Section */}
+      <HomeSections>
+        <Heading2>Frequently Asked Questions</Heading2>
+        <Accordion type="single" collapsible className="mt-6 w-full">
+          <AccordionItem value="item-1" className="border-b">
+            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">
+              What is included in the tour packages?
+            </AccordionTrigger>
+            <AccordionContent className="text-sm text-gray-500">
+              <p>
+                Accommodation, transport, meals, and guided tours are included.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2" className="border-b">
+            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">
+              How do I book a tour?
+            </AccordionTrigger>
+            <AccordionContent className="text-sm text-gray-500">
+              <p>
+                Accommodation, transport, meals, and guided tours are included.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </HomeSections>
     </div>
   );

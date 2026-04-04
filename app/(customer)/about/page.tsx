@@ -1,3 +1,4 @@
+import Heading2 from "@/components/reusable/Heading2";
 import Image from "next/image";
 import { StatItem, WhyBestFeature, memberData } from "@/lib/constants";
 import HomeSections from "@/components/reusable/HomeSections";
@@ -60,6 +61,32 @@ const AboutPage = () => {
             committed to making your journeys unforgettable.
           </p>
         </div>
+      </div>
+      {/* Heading */}
+      <div className="text-center">
+        <Heading2>Meet Our Team</Heading2>
+        <p className="mt-3 text-gray-500">
+          The people who make your journeys unforgettable
+        </p>
+      </div>
+
+      {/* Team Grid */}
+      <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <TeamMemberCard
+          name="Sourav"
+          role="Founder & CEO"
+          imageSrc="/gallery/bsf1.jpeg"
+        />
+        <TeamMemberCard
+          name="Anirban"
+          role="Travel Expert"
+          imageSrc="/gallery/bsf1.jpeg"
+        />
+        <TeamMemberCard
+          name="Rohit"
+          role="Tour Manager"
+          imageSrc="/gallery/bsf1.jpeg"
+        />
       </div>
 
       {/* Why We Are The Best */}
