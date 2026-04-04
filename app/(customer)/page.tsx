@@ -7,6 +7,12 @@ import Testimonials from "@/components/Testimonials";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 const testimonialsData = [
   {
@@ -80,7 +86,7 @@ export default function Page() {
       <HeroVideo />
       <HomeSections>
         <Heading2>Explore the World with Us</Heading2>
-        <div className="grid grid-cols-3 gap-8 my-12">
+        <div className="my-12 grid grid-cols-3 gap-8">
           <div className="rotate-3 bg-white object-cover p-3 pb-6 shadow">
             <Image
               src="/gallery/bsf1.jpeg"
@@ -141,7 +147,7 @@ export default function Page() {
       </HomeSections>
       {/* The Stories we created*/}
       <HomeSections className="max-w-none bg-amber-50">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-6xl p-8">
           <SocialMediaCarousel
             videos={videos}
             title="The Stories we created"
@@ -163,7 +169,7 @@ export default function Page() {
         <GalleryGrid images={images} />
       </HomeSections>
       {/* why choose us */}
-      <HomeSections>
+      <HomeSections className="bg-orange-100">
         <Heading2 subHeading="Travel smarter, safer, and more beautifully with us">
           Why Choose Us
         </Heading2>
@@ -222,6 +228,24 @@ export default function Page() {
             </div>
           </div>
         </div>
+      </HomeSections>
+      {/* FAQ Section */}
+      <HomeSections>
+        <Heading2>Frequently Asked Questions</Heading2>
+        <Accordion type="single" collapsible className="w-full mt-6">
+          <AccordionItem value="item-1" className="border-b">
+            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">What is included in the tour packages?</AccordionTrigger>
+            <AccordionContent className="text-sm text-gray-500">
+              <p>Accommodation, transport, meals, and guided tours are included.</p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2" className="border-b">
+            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">How do I book a tour?</AccordionTrigger>
+            <AccordionContent className="text-sm text-gray-500">
+              <p>Accommodation, transport, meals, and guided tours are included.</p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </HomeSections>
     </div>
   );
