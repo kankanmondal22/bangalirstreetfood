@@ -1,4 +1,13 @@
-import { MapPin, Bus, BookCheck, LucideIcon, Users, Tag, CalendarDays, Headphones } from "lucide-react";
+import {
+  MapPin,
+  Bus,
+  BookCheck,
+  LucideIcon,
+  Users,
+  Tag,
+  CalendarDays,
+  Headphones,
+} from "lucide-react";
 
 export type StatItem = {
   icon: LucideIcon;
@@ -6,11 +15,11 @@ export type StatItem = {
   label: string;
 };
 
-export const StatItem= [
-  { icon: Users,        value: "890+", label: "Happy Travelers" },
-  { icon: Tag,          value: "5+",   label: "Offers" },
-  { icon: CalendarDays, value: "12+",  label: "Years Experience" },
-  { icon: Headphones,   value: "24/7", label: "Hours Support" },
+export const StatItem = [
+  { icon: Users, value: "890+", label: "Happy Travelers" },
+  { icon: Tag, value: "5+", label: "Offers" },
+  { icon: CalendarDays, value: "12+", label: "Years Experience" },
+  { icon: Headphones, value: "24/7", label: "Hours Support" },
 ];
 
 export type WhyBestFeature = {
