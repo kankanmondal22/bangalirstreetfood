@@ -14,15 +14,17 @@ const Heading2 = ({
   return (
     <>
       <h2
-        className={`mb-4 text-center text-3xl font-bold text-teal-600 ${className}`}
+        className={`text-center text-3xl font-bold text-teal-600 ${subHeading ? "mb-2" : "mb-12 lg:mb-16"} ${className}`}
       >
         {children}
       </h2>
-      <p
-        className={`text-center text-sm text-gray-600 sm:text-base ${subHeadingClassName}`}
-      >
-        {subHeading}
-      </p>
+      {subHeading && (
+        <p
+          className={`mb-12 text-center text-sm text-gray-600 sm:text-base lg:mb-16 ${subHeadingClassName}`}
+        >
+          {subHeading}
+        </p>
+      )}
     </>
   );
 };

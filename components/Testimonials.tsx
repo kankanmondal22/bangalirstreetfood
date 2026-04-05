@@ -31,41 +31,63 @@ const Testimonials = ({
     const el = trackRef.current;
     if (!el) return;
 
-    const maxScrollLeft = el.scrollWidth - el.clientWidth;
-    if (maxScrollLeft <= 0) return;
+    // Kill previous animation (important on re-render)
+    tweenRef.current?.kill();
 
-    const tween = gsap.to(el, {
-      scrollLeft: maxScrollLeft,
-      duration: 15,
-      ease: "none",
-      repeat: -1,
-      yoyo: true,
-    });
+    const ctx = gsap.context(() => {
+      const totalWidth = el.scrollWidth / 2;
 
-    tweenRef.current = tween;
+      const tween = gsap.to(el, {
+        x: -totalWidth,
+        duration: 25, // control speed here
+        ease: "none",
+        repeat: -1,
+      });
+
+      tweenRef.current = tween;
+    }, el);
+
+    // Recalculate on resize (SUPER IMPORTANT)
+    const handleResize = () => {
+      tweenRef.current?.kill();
+
+      const totalWidth = el.scrollWidth / 2;
+
+      tweenRef.current = gsap.to(el, {
+        x: -totalWidth,
+        duration: 25,
+        ease: "none",
+        repeat: -1,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      tween.kill();
-      tweenRef.current = null;
+      ctx.revert();
+      tweenRef.current?.kill();
+      window.removeEventListener("resize", handleResize);
     };
-  }, [data]); // 👈 important (re-run if data changes)
+  }, [data]);
 
   return (
-    <>
-      <div>
-        <div className="mb-8">
-          <Heading2 subHeading={subtitle}>{title}</Heading2>
-        </div>
+    <div>
+      {/* Heading */}
+      <div className="mb-8">
+        <Heading2 subHeading={subtitle}>{title}</Heading2>
+      </div>
 
+      {/* Marquee Container */}
+      <div className="overflow-hidden">
         <div
           ref={trackRef}
-          className="flex gap-6 overflow-x-auto p-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          onMouseEnter={() => tweenRef.current?.pause()}
-          onMouseLeave={() => tweenRef.current?.resume()}
+          className="flex w-max gap-6 p-4 will-change-transform"
+          onMouseEnter={() => tweenRef.current?.timeScale(0.3)} // smooth slow
+          onMouseLeave={() => tweenRef.current?.timeScale(1)} // normal speed
         >
-          {data.map((testimonial) => (
+          {[...data, ...data].map((testimonial, index) => (
             <TestimonialCard
-              key={testimonial.id}
+              key={`${testimonial.id}-${index}`}
               id={testimonial.id}
               name={testimonial.name}
               text={testimonial.text}
@@ -74,7 +96,7 @@ const Testimonials = ({
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

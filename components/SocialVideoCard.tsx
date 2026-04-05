@@ -4,6 +4,7 @@ import React from "react";
 interface Props {
   src: string;
   index: number;
+  type: "youtube" | "facebook";
 }
 
 const getYouTubeEmbedUrl = (url: string) => {
@@ -30,7 +31,6 @@ const getYouTubeEmbedUrl = (url: string) => {
     return null;
   }
 };
-
 
 const getFacebookEmbedUrl = (url: string) => {
   try {
@@ -62,23 +62,26 @@ const getFacebookEmbedUrl = (url: string) => {
     }
 
     return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(
-      canonicalVideoUrl
+      canonicalVideoUrl,
     )}&show_text=false&width=500`;
   } catch {
     return null;
   }
 };
 
-const SocialVideoCard = ({ src, index }: Props) => {
-  const youtubeEmbedUrl = getYouTubeEmbedUrl(src);
-  const facebookEmbedUrl = getFacebookEmbedUrl(src);
-  const embedUrl = youtubeEmbedUrl ?? facebookEmbedUrl;
+const SocialVideoCard = ({ src, index, type }: Props) => {
+  const embedUrl =
+    type === "youtube"
+      ? getYouTubeEmbedUrl(src)
+      : type === "facebook"
+        ? getFacebookEmbedUrl(src)
+        : null;
 
   return (
     <article className="w-[82vw] max-w-[320px] shrink-0 snap-start overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm sm:w-[320px]">
       {embedUrl ? (
         <iframe
-          className="h-96 w-full bg-black sm:h-[500px]"
+          className="h-96 w-full bg-black sm:h-125"
           src={embedUrl}
           title={`Social video ${index + 1}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -86,7 +89,7 @@ const SocialVideoCard = ({ src, index }: Props) => {
         />
       ) : (
         <video
-          className="h-96 w-full object-cover sm:h-[500px]"
+          className="h-96 w-full object-cover sm:h-125"
           src={src}
           controls
         />

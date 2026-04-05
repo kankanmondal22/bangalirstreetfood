@@ -13,71 +13,15 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import {
+  testimonialsData,
+  videos,
+  images,
+  faqData,
+  memberData,
+  whyChooseUsData,
+} from "@/lib/constants";
 
-const testimonialsData = [
-  {
-    id: 1,
-    name: "Ankita Roy",
-    text: "The Darjeeling trip was perfectly organized. Hotels, transport, everything was smooth. Highly recommended!",
-    rating: 5,
-  },
-  {
-    id: 2,
-    name: "Sourav Das",
-    text: "Amazing experience in Sikkim! The team was very supportive and made our journey stress-free.",
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: "Riya Sharma",
-    text: "Loved the Goa package. Great itinerary and budget-friendly pricing. Will definitely travel again!",
-    rating: 4,
-  },
-  {
-    id: 4,
-    name: "Arindam Ghosh",
-    text: "Very professional service. The guide was knowledgeable and friendly throughout the trip.",
-    rating: 5,
-  },
-  {
-    id: 5,
-    name: "Neha Kapoor",
-    text: "Everything was well planned, from pickup to hotel stays. Had an unforgettable experience!",
-    rating: 5,
-  },
-  {
-    id: 6,
-    name: "Rahul Verma",
-    text: "Good service overall. Minor delays, but the team handled everything nicely.",
-    rating: 4,
-  },
-  {
-    id: 7,
-    name: "Priyanka Sen",
-    text: "Best travel agency I’ve used so far. Very reliable and affordable packages.",
-    rating: 5,
-  },
-];
-
-const videos = [
-  { src: "https://youtube.com/shorts/tgpjk1iYs6U?si=C0QmwyxVSCuBjfJD" },
-  { src: "https://youtube.com/shorts/t35zgT7x1fk?si=QVW_DykSD-fmeqIE" },
-  { src: "https://youtube.com/shorts/MNTHqYfCkWg?si=M3kTkXl_0-xVXz25" },
-  { src: "https://www.facebook.com/reel/1231792572373049" },
-  { src: "https://www.facebook.com/reel/1606883560603961" },
-  { src: "https://youtube.com/shorts/t35zgT7x1fk?si=QVW_DykSD-fmeqIE" },
-];
-
-const images = [
-  "/gallery/bsf1.jpeg",
-  "/gallery/bsf2.jpeg",
-  "/gallery/bsf3.jpeg",
-  "/gallery/bsf4.jpeg",
-  "/gallery/bsf5.jpeg",
-  "/gallery/bsf6.jpeg",
-  "/gallery/bsf7.jpeg",
-  "/gallery/bsf8.jpeg",
-];
 export default function Page() {
   return (
     //hero
@@ -87,44 +31,25 @@ export default function Page() {
       <HomeSections>
         <Heading2>Explore the World with Us</Heading2>
         <div className="my-12 grid grid-cols-3 gap-8">
-          <div className="rotate-3 bg-white object-cover p-3 pb-6 shadow">
-            <Image
-              src="/gallery/bsf1.jpeg"
-              height={500}
-              width={500}
-              alt="bsf1"
-              className="aspect-3/2 object-cover"
-            ></Image>
-            <p className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
-              Rohit
-            </p>
-          </div>
-          <div className="-rotate-3 bg-white object-cover p-3 pb-6 shadow">
-            <Image
-              src="/gallery/bsf1.jpeg"
-              height={500}
-              width={500}
-              alt="bsf1"
-              className="aspect-3/2 object-cover"
-            ></Image>
-            <p className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
-              Anirban
-            </p>
-          </div>
-          <div className="rotate-3 bg-white object-cover p-3 pb-6 shadow">
-            <Image
-              src="/gallery/bsf1.jpeg"
-              height={500}
-              width={500}
-              alt="bsf1"
-              className="aspect-3/2 object-cover"
-            ></Image>
-            <p className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
-              Sourav
-            </p>
-          </div>
+          {memberData.map((member, index) => (
+            <div
+              key={member.id}
+              className={`${index % 3 === 1 ? "-rotate-3" : "rotate-3"} bg-white object-cover p-3 pb-6 shadow`}
+            >
+              <Image
+                src={member.image}
+                height={500}
+                width={500}
+                alt={member.name}
+                className="aspect-3/2 object-cover"
+              ></Image>
+              <p className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
+                {member.name}
+              </p>
+            </div>
+          ))}
         </div>
-        <p className="mt-16">
+        <p className="mt-16 max-w-5xl text-center text-lg text-gray-600">
           Discover unforgettable journeys with our expertly crafted travel
           experiences, designed to take you from Kolkata to your dream
           destinations across India and beyond. Whether you are seeking serene
@@ -169,82 +94,52 @@ export default function Page() {
         <GalleryGrid images={images} />
       </HomeSections>
       {/* why choose us */}
-      <HomeSections className="bg-orange-100">
-        <Heading2 subHeading="Travel smarter, safer, and more beautifully with us">
+      <HomeSections className="max-w-none bg-teal-500">
+        <Heading2
+          className="text-white"
+          subHeading="Travel smarter, safer, and more beautifully with us"
+          subHeadingClassName="text-teal-100"
+        >
           Why Choose Us
         </Heading2>
 
         {/* Grid */}
-        <div className="mt-8 grid gap-6 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto mt-8 grid max-w-6xl gap-6 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Card */}
-          <div className="group relative rounded-2xl bg-white/70 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg sm:p-6">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-400/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative z-10">
-              <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
-                Comfort Travel
-              </h3>
-              <p className="mt-2 text-xs text-gray-500 sm:text-sm">
-                Smooth journeys with premium transport & planning.
-              </p>
+          {whyChooseUsData.map((item) => (
+            <div
+              key={item.id}
+              className="group relative rounded-md bg-white shadow-sm backdrop-blur-md transition-all duration-300 sm:p-6"
+            >
+              <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-teal-400/20 to-transparent opacity-0 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-xs text-gray-500 sm:text-sm">
+                  {item.description}
+                </p>
+              </div>
             </div>
-          </div>
-
-          {/* Card */}
-          <div className="group relative rounded-2xl bg-white/70 p-5 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg sm:p-6">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-400/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative z-10">
-              <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
-                Best Pricing
-              </h3>
-              <p className="mt-2 text-xs text-gray-500 sm:text-sm">
-                Affordable packages with no hidden costs.
-              </p>
-            </div>
-          </div>
-
-          {/* Card */}
-          <div className="group relative rounded-2xl bg-white/70 p-5 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg sm:p-6">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-400/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative z-10">
-              <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
-                Expert Guides
-              </h3>
-              <p className="mt-2 text-xs text-gray-500 sm:text-sm">
-                Travel with professionals who know every corner.
-              </p>
-            </div>
-          </div>
-
-          {/* Card */}
-          <div className="group relative rounded-2xl bg-white/70 p-5 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg sm:p-6">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-teal-400/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative z-10">
-              <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
-                Happy Travelers
-              </h3>
-              <p className="mt-2 text-xs text-gray-500 sm:text-sm">
-                Loved by hundreds of satisfied customers.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </HomeSections>
       {/* FAQ Section */}
       <HomeSections>
         <Heading2>Frequently Asked Questions</Heading2>
-        <Accordion type="single" collapsible className="w-full mt-6">
-          <AccordionItem value="item-1" className="border-b">
-            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">What is included in the tour packages?</AccordionTrigger>
-            <AccordionContent className="text-sm text-gray-500">
-              <p>Accommodation, transport, meals, and guided tours are included.</p>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2" className="border-b">
-            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">How do I book a tour?</AccordionTrigger>
-            <AccordionContent className="text-sm text-gray-500">
-              <p>Accommodation, transport, meals, and guided tours are included.</p>
-            </AccordionContent>
-          </AccordionItem>
+        <Accordion type="single" collapsible className="mt-6 w-full gap-y-4">
+          {faqData.map((faq) => (
+            <AccordionItem
+              value={`item-${faq.id}`}
+              className="rounded bg-white px-4 py-2 shadow-sm"
+              key={faq.id}
+            >
+              <AccordionTrigger>{faq.question}</AccordionTrigger>
+              <AccordionContent>
+                <p>{faq.answer}</p>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
         </Accordion>
       </HomeSections>
     </div>
