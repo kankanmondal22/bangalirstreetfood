@@ -9,7 +9,7 @@ interface Testimonial {
 
 const TestimonialCard = ({ name, text, rating }: Testimonial) => {
   return (
-    <div className="w-72 shrink-0 rounded-lg bg-white p-6 shadow-md transition-transform duration-300 hover:scale-[1.03] hover:shadow-lg">
+    <div className="w-72 shrink-0 rounded-lg bg-white p-6 shadow-md transition-transform duration-300">
       <div className="mb-4">
         <StarRating rating={rating} />
       </div>

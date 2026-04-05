@@ -40,6 +40,9 @@ const buttonVariants = cva(
           "size-8 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md",
         "icon-lg": "size-10",
         action: "", // similar to default but with less padding
+        "icon-xl": "size-12",
+        "icon-2xl": "size-14",
+        "icon-3xl": "size-16",
       },
     },
     defaultVariants: {

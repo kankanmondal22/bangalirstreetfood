@@ -7,7 +7,7 @@ import SocialVideoCard from "./SocialVideoCard";
 import Heading2 from "./reusable/Heading2";
 
 interface Props {
-  videos: { src: string }[];
+  videos: { src: string; type: "youtube" | "facebook" }[];
   title?: string;
   subtitle?: string;
 }
@@ -19,41 +19,57 @@ const SocialMediaCarousel = ({
 }: Props) => {
   const trackRef = useRef<HTMLDivElement>(null);
 
+  const handleNext = () => {
+    if (trackRef.current) {
+      trackRef.current.scrollBy({ left: 340, behavior: "smooth" });
+    }
+  };
+
+  const handlePrev = () => {
+    if (trackRef.current) {
+      trackRef.current.scrollBy({ left: -340, behavior: "smooth" });
+    }
+  };
+
   return (
     <>
-      <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
-        <Heading2>{title}</Heading2>
+      <Heading2 subHeadingClassName="mb-18" subHeading={subtitle}>
+        {title}
+      </Heading2>
 
-        <div className="flex gap-2">
-          <Button
-            size="icon"
-            onClick={() =>
-              trackRef.current?.scrollBy({ left: -340, behavior: "smooth" })
-            }
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
+      <div className="relative">
+        <Button
+          size="icon-3xl"
+          className="absolute top-1/2 -left-6 aspect-square -translate-y-1/2 rounded-full shadow"
+          onClick={handlePrev}
+          // variant=""
+          disabled={videos.length <= 1}
+        >
+          <ArrowLeft className="h-12 w-12" strokeWidth={4} />
+        </Button>
 
-          <Button
-            size="icon"
-            onClick={() =>
-              trackRef.current?.scrollBy({ left: 340, behavior: "smooth" })
-            }
-          >
-            <ArrowRight className="h-4 w-4" />
-          </Button>
+        <Button
+          size="icon-3xl"
+          className="absolute top-1/2 -right-6 aspect-square -translate-y-1/2 rounded-full shadow"
+          onClick={handleNext}
+          // variant="secondary"
+          disabled={videos.length <= 1}
+        >
+          <ArrowRight className="h-12 w-12" strokeWidth={4} />
+        </Button>
+        <div
+          ref={trackRef}
+          className="flex snap-x gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {videos.map((video, index) => (
+            <SocialVideoCard
+              key={index}
+              src={video.src}
+              type={video.type}
+              index={index}
+            />
+          ))}
         </div>
-      </div>
-
-      <p className="mb-5 text-sm text-zinc-600 sm:text-base">{subtitle}</p>
-
-      <div
-        ref={trackRef}
-        className="flex snap-x gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {videos.map((video, index) => (
-          <SocialVideoCard key={index} src={video.src} index={index} />
-        ))}
       </div>
     </>
   );
