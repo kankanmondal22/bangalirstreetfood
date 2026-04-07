@@ -91,8 +91,6 @@ export default function Page() {
             </div>
           </div>
         </div>
-
-        {/* CTA */}
       </HomeSections>
       {/* The Stories we created*/}
       <HomeSections className="max-w-none">

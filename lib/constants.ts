@@ -1,3 +1,41 @@
+import { MapPin, Bus, BookCheck, LucideIcon, Users, Tag, CalendarDays, Headphones } from "lucide-react";
+
+export type StatItem = {
+  icon: LucideIcon;
+  value: string;
+  label: string;
+};
+
+export const StatItem= [
+  { icon: Users,        value: "890+", label: "Happy Travelers" },
+  { icon: Tag,          value: "5+",   label: "Offers" },
+  { icon: CalendarDays, value: "12+",  label: "Years Experience" },
+  { icon: Headphones,   value: "24/7", label: "Hours Support" },
+];
+
+export type WhyBestFeature = {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+};
+
+export const WhyBestFeature = [
+  {
+    icon: MapPin,
+    title: "Diverse Destinations",
+    desc: "From sun-soaked coastlines to misty mountain peaks, we offer handpicked destinations for every kind of traveler.",
+  },
+  {
+    icon: Bus,
+    title: "Adventure Time",
+    desc: "Thrilling group adventures with comfortable transport, expert drivers, and routes off the beaten path.",
+  },
+  {
+    icon: BookCheck,
+    title: "Guide Tour",
+    desc: "Certified local guides bring destinations to life with rich stories, cultural insights, and personalised itineraries.",
+  },
+];
 export const testimonialsData = [
   {
     id: 1,
