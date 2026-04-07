@@ -8,7 +8,7 @@ const HomeSections = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <div className={`mx-auto my-16 max-w-6xl p-8 py-18 ${className}`}>
+    <div className={`mx-auto max-w-6xl p-8 py-24 xl:py-32 ${className}`}>
       {children}
     </div>
   );
