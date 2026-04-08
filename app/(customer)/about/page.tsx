@@ -14,7 +14,7 @@ const TeamMemberCard = ({
   imageSrc: string;
 }) => {
   return (
-    <div className="group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-lg">
+    <div className="group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-lg shadow-sm transition-shadow duration-300 hover:shadow-lg">
       {/* Full bleed image */}
       <Image src={imageSrc} alt={name} fill className="object-cover" />
 
@@ -37,15 +37,32 @@ const TeamMemberCard = ({
 
 const AboutPage = () => {
   return (
-    <div className="mx-auto mt-16 py-8">
-      {/* Page Header */}
-      <h1 className="font-handwriting mt-8 mb-2 text-center text-4xl font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
-        Our Story
-      </h1>
-      <p className="mx-auto max-w-xl px-4 text-center text-sm text-gray-700 sm:text-base">
-        Discover the passion and dedication behind our travel agency, committed
-        to making your journeys unforgettable.
-      </p>
+    <div className="mx-auto py-8">
+      {/* Hero with full-width masked bottom */}
+      
+        <div
+          className="hero-mask-intersect  mb-10 overflow-hidden rounded-t-3xl sm:-mx-8 relative mx-auto flex items-center px-6 py-16 sm:min-h-[320px] sm:px-10 lg:min-h-[380px]"
+          style={{
+            backgroundImage:
+              "url('/Andaman-and-Nicobar-Islands-Package-1.jpg')",
+          }}
+        >
+          <div className="absolute inset-0 bg-black/40" />
+
+          <div className="relative z-10 max-w-xl p-8 text-white">
+            <p className="mb-2 text-xs font-semibold tracking-[0.25em] uppercase sm:text-sm">
+              About
+            </p>
+            <h1 className="font-handwriting mb-2text-4xl mb-4 font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
+              Our Story
+            </h1>
+            <p className="text-sm text-gray-100/90 sm:text-base">
+              Discover the passion and dedication behind our travel agency,
+              committed to making your journeys unforgettable.
+            </p>
+          </div>
+        </div>
+    
 
       {/* Why We Are The Best */}
       <section className="py-12 sm:py-16">
