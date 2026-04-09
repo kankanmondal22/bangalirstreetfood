@@ -2,7 +2,7 @@ import Image from "next/image";
 import { StatItem, WhyBestFeature, memberData } from "@/lib/constants";
 import HomeSections from "@/components/reusable/HomeSections";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+// import { Plus } from "lucide-react";
 
 const TeamMemberCard = ({
   name,
@@ -14,12 +14,12 @@ const TeamMemberCard = ({
   imageSrc: string;
 }) => {
   return (
-    <div className="group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-lg shadow-sm transition-shadow duration-300 hover:shadow-lg">
+    <div className="group relative aspect-3/4 cursor-pointer overflow-hidden rounded-lg shadow-sm transition-shadow duration-300 hover:shadow-lg">
       {/* Full bleed image */}
       <Image src={imageSrc} alt={name} fill className="object-cover" />
 
       {/* Gradient overlay - always visible at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
 
       {/* Name overlay at bottom */}
       <div className="absolute right-0 bottom-0 left-0 p-4">
@@ -37,32 +37,30 @@ const TeamMemberCard = ({
 
 const AboutPage = () => {
   return (
-    <div className="mx-auto py-8">
+    <div className="mx-auto w-full overflow-x-hidden pb-8">
       {/* Hero with full-width masked bottom */}
-      
-        <div
-          className="hero-mask-intersect  mb-10 overflow-hidden rounded-t-3xl sm:-mx-8 relative mx-auto flex items-center px-6 py-16 sm:min-h-[320px] sm:px-10 lg:min-h-[380px]"
-          style={{
-            backgroundImage:
-              "url('/Andaman-and-Nicobar-Islands-Package-1.jpg')",
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40" />
 
-          <div className="relative z-10 max-w-xl p-8 text-white">
-            <p className="mb-2 text-xs font-semibold tracking-[0.25em] uppercase sm:text-sm">
-              About
-            </p>
-            <h1 className="font-handwriting mb-2text-4xl mb-4 font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
-              Our Story
-            </h1>
-            <p className="text-sm text-gray-100/90 sm:text-base">
-              Discover the passion and dedication behind our travel agency,
-              committed to making your journeys unforgettable.
-            </p>
-          </div>
+      <div
+        className="hero-mask-intersect relative mx-auto mb-10 flex items-center overflow-hidden rounded-t-3xl px-6 py-16 sm:-mx-8 sm:min-h-80 sm:px-10 lg:min-h-125"
+        style={{
+          backgroundImage: "url('/Andaman-and-Nicobar-Islands-Package-1.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-black/40" />
+
+        <div className="relative z-10 max-w-7xl p-8 text-white">
+          <p className="mb-2 text-xs font-semibold tracking-[0.25em] uppercase sm:text-sm">
+            About
+          </p>
+          <h1 className="font-handwriting mb-2text-4xl mb-4 font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
+            Our Story
+          </h1>
+          <p className="text-sm text-gray-100/90 sm:text-base">
+            Discover the passion and dedication behind our travel agency,
+            committed to making your journeys unforgettable.
+          </p>
         </div>
-    
+      </div>
 
       {/* Why We Are The Best */}
       <section className="py-12 sm:py-16">
@@ -84,7 +82,7 @@ const AboutPage = () => {
             <div className="mt-8 space-y-5">
               {WhyBestFeature.map(({ icon: Icon, title, desc }) => (
                 <div key={title} className="flex items-start gap-3 sm:gap-4">
-                  <Icon className="text-primary mt-1 h-6 w-6 flex-shrink-0 sm:h-8 sm:w-8" />
+                  <Icon className="text-primary mt-1 h-6 w-6 shrink-0 sm:h-8 sm:w-8" />
                   <div>
                     <h4 className="text-sm font-semibold text-gray-900 sm:text-base">
                       {title}
@@ -99,7 +97,7 @@ const AboutPage = () => {
           </div>
 
           {/* Right: Overlapping Images */}
-          <div className="relative mx-auto h-[280px] w-full max-w-sm sm:h-[340px] lg:h-[420px] lg:max-w-none">
+          <div className="relative mx-auto h-70 w-full max-w-sm sm:h-85 lg:h-105 lg:max-w-none">
             <div className="bg-primary/10 absolute right-5 -bottom-1.5 h-[60%] w-[63%]" />
             <div className="absolute top-0 left-0 z-10 h-[55%] w-[70%] overflow-hidden shadow-md">
               <Image
