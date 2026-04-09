@@ -1,9 +1,9 @@
-import Heading2 from "@/components/reusable/Heading2";
 import Image from "next/image";
 import { StatItem, WhyBestFeature, memberData } from "@/lib/constants";
 import HomeSections from "@/components/reusable/HomeSections";
 import { Button } from "@/components/ui/button";
-// import { Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import Heading2 from "@/components/reusable/Heading2";
 
 const TeamMemberCard = ({
   name,
