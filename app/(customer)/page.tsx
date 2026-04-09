@@ -93,7 +93,7 @@ export default function Page() {
         </div>
       </HomeSections>
       {/* The Stories we created*/}
-      <HomeSections className="max-w-none bg-amber-50">
+      <HomeSections className="max-w-none">
         <div className="mx-auto max-w-6xl p-8">
           <SocialMediaCarousel
             videos={videos}
