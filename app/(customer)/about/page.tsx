@@ -40,7 +40,6 @@ const AboutPage = () => {
   return (
     <div className="mx-auto w-full overflow-x-hidden">
       {/* Hero with full-width masked bottom */}
-
       <div
         className="hero-mask-intersect relative mx-auto mb-10 flex items-center overflow-hidden px-6 py-16 sm:-mx-8 sm:min-h-80 sm:px-10 lg:min-h-125"
         style={{
@@ -62,33 +61,7 @@ const AboutPage = () => {
           </p>
         </div>
       </div>
-      {/* Heading */}
-      <div className="text-center">
-        <Heading2>Meet Our Team</Heading2>
-        <p className="mt-3 text-gray-500">
-          The people who make your journeys unforgettable
-        </p>
-      </div>
-
-      {/* Team Grid */}
-      <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <TeamMemberCard
-          name="Sourav"
-          role="Founder & CEO"
-          imageSrc="/gallery/bsf1.jpeg"
-        />
-        <TeamMemberCard
-          name="Anirban"
-          role="Travel Expert"
-          imageSrc="/gallery/bsf1.jpeg"
-        />
-        <TeamMemberCard
-          name="Rohit"
-          role="Tour Manager"
-          imageSrc="/gallery/bsf1.jpeg"
-        />
-      </div>
-
+      
       {/* Why We Are The Best */}
       <section className="py-12 sm:py-16">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 lg:grid-cols-2">
@@ -145,7 +118,6 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
-
       {/* Stats */}
       <HomeSections className="max-w-none bg-gray-50">
         <div className="mx-auto max-w-6xl px-4 py-10 text-center sm:py-16">
@@ -181,7 +153,6 @@ const AboutPage = () => {
           </div>
         </div>
       </HomeSections>
-
       {/* CTA Banner */}
       <section
         className="relative mx-auto mt-10 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white sm:mt-12"
@@ -199,7 +170,6 @@ const AboutPage = () => {
           </Button>
         </div>
       </section>
-
       {/* Team Members */}
       <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-6xl px-4 text-center">
