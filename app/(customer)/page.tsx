@@ -140,12 +140,8 @@ export default function Page() {
         <div className="mx-auto mt-8 grid max-w-6xl gap-6 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Card */}
           {whyChooseUsData.map((item) => (
-            <div
-              key={item.id}
-              className="group relative rounded-md bg-white shadow-sm backdrop-blur-md transition-all duration-300 sm:p-6"
-            >
-              <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-teal-400/20 to-transparent opacity-0 transition-opacity duration-300" />
-              <div className="relative z-10">
+            <div key={item.id} className="group rounded-md bg-white sm:p-6">
+              <div className=" ">
                 <h3 className="text-base font-semibold text-gray-800 sm:text-lg">
                   {item.title}
                 </h3>

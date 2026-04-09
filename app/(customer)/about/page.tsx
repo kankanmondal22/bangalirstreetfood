@@ -37,25 +37,25 @@ const TeamMemberCard = ({
 
 const AboutPage = () => {
   return (
-    <div className="mx-auto w-full overflow-x-hidden pb-8">
+    <div className="mx-auto w-full overflow-x-hidden">
       {/* Hero with full-width masked bottom */}
 
       <div
-        className="hero-mask-intersect relative mx-auto mb-10 flex items-center overflow-hidden rounded-t-3xl px-6 py-16 sm:-mx-8 sm:min-h-80 sm:px-10 lg:min-h-125"
+        className="hero-mask-intersect relative mx-auto mb-10 flex items-center overflow-hidden px-6 py-16 sm:-mx-8 sm:min-h-80 sm:px-10 lg:min-h-125"
         style={{
           backgroundImage: "url('/Andaman-and-Nicobar-Islands-Package-1.jpg')",
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
 
-        <div className="relative z-10 max-w-7xl p-8 text-white">
+        <div className="relative z-1 mx-auto w-full max-w-6xl p-8 text-white">
           <p className="mb-2 text-xs font-semibold tracking-[0.25em] uppercase sm:text-sm">
             About
           </p>
           <h1 className="font-handwriting mb-2text-4xl mb-4 font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
             Our Story
           </h1>
-          <p className="text-sm text-gray-100/90 sm:text-base">
+          <p className="max-w-2xl text-sm text-gray-100/90 sm:text-base">
             Discover the passion and dedication behind our travel agency,
             committed to making your journeys unforgettable.
           </p>
@@ -157,17 +157,17 @@ const AboutPage = () => {
 
       {/* CTA Banner */}
       <section
-        className="relative mx-auto mt-10 max-w-6xl bg-cover bg-center py-16 text-center text-white sm:mt-12 sm:py-24"
+        className="relative mx-auto mt-10 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white sm:mt-12"
         style={{ backgroundImage: "url('/gallery/bsf3.jpeg')" }}
       >
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 px-6">
+        <div className="relative z-1 flex h-full w-full flex-col items-center p-16 px-6 backdrop-blur xl:p-32">
           <h2 className="text-2xl leading-snug font-semibold sm:text-3xl">
             If You Have Any Question
             <br />
             You will Ask US
           </h2>
-          <Button className="bg-primary hover:bg-primary/90 mt-6 text-white">
+          <Button className="mt-6 w-fit text-white" size={"xl"}>
             Contact Us
           </Button>
         </div>
