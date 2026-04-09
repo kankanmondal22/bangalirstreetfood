@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export default function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -61,7 +61,7 @@ export default function HeroVideo() {
   // }, []);
 
   return (
-    <section ref={sectionRef} className="my-2 w-full px-2" id="hero-video">
+    <section ref={sectionRef} className="mb-2 w-full" id="hero-video">
       <video
         ref={videoRef}
         className="block h-auto w-full object-contain will-change-transform"
