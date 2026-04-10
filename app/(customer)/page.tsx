@@ -22,6 +22,21 @@ import {
   whyChooseUsData,
 } from "@/lib/constants";
 
+type SocialLinkProps = {
+  href: string;
+  icon: string;
+  label: string;
+};
+
+const SocialLink = ({ href, icon, label }: SocialLinkProps) => (
+  <Link
+    href={href}
+    className="inline-flex items-center rounded px-2 py-1 font-medium text-white"
+  >
+    <img src={icon} alt={label} className="h-6 w-6" />
+  </Link>
+);
+
 export default function Page() {
   return (
     //hero
@@ -102,12 +117,21 @@ export default function Page() {
           />
           <p className="mt-8 text-center">
             Follow Us on{" "}
-            <Link
+            <SocialLink
+              href="https://www.facebook.com/@bangalirstreetfood"
+              icon="/icons/facebook.png"
+              label="Facebook"
+            />
+            <SocialLink
               href="https://www.youtube.com/@bangalirstreetfood"
-              className="rounded bg-blue-500 p-1 font-medium text-white"
-            >
-              Facebook
-            </Link>
+              icon="/icons/youtube.png"
+              label="YouTube"
+            />
+            <SocialLink
+              href="https://www.instagram.com/@bangalirstreetfood"
+              icon="/icons/instagram.png"
+              label="Instagram"
+            />
             {" and "}
             for more travel stories and tips!
           </p>

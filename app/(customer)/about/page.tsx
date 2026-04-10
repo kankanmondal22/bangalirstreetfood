@@ -24,11 +24,11 @@ const TeamMemberCard = ({
 
       {/* Name overlay at bottom */}
       <div className="absolute right-0 bottom-0 left-0 p-4">
-        <div className="bg-black/40 py-4">
-          <p className="text-sm leading-tight font-semibold text-white">
+        <div className="bg-black/40 py-4 backdrop-blur-2xl">
+          <p className="text-xl leading-tight font-semibold text-white">
             {name}
           </p>
-          <p className="mt-0.5 text-xs text-teal-300">{role}</p>
+          <p className="text-md mt-0.5 text-teal-300">{role}</p>
         </div>
         {/* Teal accent line matching your primary */}
       </div>
@@ -61,7 +61,6 @@ const AboutPage = () => {
           </p>
         </div>
       </div>
-      
 
       {/* Why We Are The Best */}
       <section className="py-12 sm:py-16">
@@ -154,23 +153,6 @@ const AboutPage = () => {
           </div>
         </div>
       </HomeSections>
-      {/* CTA Banner */}
-      <section
-        className="relative mx-auto mt-10 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white sm:mt-12"
-        style={{ backgroundImage: "url('/gallery/bsf3.jpeg')" }}
-      >
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-1 flex h-full w-full flex-col items-center p-16 px-6 backdrop-blur xl:p-32">
-          <h2 className="text-2xl leading-snug font-semibold sm:text-3xl">
-            If You Have Any Question
-            <br />
-            You will Ask US
-          </h2>
-          <Button className="mt-6 w-fit text-white" size={"xl"}>
-            Contact Us
-          </Button>
-        </div>
-      </section>
       {/* Team Members */}
       <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-6xl px-4 text-center">
@@ -195,6 +177,23 @@ const AboutPage = () => {
               />
             ))}
           </div>
+        </div>
+      </section>
+      {/* CTA Banner */}
+      <section
+        className="relative mx-auto mt-10 mb-10 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white sm:mt-12"
+        style={{ backgroundImage: "url('/pahar.jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-1 flex h-full w-full flex-col items-center p-16 px-6 backdrop-blur-xs xl:p-32">
+          <h2 className="text-2xl leading-snug font-semibold sm:text-3xl">
+            If You Have Any Question
+            <br />
+            You will Ask US
+          </h2>
+          <Button className="mt-6 w-fit text-white" size={"xl"}>
+            Contact Us
+          </Button>
         </div>
       </section>
     </div>

@@ -19,6 +19,7 @@ const TRANSPARENT_NAV_ROUTES: string[] = [
   "/package/[id]", // dynamic segment — matched via regex below
   "/about",
   "/gallery",
+  "/package",
 ];
 
 function isTransparentRoute(pathname: string): boolean {

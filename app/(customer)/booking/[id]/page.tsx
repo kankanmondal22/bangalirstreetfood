@@ -28,7 +28,7 @@ const BookPackage = async ({
   }
 
   return (
-    <div className="flex flex-col gap-8 bg-gray-100 py-12">
+    <div className="flex flex-col gap-8 bg-gray-100 py-12 mt-16">
       <div className="mx-auto">
         <div className="relative">
           <Image

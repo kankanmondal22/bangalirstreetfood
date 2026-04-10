@@ -10,6 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import WavyHero from "@/components/WavyHero";
 
 const PAGE_SIZE = 3;
 
@@ -62,82 +63,77 @@ const Packages = async ({
   const pageNumbers = getPageNumbers(currentPage, totalPages);
 
   return (
-    <main className="m-2 min-h-screen bg-gray-50">
-      {/* Hero / Header */}
-      <section className="px-4 pt-36 pb-14 text-center">
-        <h1 className="font-handwriting text-5xl font-bold md:text-7xl">
-          Our Packages
-        </h1>
-        <p className="mx-auto mt-2 max-w-xl text-sm text-teal-700 md:text-base">
-          Explore our hand-picked travel experiences. Pick the one that excites
-          you and book your next adventure today!
-        </p>
-      </section>
+    <div className="min-h-screen bg-gray-50">
+      <WavyHero
+        title="Our Packages"
+        subtitle=""
+        description="Explore our hand-picked travel experiences. Pick the one that
+            excites you and book your next adventure today!"
+        bgImage="/pahar.jpeg"
+      />{" "}
+        {/* Package Grid */}
+        <section className="mx-auto max-w-6xl px-4 py-10">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {packagesData.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} />
+            ))}
+          </div>
 
-      {/* Package Grid */}
-      <section className="mx-auto max-w-6xl px-4 py-10">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {packagesData.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
-          ))}
-        </div>
+          {packagesData.length === 0 && (
+            <p className="py-20 text-center text-gray-500">
+              No packages available right now. Check back soon!
+            </p>
+          )}
+        </section>
+        {totalPages > 1 && (
+          <div className="py-10">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href={`?page=${currentPage - 1}`}
+                    aria-disabled={currentPage === 1}
+                    className={
+                      currentPage === 1
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                  />
+                </PaginationItem>
 
-        {packagesData.length === 0 && (
-          <p className="py-20 text-center text-gray-500">
-            No packages available right now. Check back soon!
-          </p>
+                {pageNumbers.map((p, i) =>
+                  p === "ellipsis" ? (
+                    <PaginationItem key={`ellipsis-${i}`}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  ) : (
+                    <PaginationItem key={p}>
+                      <PaginationLink
+                        href={`?page=${p}`}
+                        isActive={p === currentPage}
+                      >
+                        {p}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ),
+                )}
+
+                <PaginationItem>
+                  <PaginationNext
+                    href={`?page=${currentPage + 1}`}
+                    aria-disabled={currentPage === totalPages}
+                    className={
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         )}
-      </section>
-
-      {totalPages > 1 && (
-        <div className="py-10">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href={`?page=${currentPage - 1}`}
-                  aria-disabled={currentPage === 1}
-                  className={
-                    currentPage === 1
-                      ? "pointer-events-none opacity-50"
-                      : undefined
-                  }
-                />
-              </PaginationItem>
-
-              {pageNumbers.map((p, i) =>
-                p === "ellipsis" ? (
-                  <PaginationItem key={`ellipsis-${i}`}>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                ) : (
-                  <PaginationItem key={p}>
-                    <PaginationLink
-                      href={`?page=${p}`}
-                      isActive={p === currentPage}
-                    >
-                      {p}
-                    </PaginationLink>
-                  </PaginationItem>
-                ),
-              )}
-
-              <PaginationItem>
-                <PaginationNext
-                  href={`?page=${currentPage + 1}`}
-                  aria-disabled={currentPage === totalPages}
-                  className={
-                    currentPage === totalPages
-                      ? "pointer-events-none opacity-50"
-                      : undefined
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-      )}
-    </main>
+    </div>
   );
 };
 

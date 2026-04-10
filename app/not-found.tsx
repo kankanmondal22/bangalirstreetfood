@@ -25,7 +25,7 @@ export default function NotFound() {
   });
 
   return (
-    <div className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
+    <div className="flex min-h-[100vh] flex-col items-center justify-center bg-[url(/bg404.png)] bg-cover bg-center px-6 text-center">
       {/* Spiral Sun */}
       <svg
         width="148"
@@ -37,7 +37,7 @@ export default function NotFound() {
         {/* Sun center */}
         <g>
           {/* base sun */}
-          <circle cx="60" cy="60" r="22" fill="#FDB813" />
+          <circle cx="68" cy="68" r="22" fill="#FDB813" />
         </g>
 
         {/* Spiral Rays */}
@@ -57,14 +57,14 @@ export default function NotFound() {
       </svg>
 
       {/* 404 text */}
-      <h1 className="mb-3 text-5xl font-bold text-gray-900">404</h1>
+      <h1 className="mb-3 text-7xl font-bold text-gray-900">404</h1>
 
-      <p className="mb-6 max-w-md text-lg text-gray-600">
+      <p className="mb-6 max-w-md text-xl text-gray-600">
         Looks like this road doesn’t lead to any street food stall. Let’s take
         you back home.
       </p>
 
-      <Button asChild size="lg" variant="accent">
+      <Button asChild size="xl" variant="accent">
         <Link href="/">Back to Home</Link>
       </Button>
     </div>
