@@ -62,6 +62,7 @@ const AboutPage = () => {
         </div>
       </div>
       
+
       {/* Why We Are The Best */}
       <section className="py-12 sm:py-16">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 lg:grid-cols-2">

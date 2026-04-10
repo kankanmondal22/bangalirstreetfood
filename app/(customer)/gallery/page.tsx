@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import ImageLightbox from "@/components/ImageLightbox";
+import WavyHero from "@/components/WavyHero";
 
 type GalleryImageData = {
   id: string;
@@ -108,44 +109,45 @@ const GalleryPage = () => {
   );
 
   return (
-    <div className="mx-auto mt-16 max-w-6xl px-4 py-8">
-      <h1 className="font-handwriting mt-8 mb-2 text-center text-7xl font-semibold">
-        Gallery
-      </h1>
-      <p className="mb-12 text-center text-gray-700">
-        Explore our vibrant gallery showcasing the essence of Bangalore Street
-        Food.
-      </p>
-
-      <div className="grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3">
-        {sampleData.map((image, index) => (
-          <button
-            key={image.id}
-            type="button"
-            onClick={() => setSelectedIndex(index)}
-            className={`${rotations[index % rotations.length]} bg-white p-3 pb-6 shadow transition-all duration-300 hover:rotate-0 hover:shadow-xl`}
-          >
-            <Image
-              src={image.src}
-              alt={image.name}
-              width={400}
-              height={300}
-              className="h-56 w-full object-cover brightness-95 contrast-95 sepia-[0.2]"
-            />
-            <p className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
-              {image.name}
-            </p>
-          </button>
-        ))}
-      </div>
-
-      <ImageLightbox
-        images={lightboxImages}
-        isOpen={selectedIndex !== null}
-        initialIndex={selectedIndex ?? 0}
-        onClose={() => setSelectedIndex(null)}
+    <>
+      <WavyHero
+        title="Gallery"
+        subtitle=""
+        description="Explore our vibrant gallery showcasing the essence of Bangalore Street
+          Food."
+        bgImage="/pahar.jpeg"
       />
-    </div>
+      <div className="mx-auto mt-16 max-w-6xl px-4 py-8">
+        <div className="grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3">
+          {sampleData.map((image, index) => (
+            <button
+              key={image.id}
+              type="button"
+              onClick={() => setSelectedIndex(index)}
+              className={`${rotations[index % rotations.length]} bg-white p-3 pb-6 shadow transition-all duration-300 hover:rotate-0 hover:shadow-xl`}
+            >
+              <Image
+                src={image.src}
+                alt={image.name}
+                width={400}
+                height={300}
+                className="h-56 w-full object-cover brightness-95 contrast-95 sepia-[0.2]"
+              />
+              <p className="font-handwriting mt-3 text-center text-xl font-bold text-gray-800">
+                {image.name}
+              </p>
+            </button>
+          ))}
+        </div>
+
+        <ImageLightbox
+          images={lightboxImages}
+          isOpen={selectedIndex !== null}
+          initialIndex={selectedIndex ?? 0}
+          onClose={() => setSelectedIndex(null)}
+        />
+      </div>
+    </>
   );
 };
 

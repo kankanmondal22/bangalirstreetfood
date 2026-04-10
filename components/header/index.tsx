@@ -18,6 +18,7 @@ const TRANSPARENT_NAV_ROUTES: string[] = [
   "/",
   "/package/[id]", // dynamic segment — matched via regex below
   "/about",
+  "/gallery",
 ];
 
 function isTransparentRoute(pathname: string): boolean {
@@ -58,7 +59,7 @@ const Navbar = () => {
           : "border-gray-200 bg-white shadow-sm"
       }`}
     >
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-2">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-2">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <Image
