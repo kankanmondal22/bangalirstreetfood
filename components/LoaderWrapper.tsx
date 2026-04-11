@@ -23,7 +23,7 @@ const LoaderWrapper = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      {loading && <PageLoader onComplete={() => setLoading(false)} />}
+      {loading && <PageLoader />}
       <div
         style={{
           opacity: loading ? 0 : 1,

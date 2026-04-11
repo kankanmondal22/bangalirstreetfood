@@ -4,7 +4,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const PageLoader = ({ onComplete }: { onComplete: () => void }) => {
+const PageLoader = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const raysRef = useRef<SVGGElement>(null);
   const sunRef = useRef<SVGCircleElement>(null);
@@ -16,57 +16,47 @@ const PageLoader = ({ onComplete }: { onComplete: () => void }) => {
     () => {
       const tl = gsap.timeline();
 
-      // Sun pulse in
       tl.from(sunRef.current, {
         scale: 0,
         opacity: 0,
-        duration: 0,
+        duration: 0.6,
         ease: "back.out(1.7)",
         transformOrigin: "center",
-      })
-        // Title drops in
-        .from(
-          titleRef.current,
-          {
-            y: -30,
-            opacity: 0,
-            duration: 0.5,
-            ease: "back.out(1.4)",
-          },
-          "-=0.2",
-        )
-        // Progress bar fills
-        .to(
-          progressRef.current,
-          {
-            width: "100%",
-            duration: 1.1,
-            ease: "power1.inOut",
-          },
-          "+=0.1",
-        )
-        // Fade out loader
-        .to(
-          containerRef.current,
-          {
-            opacity: 0,
-            duration: 0.5,
-            ease: "power2.inOut",
-            onComplete,
-          },
-          "+=0.2",
-        );
+      }).from(
+        titleRef.current,
+        {
+          y: -30,
+          opacity: 0,
+          duration: 0.5,
+          ease: "back.out(1.4)",
+        },
+        "-=0.2",
+      );
 
-      // Rays spin continuously — separate from timeline
+      // Rays — independent, GPU composited
+      gsap.set(raysRef.current, { force3D: true });
       gsap.to(raysRef.current, {
         rotate: 360,
         transformOrigin: "center",
         duration: 30,
         repeat: -1,
         ease: "linear",
+        force3D: true,
       });
 
-      // Dots bounce in loop
+      // Shimmer — GSAP owns both start and end, no CSS translate conflict
+      gsap.fromTo(
+        progressRef.current,
+        { x: "-100%" },
+        {
+          x: "400%",
+          duration: 1.2,
+          ease: "none",
+          repeat: -1,
+        },
+      );
+
+      // Dots
       dotsRef.current.forEach((dot, i) => {
         gsap.to(dot, {
           y: -6,
@@ -77,6 +67,13 @@ const PageLoader = ({ onComplete }: { onComplete: () => void }) => {
           delay: i * 0.15,
         });
       });
+
+      return () => {
+        tl.kill();
+        gsap.killTweensOf(raysRef.current);
+        gsap.killTweensOf(dotsRef.current);
+        gsap.killTweensOf(progressRef.current);
+      };
     },
     { scope: containerRef },
   );
@@ -84,13 +81,11 @@ const PageLoader = ({ onComplete }: { onComplete: () => void }) => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[url(/loding.png)] bg-cover bg-center"
+      className="fixed inset-0 z-9999 flex flex-col items-center justify-center bg-[url(/loading.png)] bg-cover bg-center"
     >
-      {/* Overlay so text is readable */}
       <div className="absolute inset-0 bg-white/60" />
 
       <div className="relative z-10 flex flex-col items-center">
-        {/* Same spiral sun as error page */}
         <svg
           width="120"
           height="120"
@@ -114,7 +109,6 @@ const PageLoader = ({ onComplete }: { onComplete: () => void }) => {
           </g>
         </svg>
 
-        {/* Title — matches your font style */}
         <h1
           ref={titleRef}
           className="text-5xl font-semibold text-gray-900 sm:text-6xl"
@@ -122,7 +116,6 @@ const PageLoader = ({ onComplete }: { onComplete: () => void }) => {
           Loading
         </h1>
 
-        {/* Bouncing dots */}
         <div className="mt-2 flex items-center gap-1">
           {[".", ".", "."].map((dot, i) => (
             <span
@@ -138,13 +131,13 @@ const PageLoader = ({ onComplete }: { onComplete: () => void }) => {
           ))}
         </div>
 
-        {/* Progress bar */}
+        {/* overflow-hidden clips the shimmer, no translate in style */}
         <div className="mt-8 h-2 w-56 overflow-hidden rounded-full bg-gray-200 sm:w-72">
           <div
             ref={progressRef}
             className="h-full rounded-full"
             style={{
-              width: "0%",
+              width: "30%",
               background: "linear-gradient(90deg, #FDB813 0%, #F97316 100%)",
             }}
           />
