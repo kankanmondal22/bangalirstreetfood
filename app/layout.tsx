@@ -2,7 +2,6 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Caveat, Geist_Mono, Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import LoaderWrapper from "@/components/LoaderWrapper";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -38,9 +37,7 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${poppins.variable} ${caveat.variable} antialiased`}
       >
-        <LoaderWrapper>
-          {children}
-        </LoaderWrapper>
+        {children}
         <Toaster richColors position="bottom-right" theme="light" />
       </body>
     </html>
