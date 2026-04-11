@@ -244,3 +244,16 @@
   -webkit-mask-size: 120% auto;
   mask-size: 120% auto;
 }
+
+/* Hide scrollbar for all browsers */
+/* hide main page scrollbar */
+html,
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
