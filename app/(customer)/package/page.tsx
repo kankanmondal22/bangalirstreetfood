@@ -69,7 +69,7 @@ const Packages = async ({
         subtitle=""
         description="Explore our hand-picked travel experiences. Pick the one that
             excites you and book your next adventure today!"
-        bgImage="/pahar.jpeg"
+        bgImage="/pahar2.jpeg"
       />{" "}
         {/* Package Grid */}
         <section className="mx-auto max-w-6xl px-4 py-10">

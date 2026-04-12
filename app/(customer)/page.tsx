@@ -195,50 +195,23 @@ export default function Page() {
           ))}
         </Accordion>
       </HomeSections>
-      <HomeSections className="mb-24 grid grid-cols-2 rounded-md bg-teal-800">
-        <div>
-          <h2>Ready to Explore?</h2>
-          <p className="mt-4 text-gray-200">
-            Let us plan your next unforgettable adventure. Contact us today to
-            start your journey!
-          </p>
-          <Button asChild className="bg-gray-50" variant="outline">
-            <Link href="/contact">Book Now</Link>
+      {/* CTA section */}
+      <section
+        className="relative mx-auto mb-10 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white"
+        style={{ backgroundImage: "url('/pahar.jpeg')" }}
+      >
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-1 flex h-full w-full flex-col items-center p-16 px-6 backdrop-blur-xs xl:p-32">
+          <h2 className="text-2xl leading-snug font-semibold sm:text-3xl">
+            If You Have Any Question
+            <br />
+            You will Ask US
+          </h2>
+          <Button className="mt-6 w-fit text-white" size={"xl"}>
+            Contact Us
           </Button>
         </div>
-        <div className="flex items-center justify-end">
-          <h2>Having Questions? We&apos;re Here to Help!</h2>
-          <Button asChild className="bg-gray-50" variant="outline">
-            <Link href="/contact">Contact Us</Link>
-          </Button>
-        </div>
-      </HomeSections>
-      {/* FAQ Section */}
-      <HomeSections>
-        <Heading2>Frequently Asked Questions</Heading2>
-        <Accordion type="single" collapsible className="mt-6 w-full">
-          <AccordionItem value="item-1" className="border-b">
-            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">
-              What is included in the tour packages?
-            </AccordionTrigger>
-            <AccordionContent className="text-sm text-gray-500">
-              <p>
-                Accommodation, transport, meals, and guided tours are included.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2" className="border-b">
-            <AccordionTrigger className="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-gray-800">
-              How do I book a tour?
-            </AccordionTrigger>
-            <AccordionContent className="text-sm text-gray-500">
-              <p>
-                Accommodation, transport, meals, and guided tours are included.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </HomeSections>
+      </section>
     </div>
   );
 }

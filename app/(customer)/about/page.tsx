@@ -2,6 +2,7 @@ import Image from "next/image";
 import { StatItem, WhyBestFeature, memberData } from "@/lib/constants";
 import HomeSections from "@/components/reusable/HomeSections";
 import { Button } from "@/components/ui/button";
+import WavyHero from "@/components/WavyHero";
 
 const TeamMemberCard = ({
   name,
@@ -38,7 +39,7 @@ const AboutPage = () => {
   return (
     <div className="mx-auto w-full overflow-x-hidden">
       {/* Hero with full-width masked bottom */}
-      <div
+      {/* <div
         className="hero-mask-intersect relative mx-auto mb-10 flex items-center overflow-hidden px-6 py-16 sm:-mx-8 sm:min-h-80 sm:px-10 lg:min-h-125"
         style={{
           backgroundImage: "url('/Andaman-and-Nicobar-Islands-Package-1.jpg')",
@@ -58,7 +59,14 @@ const AboutPage = () => {
             committed to making your journeys unforgettable.
           </p>
         </div>
-      </div>
+      </div> */}
+      <WavyHero
+        title="Our Story"
+        subtitle=""
+        description="Discover the passion and dedication behind our travel agency,
+            committed to making your journeys unforgettable."
+        bgImage="/Andaman-and-Nicobar-Islands-Package-1.jpg"
+      />
 
       {/* Why We Are The Best */}
       <section className="py-12 sm:py-16">

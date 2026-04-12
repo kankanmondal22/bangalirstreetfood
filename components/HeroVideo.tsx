@@ -65,7 +65,7 @@ export default function HeroVideo() {
       <video
         ref={videoRef}
         className="block h-auto w-full object-contain will-change-transform"
-        src="/herovideo.mp4"
+        src="/herovideo1.mp4"
         autoPlay
         loop
         muted
