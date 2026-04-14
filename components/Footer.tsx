@@ -59,9 +59,16 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-teal-500 pt-4 text-center text-xs sm:text-sm">
-          © {new Date().getFullYear()} Bangalir Street Food. All rights
-          reserved.
+        <div className="mt-8 flex items-center justify-center border-t border-teal-500 pt-4 text-xs sm:text-sm">
+          <p>
+            © {new Date().getFullYear()} Bangalir Street Food. All rights
+            reserved.
+          </p>
+          <p className="ml-4">
+            <Link href="/sitemap-page" className="hover:underline">
+              Sitemap
+            </Link>
+          </p>
         </div>
       </div>
       <div className="w-full bg-teal-950 p-4 text-center font-semibold text-teal-100">

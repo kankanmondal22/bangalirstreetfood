@@ -33,7 +33,13 @@ const SocialLink = ({ href, icon, label }: SocialLinkProps) => (
     href={href}
     className="inline-flex items-center rounded px-2 py-1 font-medium text-white"
   >
-    <img src={icon} alt={label} className="h-6 w-6" />
+    <Image
+      src={icon}
+      alt={label}
+      className="h-6 w-6"
+      height={100}
+      width={100}
+    />
   </Link>
 );
 
@@ -115,7 +121,7 @@ export default function Page() {
             title="See It Before You Book It"
             subtitle="We've actually been there. Watch our vlogs from Kashmir, Andaman, and Vizag — and imagine yourself in the frame."
           />
-          <p className="mt-8 text-center">
+          <p className="mt-8 flex items-center justify-center">
             Follow Us on{" "}
             <SocialLink
               href="https://www.facebook.com/@bangalirstreetfood"

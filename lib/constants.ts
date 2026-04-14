@@ -9,6 +9,8 @@ import {
   Headphones,
 } from "lucide-react";
 
+export const BASE_URL = 'https://bsf-six.vercel.app/'
+
 export type StatItem = {
   icon: LucideIcon;
   value: string;

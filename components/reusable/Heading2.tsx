@@ -14,7 +14,7 @@ const Heading2 = ({
   return (
     <>
       <h2
-        className={`text-center text-3xl font-bold text-teal-600 lg:text-4xl xl:text-5xl ${subHeading ? "mb-2" : "mb-12 lg:mb-16"} ${className}`}
+        className={`text-center text-3xl font-bold text-teal-600 lg:text-3xl xl:text-4xl ${subHeading ? "mb-2" : "mb-12 lg:mb-16"} ${className}`}
       >
         {children}
       </h2>
