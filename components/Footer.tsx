@@ -50,25 +50,29 @@ const Footer = () => {
             <h4 className="text-lg font-bold tracking-wide uppercase sm:text-xl">
               Contact
             </h4>
-            <p className="mt-3 break-words">
+            <p className="mt-3 wrap-break-word">
               <strong>Email:</strong> hello@bangalirstreetfood.com
             </p>
             <p className="text-sm leading-6">
               <strong>Phone:</strong> +91 90000 00000
             </p>
+            {/* 
+            // ! Add social media links here @kankanmondal22
+            */}
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-center border-t border-teal-500 pt-4 text-xs sm:text-sm">
-          <p>
+        <div className="mt-8 flex items-center justify-center gap-x-0 divide-x border-t border-teal-500 pt-4 text-xs sm:text-sm">
+          <p className="px-2">
             © {new Date().getFullYear()} Bangalir Street Food. All rights
-            reserved.
+            reserved
           </p>
-          <p className="ml-4">
-            <Link href="/sitemap-page" className="hover:underline">
-              Sitemap
-            </Link>
-          </p>
+          <Link href="/sitemap/en" className="px-2 hover:underline">
+            Sitemap
+          </Link>
+          <Link href="/privacy-policy" className="px-2 hover:underline">
+            Privacy Policy
+          </Link>
         </div>
       </div>
       <div className="w-full bg-teal-950 p-4 text-center font-semibold text-teal-100">
