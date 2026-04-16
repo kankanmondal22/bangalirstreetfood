@@ -229,20 +229,18 @@
   animation: slideInLeft 0.35s ease;
 }
 
-.hero-mask-intersect {
-  /* Main hero background */
-  background-size: cover;
+.hero-mask-intersect { 
+  background-size: cover; 
   background-position: center;
 
-  /* Single wave mask at the bottom, full width */
   -webkit-mask-image: url("/mask.png");
   mask-image: url("/mask.png");
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  -webkit-mask-position: bottom center;
-  mask-position: bottom center;
-  -webkit-mask-size: 120% auto;
-  mask-size: 120% auto;
+  -webkit-mask-position: top center;
+  mask-position: top center;
+  -webkit-mask-size: 100% auto;
+  mask-size: 100% auto;
 }
 
 /* Hide scrollbar for all browsers */
