@@ -10,7 +10,7 @@ export default function HeroVideo() {
       playsInline
       preload="auto"
     >
-      <source src="/herovideo1.mp4" />
+      <source src="/hero.mp4" />
     </video>
   );
 }
