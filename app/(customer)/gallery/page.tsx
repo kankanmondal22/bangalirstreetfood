@@ -9,87 +9,89 @@ type GalleryImageData = {
   id: string;
   src: string;
   name: string;
-  tags: string[];
+  tags: "kashmir" | "andaman" | "vizag" | "misc";
 };
+
+const tags = ["all", "kashmir", "andaman", "vizag", "misc"] as const;
 // sample images for travel
-const sampleData: GalleryImageData[] = [
+const galleryImages: GalleryImageData[] = [
   {
     id: "1",
     src: "/gallery/bsf1.jpeg",
     name: "Beach Sunset",
-    tags: ["beach", "sunset", "travel"],
+    tags: "kashmir",
   },
   {
     id: "2",
     src: "/gallery/bsf2.jpeg",
     name: "I love Pahalgam",
-    tags: ["mountain", "hiking", "adventure"],
+    tags: "kashmir",
   },
   {
     id: "3",
     src: "/gallery/bsf3.jpeg",
     name: "City Skyline",
-    tags: ["city", "skyline", "night"],
+    tags: "misc",
   },
   {
     id: "4",
     src: "/gallery/bsf4.jpeg",
     name: "Forest Trail",
-    tags: ["forest", "trail", "nature"],
+    tags: "misc",
   },
   {
     id: "5",
     src: "/gallery/bsf5.jpeg",
     name: "Desert Dunes",
-    tags: ["desert", "dunes", "sunset"],
+    tags: "misc",
   },
   {
     id: "6",
     src: "/gallery/bsf6.jpeg",
     name: "Snowy Mountains",
-    tags: ["snow", "mountains", "winter"],
+    tags: "misc",
   },
   {
     id: "7",
     src: "/gallery/bsf7.jpeg",
     name: "Tropical Paradise",
-    tags: ["tropical", "paradise", "beach"],
+    tags: "kashmir",
   },
   {
     id: "8",
     src: "/gallery/bsf8.jpeg",
     name: "Countryside Road",
-    tags: ["countryside", "road", "travel"],
+    tags: "misc",
   },
   {
     id: "9",
     src: "/gallery/bsf9.jpeg",
     name: "Lakeside Cabin",
-    tags: ["lake", "cabin", "nature"],
+    tags: "misc",
   },
   {
     id: "10",
     src: "/gallery/bsf10.jpeg",
     name: "Sunrise Over Hills",
-    tags: ["sunrise", "hills", "scenery"],
+    tags: "misc",
   },
   {
     id: "11",
     src: "/gallery/bsf11.jpeg",
     name: "City Street",
-    tags: ["city", "street", "urban"],
+    tags: "misc",
   },
   {
     id: "12",
     src: "/gallery/bsf12.jpeg",
     name: "Ocean Waves",
-    tags: ["ocean", "waves", "beach"],
+    tags: "misc",
   },
   {
     id: "13",
     src: "/gallery/bsf13.jpeg",
     name: "Countryside Sunset",
-    tags: ["countryside", "sunset", "nature"],
+    tags: "misc",
   },
 ];
 
@@ -97,10 +99,16 @@ const rotations = ["-rotate-3", "rotate-2", "-rotate-1", "rotate-3"];
 
 const GalleryPage = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
+  const [filterTag, setFilterTag] = useState<
+    "all" | "kashmir" | "andaman" | "vizag" | "misc"
+  >("all");
+  const filteredData = useMemo(() => {
+    if (filterTag === "all") return galleryImages;
+    return galleryImages.filter((image) => image.tags === filterTag);
+  }, [filterTag]);
   const lightboxImages = useMemo(
     () =>
-      sampleData.map((image) => ({
+      galleryImages.map((image) => ({
         src: image.src,
         alt: image.name,
         title: image.name,
@@ -117,9 +125,23 @@ const GalleryPage = () => {
           Food."
         bgImage="/pahar.jpeg"
       />
+
       <div className="mx-auto mt-16 max-w-6xl px-4 py-8">
+        <div className="mb-12 flex w-fit gap-2">
+          {tags.map((tagItem) => {
+            return (
+              <button
+                key={tagItem}
+                onClick={() => setFilterTag(tagItem)}
+                className={`${filterTag === tagItem ? "bg-teal-700" : "bg-teal-500"} px-2 py-1 text-white capitalize hover:bg-teal-900`}
+              >
+                {tagItem}
+              </button>
+            );
+          })}
+        </div>
         <div className="grid grid-cols-1 gap-16 sm:grid-cols-2 lg:grid-cols-3">
-          {sampleData.map((image, index) => (
+          {filteredData.map((image, index) => (
             <button
               key={image.id}
               type="button"
