@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import PackageCardThumbnail from "./PackageCardThumbnail";
 
 export interface PackageCardProps {
   id: string;
@@ -36,13 +37,7 @@ export default function PackageCard({ pkg }: { pkg: PackageCardProps }) {
     <Card className="group flex h-full flex-col overflow-hidden pt-0 transition-shadow hover:shadow-md">
       {/* Image */}
       <div className="relative overflow-hidden">
-        <Image
-          src={pkg.thumbnail || "/pahar.jpeg"}
-          alt={pkg.title}
-          width={600}
-          height={400}
-          className="aspect-4/3 w-full bg-teal-50 object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+        <PackageCardThumbnail thumbnail={pkg.thumbnail} title={pkg.title} />
         {/* Duration badge overlaid on image */}
         <Badge
           variant="default"
