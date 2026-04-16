@@ -9,7 +9,7 @@ import {
   Headphones,
 } from "lucide-react";
 
-export const BASE_URL = 'https://bsf-six.vercel.app/'
+export const BASE_URL = "https://bsf-six.vercel.app/";
 
 export type StatItem = {
   icon: LucideIcon;
@@ -202,3 +202,5 @@ export const whyChooseUsData = [
       "With a track record of successfully organizing trips for thousands of satisfied customers, we have built a reputation for reliability and excellence in the travel industry. Our customers trust us to deliver memorable and hassle-free travel experiences.",
   },
 ];
+
+// ! add social media links, phone number, emails etc here @kankanmondal22

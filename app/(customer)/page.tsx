@@ -22,12 +22,14 @@ import {
   whyChooseUsData,
 } from "@/lib/constants";
 
+// !! Types alada file e rakhbi @kankanmondal22
 type SocialLinkProps = {
   href: string;
   icon: string;
   label: string;
 };
 
+// !! Component alada file e rakhbi @kankanmondal22
 const SocialLink = ({ href, icon, label }: SocialLinkProps) => (
   <Link
     href={href}
@@ -36,7 +38,7 @@ const SocialLink = ({ href, icon, label }: SocialLinkProps) => (
     <Image
       src={icon}
       alt={label}
-      className="h-6 w-6"
+      className="h-12 w-12"
       height={100}
       width={100}
     />
@@ -121,7 +123,7 @@ export default function Page() {
             title="See It Before You Book It"
             subtitle="We've actually been there. Watch our vlogs from Kashmir, Andaman, and Vizag — and imagine yourself in the frame."
           />
-          <p className="mt-8 flex items-center justify-center">
+          <p className="mt-8 flex items-center justify-center text-lg">
             Follow Us on{" "}
             <SocialLink
               href="https://www.facebook.com/@bangalirstreetfood"
@@ -203,7 +205,7 @@ export default function Page() {
       </HomeSections>
       {/* CTA section */}
       <section
-        className="relative mx-auto mb-10 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white"
+        className="relative mx-auto mb-32 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white"
         style={{ backgroundImage: "url('/pahar.jpeg')" }}
       >
         <div className="absolute inset-0 bg-black/60" />
