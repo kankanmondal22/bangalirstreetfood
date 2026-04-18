@@ -22,19 +22,19 @@
 
 // export default TestPage;
 
-"use client";
-import FileUpload from "@/lib/file-upload/FileUpload";
-import React from "react";
+import ContactForm from "@/components/forms/ContactForm";
+// import FileUpload from "@/lib/file-upload/FileUpload";
 const TestPage = () => {
-  const [image, setImage] = React.useState<string>("");
+  // const [image, setImage] = React.useState<string>("");
   return (
     <div>
-      {" "}
+      {/* {" "}
       <FileUpload
         accept="image/*"
         multiple={false}
         onChange={(urls) => setImage(urls[0])}
-      />{" "}
+      />{" "} */}
+      <ContactForm />
     </div>
   );
 };

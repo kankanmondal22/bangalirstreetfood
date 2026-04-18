@@ -21,6 +21,7 @@ import {
   memberData,
   whyChooseUsData,
 } from "@/lib/constants";
+import ContactForm from "@/components/forms/ContactForm";
 
 // !! Types alada file e rakhbi @kankanmondal22
 type SocialLinkProps = {
@@ -205,19 +206,15 @@ export default function Page() {
       </HomeSections>
       {/* CTA section */}
       <section
-        className="relative mx-auto mb-32 max-w-6xl overflow-hidden rounded-2xl bg-cover bg-center text-center text-white"
+        className="relative mx-auto mb-32 max-w-6xl overflow-hidden rounded-lg bg-cover bg-center text-center text-white"
         style={{ backgroundImage: "url('/pahar.jpeg')" }}
       >
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-1 flex h-full w-full flex-col items-center p-16 px-6 backdrop-blur-xs xl:p-32">
-          <h2 className="text-2xl leading-snug font-semibold sm:text-3xl">
-            If You Have Any Question
-            <br />
-            You will Ask US
-          </h2>
-          <Button className="mt-6 w-fit text-white" size={"xl"}>
-            Contact Us
-          </Button>
+        <div className="relative z-1 flex h-full w-full flex-col items-center p-4 backdrop-blur-xs md:flex-row">
+          <div className="w-full p-4 md:w-1/2 lg:px-16"></div>
+          <div className="w-full p-4 md:w-1/2 lg:px-16">
+            <ContactForm />
+          </div>
         </div>
       </section>
     </div>
